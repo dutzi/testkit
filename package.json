@@ -1,5 +1,5 @@
 {
-  "name": "testkit2",
+  "name": "testkit",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -7,9 +7,21 @@
     "@types/node": "11.13.9",
     "@types/react": "16.8.15",
     "@types/react-dom": "16.8.4",
+    "@types/react-router-dom": "^4.3.2",
+    "@types/react-select": "^2.0.17",
+    "@types/styled-components": "^4.1.14",
+    "moment": "^2.24.0",
+    "prismjs": "^1.16.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-feather": "^1.1.6",
+    "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.0",
+    "react-select": "^2.4.3",
+    "react-simple-code-editor": "^0.9.10",
+    "react-simplemde-editor": "^4.0.1",
+    "react-table": "^6.10.0",
+    "styled-components": "^4.2.0",
     "typescript": "3.4.5"
   },
   "scripts": {

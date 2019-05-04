@@ -1,0 +1,91 @@
+.ReactTable {
+  color: white;
+}
+
+.ReactTable .rt-thead {
+  color: #727694;
+}
+
+.ReactTable .rt-thead .rt-tr {
+  text-align: left;
+}
+
+.ReactTable .rt-tbody .rt-td {
+  display: flex;
+  align-items: center;
+}
+
+.ReactTable .rt-td {
+  overflow: visible;
+  white-space: normal;
+}
+
+.ReactTable .rt-tr.-odd {
+  background-color: #1c1e2e;
+}
+
+.ReactTable .rt-tr.-even {
+  background-color: #272a3f;
+}
+
+.ReactTable .-pagination .-btn {
+  background-color: #272a3f;
+  color: white;
+}
+
+.ReactTable .-pagination {
+  padding: 13px 0px;
+}
+
+.ReactTable .-pagination input,
+.ReactTable .-pagination select {
+  background-color: var(--input-background-color);
+  border-radius: 5px;
+  color: white;
+  outline: none;
+  border: 1px solid var(--input-border-color);
+  font-size: 16px;
+  padding: 10px;
+  height: 40px;
+}
+
+.ReactTable .-pagination .-pageInfo {
+  color: #727694;
+}
+
+.ReactTable .-pagination {
+  max-width: 620px;
+}
+
+.ReactTable .-pagination .-previous,
+.ReactTable .-pagination .-next {
+  flex: 0.5 1;
+}
+
+.ReactTable .-pagination .-center {
+  flex: 1;
+}
+
+.ReactTable .rt-thead .rt-th.-sort-asc,
+.ReactTable .rt-thead .rt-td.-sort-asc {
+  box-shadow: inset 0 3px 0 0 var(--background-bright);
+}
+
+.ReactTable .rt-thead .rt-th.-sort-desc,
+.ReactTable .rt-thead .rt-td.-sort-desc {
+  box-shadow: inset 0 -3px 0 0 var(--background-bright);
+}
+
+.ReactTable .rt-resizer {
+  width: 10px;
+  right: -5px;
+}
+
+.ReactTable .rt-th,
+.ReactTable .rt-td {
+  padding: 13px 5px;
+}
+
+.ReactTable .rt-tbody {
+  max-height: calc(100vh - 150px);
+}

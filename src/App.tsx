@@ -1,26 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { createGlobalStyle } from 'styled-components';
+import { BrowserRouter as Router } from 'react-router-dom';
+import MainView from './views/Main';
+
+const GlobalStyle = createGlobalStyle`
+:root {
+  --background-dark: #0B0D1A;
+  --background-light: #14172A;
+  --background-bright: #564DF5;
+  --text-color: #E3E5F7;
+  --input-background-color: #1c1e2e;
+  --input-border-color: #3c3285;
+  --input-border-color-focused: #5a45ff;
+  --background-checkbox: #B5B2CD;
+}
+body {
+  background-color: var(--background-dark);
+}
+`;
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <GlobalStyle />
+      <MainView />
+    </Router>
   );
-}
+};
 
 export default App;
