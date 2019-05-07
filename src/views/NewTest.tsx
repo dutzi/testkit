@@ -6,8 +6,8 @@ import StepsProp from '../components/StepsProp';
 import BigButton from '../components/BigButton';
 
 const Wrapper = styled.div`
-  width: 700px;
-  padding: 15px;
+  width: calc(100% - 60px);
+  padding: 30px;
 `;
 
 const TypeWrapper = styled.div`
@@ -33,7 +33,7 @@ const NewTestView = () => {
   const handleSaveChanges = () => {};
   return (
     <Wrapper>
-      <InputProp label="Name" />
+      <InputProp label="Name" focusOnMount />
       <TypeWrapper>
         <SelectPropWrapper>
           <SelectProp label="Component" />
@@ -43,9 +43,9 @@ const NewTestView = () => {
         </SelectPropWrapper>
       </TypeWrapper>
       <StepsProp />
-      <SaveChangesContainer>
+      {/* <SaveChangesContainer>
         <BigButton label="Save Changes" onClick={handleSaveChanges} />
-      </SaveChangesContainer>
+      </SaveChangesContainer> */}
     </Wrapper>
   );
 };

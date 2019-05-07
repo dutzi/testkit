@@ -3,34 +3,35 @@ import styled from 'styled-components';
 import * as Icons from 'react-feather';
 
 const Wrapper = styled.a`
-  display: flex;
+  padding: 15px;
+  color: #727694;
+  display: inline-flex;
   align-items: center;
   text-decoration: none;
-  color: #e3e5f7;
 `;
 
 const IconWrapper = styled.div`
   margin-right: 6px;
 `;
 
-const IconButton = ({
+const ToolbarButton = ({
   label,
   icon,
   onClick,
 }: {
   label: string;
-  icon: string;
+  icon: any;
   onClick: () => void;
 }) => {
-  const Icon = Icons[icon];
-
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onClick();
   };
 
+  const Icon = Icons[icon];
+
   return (
-    <Wrapper onClick={handleClick} href="#">
+    <Wrapper href="#" onClick={handleClick}>
       <IconWrapper>
         <Icon color="#554DF5" />
       </IconWrapper>
@@ -39,4 +40,4 @@ const IconButton = ({
   );
 };
 
-export default IconButton;
+export default ToolbarButton;

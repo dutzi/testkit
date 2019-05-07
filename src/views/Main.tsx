@@ -73,6 +73,7 @@ const MainView = () => {
       <ContentWrapper>
         <Route exact path="/new-test" component={NewTestView} />
         <Route exact path="/tests" component={TestsView} />
+        <Route exact path="/tests/:testId" component={TestsView} />
       </ContentWrapper>
     </Wrapper>
   );

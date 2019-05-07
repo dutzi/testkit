@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -27,11 +27,25 @@ const Input = styled.input`
   }
 `;
 
-const InputProp = ({ label }: { label: string }) => {
+const InputProp = ({
+  label,
+  focusOnMount,
+}: {
+  label: string;
+  focusOnMount?: boolean;
+}) => {
+  const input = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (focusOnMount && input.current) {
+      input.current.focus();
+    }
+  }, []);
+
   return (
     <Wrapper>
       <Label>{label}</Label>
-      <Input />
+      <Input ref={input} />
     </Wrapper>
   );
 };

@@ -17,6 +17,7 @@ const GlobalStyle = createGlobalStyle`
 }
 body {
   background-color: var(--background-dark);
+  overflow: hidden;
 }
 `;
 

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import MarkdownEditor from './MarkdownEditor';
 import IconButton from './IconButton';
+import TestStep from './TestStep';
+import uuidv1 from 'uuid/v1';
 
 const Wrapper = styled.div``;
 
@@ -23,16 +24,27 @@ const AddStepContainer = styled.div`
   margin-bottom: 13px;
 `;
 
+interface Step {
+  id: string;
+}
+
 const StepsProp = () => {
+  const [steps, setSteps] = useState<Step[]>([{ id: uuidv1() }]);
+  const handleAddStep = () => {
+    setSteps([...steps, { id: uuidv1() }]);
+  };
+
+  const handleRemoveStep = (index: number) => {
+    setSteps([...steps.slice(0, index), ...steps.slice(index + 1)]);
+  };
   return (
     <Wrapper>
       <TopLabel>Steps</TopLabel>
-      <Label>Description</Label>
-      <MarkdownEditor minHeight="120px" />
-      <Label>Expected Result</Label>
-      <MarkdownEditor minHeight="70px" />
+      {steps.map((step, index) => (
+        <TestStep key={step.id} onRemove={handleRemoveStep.bind(null, index)} />
+      ))}
       <AddStepContainer>
-        <IconButton label="Add A Step" icon={'Plus'} />
+        <IconButton onClick={handleAddStep} label="Add A Step" icon="Plus" />
       </AddStepContainer>
     </Wrapper>
   );

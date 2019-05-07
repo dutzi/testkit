@@ -87,5 +87,21 @@
 }
 
 .ReactTable .rt-tbody {
-  max-height: calc(100vh - 150px);
+  max-height: calc(100vh - 200px);
+}
+
+.ReactTable .pagination-bottom {
+  justify-content: flex-end;
+  display: flex;
+  max-width: calc(100vw - 140px);
+}
+
+.ReactTable .-pagination {
+  flex: 1;
+}
+
+.ReactTable .rt-th {
+  display: flex;
+  align-items: center;
+  height: 60px;
 }

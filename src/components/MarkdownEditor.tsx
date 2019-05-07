@@ -48,7 +48,13 @@ const Wrapper = styled.div`
   }
 `;
 
-const MarkdownEditor = ({ minHeight }, { minHeight: string }) => {
+const MarkdownEditor = ({
+  minHeight,
+  onChange,
+}: {
+  minHeight: string;
+  onChange: (value: string) => void;
+}) => {
   const uniqueIdentifier = Math.floor(Math.random() * 1000000000);
   const [state, setState] = useState('');
 
@@ -58,9 +64,15 @@ const MarkdownEditor = ({ minHeight }, { minHeight: string }) => {
     );
 
     if (steps) {
+      steps.addEventListener('keyup', (e: any) => {
+        onChange(steps.value);
+      });
+
       steps.addEventListener('keypress', (e: any) => {
+        let newState: string | undefined;
+        const value = steps.value;
+
         if (e.keyCode === 13) {
-          const value = steps.value;
           let lineStart = value.lastIndexOf('\n', steps.selectionStart - 1) + 1;
           let line = value.substring(lineStart, steps.selectionStart);
 
@@ -87,21 +99,25 @@ const MarkdownEditor = ({ minHeight }, { minHeight: string }) => {
             const selectionStart = steps.selectionStart;
 
             if (line === `${indentString} `) {
-              setState(
+              newState =
                 value.substr(0, steps.selectionStart - 2 - indentStringLength) +
-                  '\n' +
-                  value.substr(steps.selectionStart),
-              );
+                '\n' +
+                value.substr(steps.selectionStart);
+
+              setState(newState);
+
               steps.selectionStart = selectionStart - replaceStringLength - 1;
               steps.selectionEnd = steps.selectionStart;
 
               e.preventDefault();
             } else {
-              setState(
+              newState =
                 value.substr(0, steps.selectionStart) +
-                  `\n${replaceString} ` +
-                  value.substr(steps.selectionStart),
-              );
+                `\n${replaceString} ` +
+                value.substr(steps.selectionStart);
+
+              setState(newState);
+
               steps.selectionStart = selectionStart + 2 + replaceStringLength;
               steps.selectionEnd = steps.selectionStart;
               e.preventDefault();

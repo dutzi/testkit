@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Check } from 'react-feather';
 
 const VisualCheckbox = styled.div`
-  width: 32px;
-  height: 32px;
+  width: 27px;
+  height: 27px;
   background-color: var(--background-checkbox);
   border-radius: 5px;
   display: flex;
@@ -13,6 +13,9 @@ const VisualCheckbox = styled.div`
 `;
 
 const Wrapper = styled.label`
+  margin-left: 6px;
+  display: inline-block;
+
   input {
     border: 0;
     clip: rect(0 0 0 0);
