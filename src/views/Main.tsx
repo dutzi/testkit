@@ -4,10 +4,11 @@ import { FilePlus, FolderPlus, BookOpen } from 'react-feather';
 import { Route, Link } from 'react-router-dom';
 import NewTestView from './NewTest';
 import TestsView from './Tests';
+import Navigator from '../components/Navigator';
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 126px auto;
+  grid-template-columns: 256px auto;
   height: 100vh;
 `;
 
@@ -18,7 +19,7 @@ const Sidebar = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  background-color: var(--background-light);
+  background-color: #f5f7f9;
 `;
 
 const Button = styled.div`
@@ -56,7 +57,7 @@ const MainView = () => {
 
   return (
     <Wrapper>
-      <Sidebar>
+      {/* <Sidebar>
         {buttons.map(button => (
           <Link
             key={button.name}
@@ -69,11 +70,11 @@ const MainView = () => {
             </Button>
           </Link>
         ))}
-      </Sidebar>
+      </Sidebar> */}
+      <Navigator />
       <ContentWrapper>
         <Route exact path="/new-test" component={NewTestView} />
-        <Route exact path="/tests" component={TestsView} />
-        <Route exact path="/tests/:testId" component={TestsView} />
+        <Route path="/tests/:testId?" component={TestsView} />
       </ContentWrapper>
     </Wrapper>
   );
