@@ -16,11 +16,13 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
+import ArchiveIcon from '@material-ui/icons/Archive';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
+import Input from '@material-ui/core/Input';
 import moment from 'moment';
 
 const Wrapper = styled.div`
@@ -30,7 +32,7 @@ const Wrapper = styled.div`
   }
   .EnhancedTable-tableWrapper-142 {
     max-height: calc(100vh - 210px);
-    overflow: scroll;
+    overflow: auto;
   }
 `;
 
@@ -201,6 +203,7 @@ const toolbarStyles = theme => ({
   },
   actions: {
     color: theme.palette.text.secondary,
+    display: 'flex',
   },
   title: {
     flex: '0 0 auto',
@@ -238,20 +241,36 @@ const EnhancedTableToolbar = ({
         )}
       </div>
       <div className={classes.spacer} />
+      {/* <Input
+        placeholder="Filter"
+        // className={classes.input}
+        fullWidth
+        inputProps={{
+          'aria-label': 'Filter',
+        }}
+      /> */}
+      <div className={classes.spacer} />
+
       <div className={classes.actions}>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
+        {numSelected > 0 && (
+          <React.Fragment>
+            <Tooltip title="Duplicate">
+              <IconButton aria-label="Duplicate">
+                <FileCopyIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Archive">
+              <IconButton aria-label="Archive">
+                <ArchiveIcon />
+              </IconButton>
+            </Tooltip>
+          </React.Fragment>
         )}
+        <Tooltip title="Filter list">
+          <IconButton aria-label="Filter list">
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
       </div>
     </Toolbar>
   );

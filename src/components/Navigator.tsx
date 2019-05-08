@@ -11,7 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import DescriptionIcon from '@material-ui/icons/Description';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
-import PermMediaOutlinedIcon from '@material-ui/icons/PhotoSizeSelectActual';
+import ArchiveIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/Public';
 import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
@@ -25,7 +25,7 @@ const categories = [
     children: [
       { id: 'Tests', icon: <DescriptionIcon />, active: true },
       { id: 'Test Sets', icon: <DoneAllIcon /> },
-      { id: 'Storage', icon: <PermMediaOutlinedIcon /> },
+      { id: 'Archived Tests', icon: <ArchiveIcon /> },
       { id: 'Hosting', icon: <PublicIcon /> },
       { id: 'Functions', icon: <SettingsEthernetIcon /> },
       { id: 'ML Kit', icon: <SettingsInputComponentIcon /> },

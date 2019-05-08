@@ -49,11 +49,7 @@ const TestsView = ({ history, location }: { history: any; location: any }) => {
         </Button>
       </Toolbar>
       <TestsTable />
-      {showNewTestModal && (
-        <Modal onClose={handleCloseNewTest}>
-          <NewTestView />
-        </Modal>
-      )}
+      {showNewTestModal && <NewTestView onClose={handleCloseNewTest} />}
     </Wrapper>
   );
 };
