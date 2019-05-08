@@ -6,19 +6,14 @@ import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-markdown';
 
 const Wrapper = styled.div`
-  background-color: var(--input-background-color);
-  border-radius: 5px;
-  color: white;
+  color: black;
   outline: none;
-  border: 1px solid var(--input-border-color);
   font-size: 16px;
-  padding: 10px;
   margin-bottom: 13px;
-
-  &:focus {
-    border: 1px solid var(--input-border-color-focused);
-    box-shadow: 0px 0px 0px 3px #172e51;
-  }
+  padding: 6px 0 7px;
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.42); */
+  /* box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); */
 
   > div {
     /* overflow: visible !important; */
@@ -27,13 +22,19 @@ const Wrapper = styled.div`
   textarea {
     outline: none;
     border-radius: 4px;
-    color: white !important;
+    background: #ececec !important;
+    padding: 10px !important;
   }
+
   pre {
-    color: white;
+    padding: 10px !important;
+  }
+
+  pre {
+    color: black;
   }
   .token.punctuation {
-    color: #868686;
+    color: #aaa;
   }
   .token.property {
     color: #dc9e6f;
@@ -51,8 +52,10 @@ const Wrapper = styled.div`
 const MarkdownEditor = ({
   minHeight,
   onChange,
+  placeholder,
 }: {
   minHeight: string;
+  placeholder: string;
   onChange: (value: string) => void;
 }) => {
   const uniqueIdentifier = Math.floor(Math.random() * 1000000000);
@@ -137,8 +140,9 @@ const MarkdownEditor = ({
         padding={0}
         ignoreTabKey
         textareaId={`steps_${uniqueIdentifier}`}
+        placeholder={placeholder}
         style={{
-          fontFamily: '"helvetica", "Fira Mono", monospace',
+          fontFamily: '"Roboto", "Fira Mono", monospace',
           fontSize: '16px',
           minHeight: minHeight,
         }}

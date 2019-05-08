@@ -26,18 +26,11 @@ const categories = [
       { id: 'Tests', icon: <DescriptionIcon />, active: true },
       { id: 'Test Sets', icon: <DoneAllIcon /> },
       { id: 'Archived Tests', icon: <ArchiveIcon /> },
-      { id: 'Hosting', icon: <PublicIcon /> },
-      { id: 'Functions', icon: <SettingsEthernetIcon /> },
-      { id: 'ML Kit', icon: <SettingsInputComponentIcon /> },
     ],
   },
   {
     id: 'Settings',
-    children: [
-      { id: 'Settings', icon: <SettingsIcon /> },
-      { id: 'Performance', icon: <TimerIcon /> },
-      { id: 'Test Lab', icon: <PhonelinkSetupIcon /> },
-    ],
+    children: [{ id: 'Settings', icon: <SettingsIcon /> }],
   },
 ];
 

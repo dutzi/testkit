@@ -15,6 +15,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import StepsProp from '../components/StepsProp';
 
 const SelectsWrapper = styled.div`
   display: flex;
@@ -62,13 +63,13 @@ function ScrollDialog({ onClose }: { onClose: () => void }) {
           <Row>
             <SelectsWrapper>
               <FormControl fullWidth>
-                <InputLabel htmlFor="age-simple">Age</InputLabel>
+                <InputLabel htmlFor="component">Component</InputLabel>
                 <Select
                   value={10}
                   // onChange={handleChange}
                   inputProps={{
-                    name: 'age',
-                    id: 'age-simple',
+                    name: 'component',
+                    id: 'component',
                   }}
                 >
                   <MenuItem value="">
@@ -81,13 +82,13 @@ function ScrollDialog({ onClose }: { onClose: () => void }) {
               </FormControl>
               <Margin />
               <FormControl fullWidth>
-                <InputLabel htmlFor="age-simple">Age</InputLabel>
+                <InputLabel htmlFor="area">Area</InputLabel>
                 <Select
                   value={10}
                   // onChange={handleChange}
                   inputProps={{
-                    name: 'age',
-                    id: 'age-simple',
+                    name: 'area',
+                    id: 'area',
                   }}
                 >
                   <MenuItem value="">
@@ -100,16 +101,9 @@ function ScrollDialog({ onClose }: { onClose: () => void }) {
               </FormControl>
             </SelectsWrapper>
           </Row>
-          {/* <DialogContentText>
-            {Array.apply(null, Array(50))
-              .map(
-                () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
-              )
-              .join('\n')}
-          </DialogContentText> */}
+          <Row>
+            <StepsProp />
+          </Row>
         </DialogContent>
         {/* <DialogActions>
           <Button onClick={handleClose} color="primary">
