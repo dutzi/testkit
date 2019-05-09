@@ -213,6 +213,8 @@ const toolbarStyles = theme => ({
 const EnhancedTableToolbar = ({
   classes,
   numSelected,
+  onDuplicate,
+  onArchive,
 }: {
   classes: {
     root: string;
@@ -222,6 +224,8 @@ const EnhancedTableToolbar = ({
     title: string;
   };
   numSelected: number;
+  onDuplicate: () => void;
+  onArchive: () => void;
 }) => {
   return (
     <Toolbar
@@ -255,12 +259,12 @@ const EnhancedTableToolbar = ({
         {numSelected > 0 && (
           <React.Fragment>
             <Tooltip title="Duplicate">
-              <IconButton aria-label="Duplicate">
+              <IconButton onClick={onDuplicate} aria-label="Duplicate">
                 <FileCopyIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title="Archive">
-              <IconButton aria-label="Archive">
+              <IconButton onClick={onArchive} aria-label="Archive">
                 <ArchiveIcon />
               </IconButton>
             </Tooltip>
@@ -297,13 +301,16 @@ type EnhancedTableProps = {
     tableWrapper: string;
     table: string;
   };
+  data: object[];
+  onDuplicate: (selectedIds: string[]) => void;
+  onArchive: (selectedIds: string[]) => void;
+  onOpenTest: (id: string) => void;
 };
 
 type EnhancedTableState = {
   order: 'asc' | 'desc' | undefined;
   orderBy: string;
-  selected: object[];
-  data: object[];
+  selected: string[];
   page: number;
   rowsPerPage: number;
 };
@@ -319,56 +326,44 @@ class EnhancedTable extends React.Component<
       order: 'asc',
       orderBy: 'calories',
       selected: [],
-      data: [
-        createData(
-          'Post comment actions close events are sent Post comment actions close events are sent',
-          'Ready',
-          'passed',
-          new Date(),
-          new Date(),
-          'Conversation',
-          'Registration',
-        ),
-        createData(
-          'Post comment actions close events are sent',
-          'Archived',
-          'failed',
-          new Date(),
-          new Date(),
-          'Community',
-          'Registration',
-        ),
-        createData(
-          'Post comment actions close events are sent',
-          'ready',
-          'passed',
-          new Date(),
-          new Date(),
-          'Conversation',
-          'Say Control',
-        ),
-        createData(
-          'Post comment actions close events are sent',
-          'ready',
-          'passed',
-          new Date(),
-          new Date(),
-          'Conversation',
-          'Say Control',
-        ),
-        // createData('Donut', 452, 25.0, 51, 4.9),
-        // createData('Eclair', 262, 16.0, 24, 6.0),
-        // createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        // createData('Gingerbread', 356, 16.0, 49, 3.9),
-        // createData('Honeycomb', 408, 3.2, 87, 6.5),
-        // createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        // createData('Jelly Bean', 375, 0.0, 94, 0.0),
-        // createData('KitKat', 518, 26.0, 65, 7.0),
-        // createData('Lollipop', 392, 0.2, 98, 0.0),
-        // createData('Marshmallow', 318, 0, 81, 2.0),
-        // createData('Nougat', 360, 19.0, 9, 37.0),
-        // createData('Oreo', 437, 18.0, 63, 4.0),
-      ],
+      // data: [
+      //   createData(
+      //     'Post comment actions close events are sent Post comment actions close events are sent',
+      //     'Ready',
+      //     'passed',
+      //     new Date(),
+      //     new Date(),
+      //     'Conversation',
+      //     'Registration',
+      //   ),
+      //   createData(
+      //     'Post comment actions close events are sent',
+      //     'Archived',
+      //     'failed',
+      //     new Date(),
+      //     new Date(),
+      //     'Community',
+      //     'Registration',
+      //   ),
+      //   createData(
+      //     'Post comment actions close events are sent',
+      //     'ready',
+      //     'passed',
+      //     new Date(),
+      //     new Date(),
+      //     'Conversation',
+      //     'Say Control',
+      //   ),
+      //   createData(
+      //     'Post comment actions close events are sent',
+      //     'ready',
+      //     'passed',
+      //     new Date(),
+      //     new Date(),
+      //     'Conversation',
+      //     'Say Control',
+      //   ),
+      // ],
       page: 0,
       rowsPerPage: 5,
     };
@@ -387,16 +382,18 @@ class EnhancedTable extends React.Component<
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      this.setState(state => ({ selected: state.data.map((n: any) => n.id) }));
+      this.setState(state => ({
+        selected: this.props.data.map((n: any) => n.id),
+      }));
       return;
     }
     this.setState({ selected: [] });
   };
 
-  handleClick = (event: React.MouseEvent, id: object) => {
+  handleClick = (event: React.MouseEvent, id: string) => {
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
-    let newSelected: object[] = [];
+    let newSelected: string[] = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
@@ -422,23 +419,36 @@ class EnhancedTable extends React.Component<
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  handleLinkClick = (e: React.MouseEvent) => {
+  handleLinkClick = (id: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    this.props.onOpenTest(id);
+  };
+
+  handleDuplicate = () => {
+    this.props.onDuplicate(this.state.selected);
+  };
+
+  handleArchive = () => {
+    this.props.onArchive(this.state.selected);
   };
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes } = this.props;
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+    const { classes, data } = this.props;
+    const { order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
       <Wrapper>
         <Paper className={classes.root}>
-          <EnhancedTableToolbarWithStyles numSelected={selected.length} />
+          <EnhancedTableToolbarWithStyles
+            onDuplicate={this.handleDuplicate}
+            onArchive={this.handleArchive}
+            numSelected={selected.length}
+          />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
               <EnhancedTableHead
@@ -468,7 +478,10 @@ class EnhancedTable extends React.Component<
                           <Checkbox checked={isSelected} />
                         </TableCell>
                         <TableCell component="th" scope="row" padding="none">
-                          <TableLink onClick={this.handleLinkClick} href="#">
+                          <TableLink
+                            onClick={this.handleLinkClick.bind(null, n.id)}
+                            href="#"
+                          >
                             {n.name}
                           </TableLink>
                         </TableCell>
@@ -484,22 +497,30 @@ class EnhancedTable extends React.Component<
                           </div>
                         </TableCell>
                         <TableCell align="left">
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: moment(n.lastRun)
-                                .format('D/M/Y HH:MM')
-                                .replace(' ', '&nbsp;'),
-                            }}
-                          />
+                          {n.lastRun ? (
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: moment(n.lastRun.seconds * 1000)
+                                  .format('D/M/Y HH:MM')
+                                  .replace(' ', '&nbsp;'),
+                              }}
+                            />
+                          ) : (
+                            '-'
+                          )}
                         </TableCell>
                         <TableCell align="left">
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: moment(n.modified)
-                                .format('D/M/Y HH:MM')
-                                .replace(' ', '&nbsp;'),
-                            }}
-                          />
+                          {n.modified ? (
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: moment(n.modified.seconds * 1000)
+                                  .format('D/M/Y HH:MM')
+                                  .replace(' ', '&nbsp;'),
+                              }}
+                            />
+                          ) : (
+                            '-'
+                          )}
                         </TableCell>
                         <TableCell align="left">{n.component}</TableCell>
                         <TableCell align="left">{n.area}</TableCell>
