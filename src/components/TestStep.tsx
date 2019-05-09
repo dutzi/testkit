@@ -7,6 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import AddIcon from '@material-ui/icons/Add';
+import { Step } from '../types';
 
 const Wrapper = styled.div`
   margin: 30px -24px 0px;
@@ -27,19 +28,30 @@ const ButtonContainer = styled.div`
 `;
 
 const TestStep = ({
+  step,
   onRemove,
   onDuplicate,
   onAdd,
+  onChange,
 }: {
+  step: Step;
   onRemove: () => void;
   onDuplicate: () => void;
   onAdd: () => void;
+  onChange: (step: Step) => void;
 }) => {
   const handleDescriptionChange = (value: string) => {
-    console.log(value);
+    onChange({
+      ...step,
+      description: value,
+    });
   };
-  const handleResultChange = (value: string) => {
-    console.log(value);
+  const handleResultChange = (step: Step, value: string) => {
+    console.log(step);
+    onChange({
+      ...step,
+      result: value,
+    });
   };
   return (
     <Wrapper>
@@ -47,11 +59,13 @@ const TestStep = ({
         minHeight="120px"
         onChange={handleDescriptionChange}
         placeholder="Description"
+        initialValue={step.description}
       />
       <MarkdownEditor
         minHeight="70px"
-        onChange={handleResultChange}
+        onChange={handleResultChange.bind(null, step)}
         placeholder="Expected Result"
+        initialValue={step.result}
       />
       <ButtonContainer>
         {/* <Button variant="text" color="secondary" onClick={onRemove}>

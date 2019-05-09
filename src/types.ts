@@ -10,6 +10,7 @@ export interface Component {
 }
 
 export interface Step {
+  id: string;
   description: string;
   result: string;
 }

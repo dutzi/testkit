@@ -50,16 +50,18 @@ const Wrapper = styled.div`
 `;
 
 const MarkdownEditor = ({
+  initialValue,
   minHeight,
   onChange,
   placeholder,
 }: {
+  initialValue: string;
   minHeight: string;
   placeholder: string;
   onChange: (value: string) => void;
 }) => {
   const uniqueIdentifier = Math.floor(Math.random() * 1000000000);
-  const [state, setState] = useState('');
+  const [state, setState] = useState(initialValue);
 
   useEffect(() => {
     const steps: HTMLTextAreaElement | null = document.querySelector(

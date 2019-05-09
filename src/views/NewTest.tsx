@@ -16,10 +16,10 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import StepsProp from '../components/StepsProp';
+import StepsProp from '../components/StepsProp.jsx';
 import { firestore } from '../firebase';
 import { getTestById, updateTest } from '../utils';
-import { Test, Component } from '../types';
+import { Test, Component, Step } from '../types';
 import { getComponents } from '../data/components';
 
 const SelectsWrapper = styled.div`
@@ -118,6 +118,12 @@ function ScrollDialog({
     }
   }
 
+  function handleStepsChange(steps: Step[]) {
+    updateTest({
+      steps,
+    });
+  }
+
   return (
     <div>
       <Dialog
@@ -152,7 +158,7 @@ function ScrollDialog({
                   }}
                 >
                   {components.map(component => (
-                    <MenuItem value={component.name}>
+                    <MenuItem key={component.name} value={component.name}>
                       {component.label}
                     </MenuItem>
                   ))}
@@ -170,14 +176,16 @@ function ScrollDialog({
                   }}
                 >
                   {getAreas().map(area => (
-                    <MenuItem value={area.name}>{area.label}</MenuItem>
+                    <MenuItem key={area.name} value={area.name}>
+                      {area.label}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </SelectsWrapper>
           </Row>
           <Row>
-            <StepsProp />
+            <StepsProp steps={test.data().steps} onChange={handleStepsChange} />
           </Row>
         </DialogContent>
         {/* <DialogActions>
