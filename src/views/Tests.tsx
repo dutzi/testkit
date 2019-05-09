@@ -4,13 +4,14 @@ import ToolbarButton from '../components/ToolbarButton';
 import { withRouter } from 'react-router';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import TestsTable from '../components/TestsTable';
-import NewTestView from './NewTest';
+import TestView from './Test';
 import Modal from '../components/Modal';
 import Button from '@material-ui/core/Button';
 import { FilePlus } from 'react-feather';
 import { firestore } from '../firebase';
 import { getTestById, updateTest } from '../utils';
 import { Test } from '../types';
+import { createTest } from '../model/test';
 
 const Wrapper = styled.div``;
 
@@ -36,10 +37,17 @@ const TestsView = ({
   const { value: collection } = useCollection(firestore.collection('tests'));
 
   const handleCreateTest = () => {
-    history.push('/tests/new');
+    const nextId = getNextId(collection!);
+
+    firestore
+      .collection('tests')
+      .add(createTest(nextId))
+      .then(() => {
+        history.push(`/tests/${nextId}`);
+      });
   };
 
-  const handleCloseNewTest = () => {
+  const handleCloseTest = () => {
     history.push('/tests');
   };
 
@@ -61,7 +69,7 @@ const TestsView = ({
       }
     });
 
-    return maxId + 1;
+    return String(maxId + 1);
   }
 
   const handleDuplicate = (testIds: string[]) => {
@@ -124,10 +132,7 @@ const TestsView = ({
         data={getUnarchivedTests(getCollectionData(collection))}
       />
       {showTestModal && (
-        <NewTestView
-          testId={match.params.testId}
-          onClose={handleCloseNewTest}
-        />
+        <TestView testId={match.params.testId} onClose={handleCloseTest} />
       )}
     </Wrapper>
   );

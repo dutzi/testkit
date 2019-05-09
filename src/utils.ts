@@ -5,7 +5,7 @@ export function getTestById(
   id: any,
   tests: firebase.firestore.QueryDocumentSnapshot[],
 ) {
-  return tests.find(test => test.data().id === parseInt(id));
+  return tests.find(test => test.data().id === id);
 }
 
 export function updateTest(

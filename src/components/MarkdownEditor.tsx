@@ -9,9 +9,12 @@ const Wrapper = styled.div`
   color: black;
   outline: none;
   font-size: 16px;
-  margin-bottom: 13px;
-  padding: 6px 0 7px;
-  /* border-bottom: 1px solid rgba(0, 0, 0, 0.42); */
+
+  border-left: 1px solid #e6e6e6;
+
+  &:first-child {
+    border-bottom: 1px solid #e6e6e6;
+  }
   /* box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); */
 
@@ -21,8 +24,7 @@ const Wrapper = styled.div`
 
   textarea {
     outline: none;
-    border-radius: 4px;
-    background: #ececec !important;
+    background: #ffffff99 !important;
     padding: 10px !important;
   }
 

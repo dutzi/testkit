@@ -18,21 +18,7 @@ import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponen
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
-
-const categories = [
-  {
-    id: 'Project',
-    children: [
-      { id: 'Tests', icon: <DescriptionIcon />, active: true },
-      { id: 'Test Sets', icon: <DoneAllIcon /> },
-      { id: 'Archived Tests', icon: <ArchiveIcon /> },
-    ],
-  },
-  {
-    id: 'Settings',
-    children: [{ id: 'Settings', icon: <SettingsIcon /> }],
-  },
-];
+import { withRouter } from 'react-router';
 
 const styles = theme => ({
   categoryHeader: {
@@ -79,11 +65,58 @@ const styles = theme => ({
   },
 });
 
-function Navigator(props) {
-  const { classes, ...other } = props;
+const Navigator = ({
+  location,
+  history,
+  classes,
+}: {
+  location: any;
+  history: any;
+  classes?: any;
+}) => {
+  const categories = [
+    {
+      id: 'Project',
+      children: [
+        {
+          id: 'Tests',
+          icon: <DescriptionIcon />,
+          path: '/tests',
+          active: location.pathname.startsWith('/tests'),
+        },
+        {
+          id: 'Test Sets',
+          icon: <DoneAllIcon />,
+          path: '/test-sets',
+          active: location.pathname.startsWith('/test-sets'),
+        },
+        {
+          id: 'Archived Tests',
+          icon: <ArchiveIcon />,
+          path: '/archived-tests',
+          active: location.pathname.startsWith('/archived-tests'),
+        },
+      ],
+    },
+    {
+      id: 'Settings',
+      children: [
+        {
+          id: 'Settings',
+          icon: <SettingsIcon />,
+          path: '/settings',
+          active: location.pathname.startsWith('/settings'),
+        },
+      ],
+    },
+  ];
+
+  function handleListItemClick(path: string) {
+    history.push(path);
+  }
 
   return (
-    <Drawer variant="permanent" {...other}>
+    <Drawer variant="permanent">
       <List disablePadding style={{ width: '256px' }}>
         <ListItem
           className={clsx(classes.firebase, classes.item, classes.itemCategory)}
@@ -113,8 +146,9 @@ function Navigator(props) {
                 {id}
               </ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
+            {children.map(({ id: childId, icon, active, path }) => (
               <ListItem
+                onClick={handleListItemClick.bind(null, path)}
                 button
                 dense
                 key={childId}
@@ -141,10 +175,6 @@ function Navigator(props) {
       </List>
     </Drawer>
   );
-}
-
-Navigator.propTypes = {
-  classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Navigator);
+export default withStyles(styles)(withRouter(Navigator));

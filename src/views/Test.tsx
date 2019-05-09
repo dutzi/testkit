@@ -16,7 +16,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import StepsProp from '../components/StepsProp.jsx';
+import StepsProp from '../components/StepsProp';
 import { firestore } from '../firebase';
 import { getTestById, updateTest } from '../utils';
 import { Test, Component, Step } from '../types';
@@ -24,6 +24,7 @@ import { getComponents } from '../data/components';
 
 const SelectsWrapper = styled.div`
   display: flex;
+  margin-bottom: 30px;
 `;
 
 const Margin = styled.div`

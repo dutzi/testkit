@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { FilePlus, FolderPlus, BookOpen } from 'react-feather';
 import { Route, Link } from 'react-router-dom';
-import NewTestView from './NewTest';
 import TestsView from './Tests';
 import Navigator from '../components/Navigator';
 
@@ -21,7 +20,6 @@ const MainView = () => {
     <Wrapper>
       <Navigator />
       <ContentWrapper>
-        <Route exact path="/new-test" component={NewTestView} />
         <Route path="/tests/:testId?" component={TestsView} />
       </ContentWrapper>
     </Wrapper>

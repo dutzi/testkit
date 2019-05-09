@@ -24,22 +24,20 @@ const AddStepContainer = styled.div`
   margin-top: 13px;
 `;
 
-class StepsProp extends React.Component {
-  // propTypes = {
-  //   steps: PropTypes.;
-  //   onChange: (steps: Step[]) => void;
-  // }
-
-  createStep(step) {
+class StepsProp extends React.Component<{
+  steps: Step[];
+  onChange: (steps: Step[]) => void;
+}> {
+  createStep(step?: Step) {
     return { id: uuidv1(), description: '', result: '', ...step };
   }
 
-  handleRemoveStep(index) {
+  handleRemoveStep(index: number) {
     const { steps } = this.props;
     this.props.onChange([...steps.slice(0, index), ...steps.slice(index + 1)]);
   }
 
-  handleDuplicateStep(index) {
+  handleDuplicateStep(index: number) {
     const { steps } = this.props;
 
     this.props.onChange([
@@ -49,7 +47,7 @@ class StepsProp extends React.Component {
     ]);
   }
 
-  handleAddStep(index) {
+  handleAddStep(index: number) {
     const { steps } = this.props;
 
     this.props.onChange([
@@ -59,7 +57,7 @@ class StepsProp extends React.Component {
     ]);
   }
 
-  onChange(index, value) {
+  onChange(index: number, value: Step) {
     this.props.onChange([
       ...this.props.steps.slice(0, index),
       value,
@@ -74,10 +72,12 @@ class StepsProp extends React.Component {
           <TestStep
             key={step.id}
             step={step}
+            index={index}
             onRemove={this.handleRemoveStep.bind(this, index)}
             onDuplicate={this.handleDuplicateStep.bind(this, index)}
             onAdd={this.handleAddStep.bind(this, index)}
             onChange={this.onChange.bind(this, index)}
+            allowRemove={this.props.steps.length > 1}
           />
         ))}
       </Wrapper>

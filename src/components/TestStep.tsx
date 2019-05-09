@@ -9,86 +9,191 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import AddIcon from '@material-ui/icons/Add';
 import { Step } from '../types';
 
+const ButtonContainer = styled.div`
+  display: flex;
+  opacity: 0;
+  justify-content: center;
+`;
+
 const Wrapper = styled.div`
-  margin: 30px -24px 0px;
-  padding: 16px 24px 1px;
+  margin: 0px -24px;
   background: #f7f7f7;
-  border-top: 1px solid #00000022;
+
+  &:nth-of-type(1) {
+    border-top: 1px solid #00000022;
+  }
   border-bottom: 1px solid #00000022;
+  display: flex;
+
+  &:hover {
+    ${ButtonContainer} {
+      opacity: 1;
+    }
+  }
 `;
 
 const Label = styled.div`
   margin-bottom: 13px;
 `;
 
-const ButtonContainer = styled.div`
+const Sidebar = styled.div`
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 13px;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 110px;
+  padding: 10px 0px 4px;
 `;
 
-const TestStep = ({
-  step,
-  onRemove,
-  onDuplicate,
-  onAdd,
-  onChange,
-}: {
+const Header = styled.div`
+  padding: 0px 24px;
+  color: #787878;
+`;
+
+const Editors = styled.div`
+  flex: 1;
+`;
+
+class TestStep extends React.Component<{
   step: Step;
+  index: number;
   onRemove: () => void;
   onDuplicate: () => void;
   onAdd: () => void;
   onChange: (step: Step) => void;
-}) => {
-  const handleDescriptionChange = (value: string) => {
-    onChange({
-      ...step,
+  allowRemove: boolean;
+}> {
+  handleDescriptionChange = (value: string) => {
+    this.props.onChange({
+      ...this.props.step,
       description: value,
     });
   };
-  const handleResultChange = (step: Step, value: string) => {
-    console.log(step);
-    onChange({
-      ...step,
+
+  handleResultChange = (step: Step, value: string) => {
+    this.props.onChange({
+      ...this.props.step,
       result: value,
     });
   };
-  return (
-    <Wrapper>
-      <MarkdownEditor
-        minHeight="120px"
-        onChange={handleDescriptionChange}
-        placeholder="Description"
-        initialValue={step.description}
-      />
-      <MarkdownEditor
-        minHeight="70px"
-        onChange={handleResultChange.bind(null, step)}
-        placeholder="Expected Result"
-        initialValue={step.result}
-      />
-      <ButtonContainer>
-        {/* <Button variant="text" color="secondary" onClick={onRemove}>
-          Remove Step
-        </Button> */}
-        <Tooltip title="Add Step Below">
-          <IconButton onClick={onAdd} aria-label="Add Step Below">
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Duplicate">
-          <IconButton onClick={onDuplicate} aria-label="Duplicate">
-            <FileCopyIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Delete">
-          <IconButton onClick={onRemove} aria-label="Delete">
-            <DeleteIcon color="secondary" />
-          </IconButton>
-        </Tooltip>
-      </ButtonContainer>
-    </Wrapper>
-  );
-};
+
+  render() {
+    const { step, index } = this.props;
+    return (
+      <Wrapper>
+        <Sidebar>
+          <Header>Step {index + 1}</Header>
+          <ButtonContainer>
+            {/* <Button variant="text" color="secondary" onClick={onRemove}>
+            Remove Step
+          </Button> */}
+            <Tooltip title="Add Step After">
+              <IconButton
+                onClick={this.props.onAdd}
+                aria-label="Add Step After"
+              >
+                <AddIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Duplicate">
+              <IconButton
+                onClick={this.props.onDuplicate}
+                aria-label="Duplicate"
+              >
+                <FileCopyIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            {this.props.allowRemove && (
+              <Tooltip title="Remove">
+                <IconButton onClick={this.props.onRemove} aria-label="Remove">
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
+          </ButtonContainer>
+        </Sidebar>
+        <Editors>
+          <MarkdownEditor
+            minHeight="120px"
+            onChange={this.handleDescriptionChange}
+            placeholder="Description"
+            initialValue={step.description}
+          />
+          <MarkdownEditor
+            minHeight="70px"
+            onChange={this.handleResultChange.bind(null, step)}
+            placeholder="Expected Result"
+            initialValue={step.result}
+          />
+        </Editors>
+      </Wrapper>
+    );
+  }
+}
 
 export default TestStep;
+
+// const TestStep = ({
+//   step,
+//   onRemove,
+//   onDuplicate,
+//   onAdd,
+//   onChange,
+// }: {
+//   step: Step;
+//   onRemove: () => void;
+//   onDuplicate: () => void;
+//   onAdd: () => void;
+//   onChange: (step: Step) => void;
+// }) => {
+//   const handleDescriptionChange = (value: string) => {
+//     onChange({
+//       ...step,
+//       description: value,
+//     });
+//   };
+//   const handleResultChange = (step: Step, value: string) => {
+//     console.log(step);
+//     onChange({
+//       ...step,
+//       result: value,
+//     });
+//   };
+//   return (
+//     <Wrapper>
+//       <MarkdownEditor
+//         minHeight="120px"
+//         onChange={handleDescriptionChange}
+//         placeholder="Description"
+//         initialValue={step.description}
+//       />
+//       <MarkdownEditor
+//         minHeight="70px"
+//         onChange={handleResultChange.bind(null, step)}
+//         placeholder="Expected Result"
+//         initialValue={step.result}
+//       />
+//       <ButtonContainer>
+//         {/* <Button variant="text" color="secondary" onClick={onRemove}>
+//           Remove Step
+//         </Button> */}
+//         <Tooltip title="Add Step Below">
+//           <IconButton onClick={onAdd} aria-label="Add Step Below">
+//             <AddIcon />
+//           </IconButton>
+//         </Tooltip>
+//         <Tooltip title="Duplicate">
+//           <IconButton onClick={onDuplicate} aria-label="Duplicate">
+//             <FileCopyIcon />
+//           </IconButton>
+//         </Tooltip>
+//         <Tooltip title="Delete">
+//           <IconButton onClick={onRemove} aria-label="Delete">
+//             <DeleteIcon color="secondary" />
+//           </IconButton>
+//         </Tooltip>
+//       </ButtonContainer>
+//     </Wrapper>
+//   );
+// };
+
+// export default TestStep;

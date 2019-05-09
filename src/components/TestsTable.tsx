@@ -25,16 +25,7 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Input from '@material-ui/core/Input';
 import moment from 'moment';
 
-const Wrapper = styled.div`
-  .EnhancedTable-root-140 {
-    width: calc(100% - 40px);
-    margin: 24px 20px;
-  }
-  .EnhancedTable-tableWrapper-142 {
-    max-height: calc(100vh - 210px);
-    overflow: auto;
-  }
-`;
+const Wrapper = styled.div``;
 
 const TableLink = styled.a`
   text-decoration: none;
@@ -95,6 +86,12 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
+  {
+    id: 'id',
+    numeric: true,
+    disablePadding: false,
+    label: 'Id',
+  },
   {
     id: 'name',
     numeric: false,
@@ -286,13 +283,17 @@ const EnhancedTableToolbarWithStyles = withStyles(toolbarStyles)(
 
 const styles = theme => ({
   root: {
-    width: '100%',
     marginTop: theme.spacing.unit * 3,
+    width: 'calc(100% - 40px)',
+    margin: '24px 20px',
   },
   table: {
     minWidth: 500,
   },
-  tableWrapper: {},
+  tableWrapper: {
+    maxHeight: 'calc(100vh - 210px)',
+    overflow: 'auto',
+  },
 });
 
 type EnhancedTableProps = {
@@ -477,12 +478,15 @@ class EnhancedTable extends React.Component<
                         <TableCell padding="checkbox">
                           <Checkbox checked={isSelected} />
                         </TableCell>
+                        <TableCell component="th" scope="row" align="right">
+                          {n.id}
+                        </TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           <TableLink
                             onClick={this.handleLinkClick.bind(null, n.id)}
                             href="#"
                           >
-                            {n.name}
+                            {n.name || '(untitled)'}
                           </TableLink>
                         </TableCell>
                         <TableCell align="left">{n.state}</TableCell>
@@ -529,7 +533,7 @@ class EnhancedTable extends React.Component<
                   })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 49 * emptyRows }}>
-                    <TableCell colSpan={8} />
+                    <TableCell colSpan={9} />
                   </TableRow>
                 )}
               </TableBody>
