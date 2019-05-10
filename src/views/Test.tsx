@@ -144,6 +144,7 @@ function ScrollDialog({
               value={test.data().name}
               onChange={handleNameChange}
               fullWidth
+              autoFocus
             />
           </Row>
           <Row>

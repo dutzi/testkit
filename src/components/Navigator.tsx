@@ -59,7 +59,6 @@ const styles = theme => ({
       fontSize: theme.typography.fontSize,
     },
   },
-  textDense: {},
   divider: {
     marginTop: theme.spacing(2),
   },
@@ -162,7 +161,6 @@ const Navigator = ({
                 <ListItemText
                   classes={{
                     primary: classes.itemPrimary,
-                    textDense: classes.textDense,
                   }}
                 >
                   {childId}

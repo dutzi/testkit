@@ -16,11 +16,9 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import ArchiveIcon from '@material-ui/icons/Archive';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Input from '@material-ui/core/Input';
 import moment from 'moment';
@@ -183,7 +181,7 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
 
 const toolbarStyles = theme => ({
   root: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing(1),
   },
   highlight:
     theme.palette.type === 'light'
@@ -210,9 +208,11 @@ const toolbarStyles = theme => ({
 const EnhancedTableToolbar = ({
   classes,
   numSelected,
-  onDuplicate,
-  onArchive,
-}: {
+  onAction,
+  actions,
+}: // onDuplicate,
+// onArchive,
+{
   classes: {
     root: string;
     highlight: string;
@@ -221,8 +221,10 @@ const EnhancedTableToolbar = ({
     title: string;
   };
   numSelected: number;
-  onDuplicate: () => void;
-  onArchive: () => void;
+  onAction: (action: string) => void;
+  actions: any[];
+  // onDuplicate: () => void;
+  // onArchive: () => void;
 }) => {
   return (
     <Toolbar
@@ -253,20 +255,17 @@ const EnhancedTableToolbar = ({
       <div className={classes.spacer} />
 
       <div className={classes.actions}>
-        {numSelected > 0 && (
-          <React.Fragment>
-            <Tooltip title="Duplicate">
-              <IconButton onClick={onDuplicate} aria-label="Duplicate">
-                <FileCopyIcon />
+        {numSelected > 0 &&
+          actions.map(action => (
+            <Tooltip key={action.title} title={action.title}>
+              <IconButton
+                onClick={onAction.bind(null, action.title)}
+                aria-label={action.title}
+              >
+                <action.icon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Archive">
-              <IconButton onClick={onArchive} aria-label="Archive">
-                <ArchiveIcon />
-              </IconButton>
-            </Tooltip>
-          </React.Fragment>
-        )}
+          ))}
         <Tooltip title="Filter list">
           <IconButton aria-label="Filter list">
             <FilterListIcon />
@@ -283,7 +282,7 @@ const EnhancedTableToolbarWithStyles = withStyles(toolbarStyles)(
 
 const styles = theme => ({
   root: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     width: 'calc(100% - 40px)',
     margin: '24px 20px',
   },
@@ -303,8 +302,10 @@ type EnhancedTableProps = {
     table: string;
   };
   data: object[];
-  onDuplicate: (selectedIds: string[]) => void;
-  onArchive: (selectedIds: string[]) => void;
+  actions: object[];
+  onAction: (action: string, selectedIds: string[]) => void;
+  // onDuplicate: (selectedIds: string[]) => void;
+  // onArchive: (selectedIds: string[]) => void;
   onOpenTest: (id: string) => void;
 };
 
@@ -327,44 +328,6 @@ class EnhancedTable extends React.Component<
       order: 'asc',
       orderBy: 'calories',
       selected: [],
-      // data: [
-      //   createData(
-      //     'Post comment actions close events are sent Post comment actions close events are sent',
-      //     'Ready',
-      //     'passed',
-      //     new Date(),
-      //     new Date(),
-      //     'Conversation',
-      //     'Registration',
-      //   ),
-      //   createData(
-      //     'Post comment actions close events are sent',
-      //     'Archived',
-      //     'failed',
-      //     new Date(),
-      //     new Date(),
-      //     'Community',
-      //     'Registration',
-      //   ),
-      //   createData(
-      //     'Post comment actions close events are sent',
-      //     'ready',
-      //     'passed',
-      //     new Date(),
-      //     new Date(),
-      //     'Conversation',
-      //     'Say Control',
-      //   ),
-      //   createData(
-      //     'Post comment actions close events are sent',
-      //     'ready',
-      //     'passed',
-      //     new Date(),
-      //     new Date(),
-      //     'Conversation',
-      //     'Say Control',
-      //   ),
-      // ],
       page: 0,
       rowsPerPage: 5,
     };
@@ -426,12 +389,16 @@ class EnhancedTable extends React.Component<
     this.props.onOpenTest(id);
   };
 
-  handleDuplicate = () => {
-    this.props.onDuplicate(this.state.selected);
-  };
+  // handleDuplicate = () => {
+  //   this.props.onDuplicate(this.state.selected);
+  // };
 
-  handleArchive = () => {
-    this.props.onArchive(this.state.selected);
+  // handleArchive = () => {
+  //   this.props.onArchive(this.state.selected);
+  // };
+
+  handleAction = (action: string) => {
+    this.props.onAction(action, this.state.selected);
   };
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
@@ -446,8 +413,8 @@ class EnhancedTable extends React.Component<
       <Wrapper>
         <Paper className={classes.root}>
           <EnhancedTableToolbarWithStyles
-            onDuplicate={this.handleDuplicate}
-            onArchive={this.handleArchive}
+            actions={this.props.actions}
+            onAction={this.handleAction}
             numSelected={selected.length}
           />
           <div className={classes.tableWrapper}>

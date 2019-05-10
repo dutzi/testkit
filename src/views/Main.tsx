@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FilePlus, FolderPlus, BookOpen } from 'react-feather';
 import { Route, Link } from 'react-router-dom';
 import TestsView from './Tests';
+import ArchivedTestsView from './ArchivedTests';
 import Navigator from '../components/Navigator';
 
 const Wrapper = styled.div`
@@ -21,6 +22,7 @@ const MainView = () => {
       <Navigator />
       <ContentWrapper>
         <Route path="/tests/:testId?" component={TestsView} />
+        <Route path="/archived-tests/:testId?" component={ArchivedTestsView} />
       </ContentWrapper>
     </Wrapper>
   );

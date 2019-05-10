@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import ToolbarButton from '../components/ToolbarButton';
 import { withRouter } from 'react-router';
-import { useCollection } from 'react-firebase-hooks/firestore';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import DeleteIcon from '@material-ui/icons/Delete';
+import UnarchiveIcon from '@material-ui/icons/Unarchive';
+import { useCollection } from 'react-firebase-hooks/firestore';
 import TestsTable from '../components/TestsTable';
 import TestView from './Test';
 import Modal from '../components/Modal';
 import Button from '@material-ui/core/Button';
 import { FilePlus } from 'react-feather';
 import { firestore } from '../firebase';
-import { getTestById, updateTest, getCollectionData } from '../utils';
+import {
+  getTestById,
+  updateTest,
+  deleteTest,
+  getCollectionData,
+} from '../utils';
 import { Test } from '../types';
 import { createTest } from '../model/test';
 
@@ -38,83 +44,49 @@ const TestsView = ({
 }) => {
   const { value: collection } = useCollection(firestore.collection('tests'));
 
-  const handleCreateTest = () => {
-    const nextId = getNextId(collection!);
-
-    firestore
-      .collection('tests')
-      .add(createTest(String(nextId)))
-      .then(() => {
-        history.push(`/tests/${nextId}`);
-      });
-  };
-
   const handleCloseTest = () => {
-    history.push('/tests');
+    history.push('/archived-tests');
   };
 
-  const handleCreateTestSet = () => {};
-
-  function getNextId(tests: firebase.firestore.QuerySnapshot) {
-    let maxId = 0;
-    tests.docs.forEach(test => {
-      if (parseInt(test.data().id) > maxId) {
-        maxId = parseInt(test.data().id);
-      }
-    });
-
-    return maxId + 1;
-  }
-
-  const handleDuplicate = (testIds: string[]) => {
-    testIds.forEach((id, index) => {
-      const test = getTestById(id, collection!.docs);
-      const nextId = String(getNextId(collection!) + index);
-
-      if (test) {
-        firestore.collection('tests').add({
-          ...test.data(),
-          id: nextId,
-          modified: new Date(),
-          lastRun: null,
-        });
-      }
-    });
-  };
-
-  const handleArchive = (testIds: string[]) => {
+  function handleUnarchive(testIds: string[]) {
     testIds.forEach(id => {
       updateTest(
         id,
         {
-          state: 'archived',
+          state: 'ready',
         },
         collection!,
       );
     });
-  };
-
-  function handleAction(action: string, testIds: string[]) {
-    if (action === 'Duplicate') {
-      handleDuplicate(testIds);
-    } else if (action === 'Archive') {
-      handleArchive(testIds);
-    }
   }
 
-  function getUnarchivedTests(tests: Test[]) {
-    return tests.filter(test => test.state !== 'archived');
+  function handleDelete(testIds: string[]) {
+    testIds.forEach(id => {
+      deleteTest(id, collection!);
+    });
+  }
+
+  const handleAction = (action: string, testIds: string[]) => {
+    if (action === 'Delete') {
+      handleDelete(testIds);
+    } else if (action === 'Unarchive') {
+      handleUnarchive(testIds);
+    }
+  };
+
+  function getArchivedTests(tests: Test[]) {
+    return tests.filter(test => test.state === 'archived');
   }
 
   function handleOpenTest(id: string) {
-    history.push(`/tests/${id}`);
+    history.push(`/archived-tests/${id}`);
   }
 
   const showTestModal = !!match.params.testId;
 
   return (
     <Wrapper>
-      <Toolbar>
+      {/* <Toolbar>
         <Button onClick={handleCreateTest} variant="contained" color="primary">
           New Test
         </Button>
@@ -126,21 +98,21 @@ const TestsView = ({
         >
           Create Test Set
         </Button>
-      </Toolbar>
+      </Toolbar> */}
       <TestsTable
         onOpenTest={handleOpenTest}
         onAction={handleAction}
+        data={getArchivedTests(getCollectionData(collection))}
         actions={[
           {
-            title: 'Duplicate',
-            icon: FileCopyIcon,
+            title: 'Unarchive',
+            icon: UnarchiveIcon,
           },
           {
-            title: 'Archive',
-            icon: ArchiveIcon,
+            title: 'Delete',
+            icon: DeleteIcon,
           },
         ]}
-        data={getUnarchivedTests(getCollectionData(collection))}
       />
       {showTestModal && (
         <TestView testId={match.params.testId} onClose={handleCloseTest} />
