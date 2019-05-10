@@ -43,19 +43,6 @@ const TableLink = styled.a`
 `;
 
 let counter = 0;
-function createData(name, state, status, lastRun, modified, component, area) {
-  counter += 1;
-  return {
-    id: counter,
-    name,
-    state,
-    status,
-    lastRun,
-    modified,
-    component,
-    area,
-  };
-}
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -83,7 +70,15 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-const rows = [
+interface Column {
+  id: string;
+  numeric: boolean;
+  disablePadding: boolean;
+  label: string;
+  large?: boolean;
+}
+
+const columns: Column[] = [
   {
     id: 'id',
     numeric: true,
@@ -122,7 +117,14 @@ type EnhancedTableHeadProps = {
   order: 'desc' | 'asc' | undefined;
   orderBy: string;
   rowCount: number;
+  classes: any;
 };
+
+const tableHeadStyles = theme => ({
+  wide: {
+    width: '40%',
+  },
+});
 
 class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
   createSortHandler = property => event => {
@@ -136,6 +138,7 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
       orderBy,
       numSelected,
       rowCount,
+      classes,
     } = this.props;
 
     return (
@@ -148,25 +151,28 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
               onChange={onSelectAllClick}
             />
           </TableCell>
-          {rows.map(
-            row => (
+          {columns.map(
+            column => (
               <TableCell
-                key={row.id}
-                align={row.numeric ? 'right' : 'left'}
-                padding={row.disablePadding ? 'none' : 'default'}
-                sortDirection={orderBy === row.id ? order : false}
+                className={classNames({
+                  [classes.wide]: column.large,
+                })}
+                key={column.id}
+                align={column.numeric ? 'right' : 'left'}
+                padding={column.disablePadding ? 'none' : 'default'}
+                sortDirection={orderBy === column.id ? order : false}
               >
                 <Tooltip
                   title="Sort"
-                  placement={row.numeric ? 'bottom-end' : 'bottom-start'}
+                  placement={column.numeric ? 'bottom-end' : 'bottom-start'}
                   enterDelay={300}
                 >
                   <TableSortLabel
-                    active={orderBy === row.id}
+                    active={orderBy === column.id}
                     direction={order}
-                    onClick={this.createSortHandler(row.id)}
+                    onClick={this.createSortHandler(column.id)}
                   >
-                    {row.label}
+                    {column.label}
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
@@ -178,6 +184,10 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
     );
   }
 }
+
+const EnhancedTableHeadWithStyles = withStyles(tableHeadStyles)(
+  EnhancedTableHead,
+);
 
 const toolbarStyles = theme => ({
   root: {
@@ -419,7 +429,7 @@ class EnhancedTable extends React.Component<
           />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
-              <EnhancedTableHead
+              <EnhancedTableHeadWithStyles
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}

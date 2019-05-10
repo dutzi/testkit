@@ -1,23 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
-import ArchiveIcon from '@material-ui/icons/Archive';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
 import DeleteIcon from '@material-ui/icons/Delete';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import TestsTable from '../components/TestsTable';
 import TestView from './Test';
-import Modal from '../components/Modal';
-import Button from '@material-ui/core/Button';
-import { FilePlus } from 'react-feather';
 import { firestore } from '../firebase';
-import {
-  getTestById,
-  updateTest,
-  deleteTest,
-  getCollectionData,
-} from '../utils';
+import { updateTest, deleteTest, getCollectionData } from '../utils';
 import { Test } from '../types';
 import { createTest } from '../model/test';
 
@@ -35,7 +25,6 @@ const Margin = styled.div`
 
 const TestsView = ({
   history,
-  location,
   match,
 }: {
   history: any;

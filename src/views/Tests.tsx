@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import ToolbarButton from '../components/ToolbarButton';
 import { withRouter } from 'react-router';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import TestsTable from '../components/TestsTable';
 import TestView from './Test';
-import Modal from '../components/Modal';
 import Button from '@material-ui/core/Button';
 import { FilePlus } from 'react-feather';
 import { firestore } from '../firebase';
