@@ -26,3 +26,20 @@ export interface Test {
   area: string;
   steps: Step[];
 }
+
+export type StepStatus = 'passed' | 'failed' | 'no-run';
+
+export interface TestSet {
+  id: string;
+  name: string;
+  lastRun: any | null;
+  status: {
+    [testId: string]: {
+      [testStepId: string]: {
+        message: string;
+        status: StepStatus;
+      };
+    };
+  };
+  tests: string[];
+}

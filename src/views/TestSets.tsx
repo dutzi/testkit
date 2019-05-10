@@ -4,14 +4,15 @@ import { withRouter } from 'react-router';
 import DeleteIcon from '@material-ui/icons/Delete';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import Button from '@material-ui/core/Button';
 import Table from '../components/Table';
 import TestView from './Test';
 import { firestore } from '../firebase';
 import { updateTest, deleteTest, getCollectionData } from '../utils';
 import { Test } from '../types';
 import { createTest } from '../model/test';
-import { testsTableColumns } from '../data/table-columns';
-import TestsTableRow from '../components/TestsTableRow';
+import { testsTableColumns, testSetsTableColumns } from '../data/table-columns';
+import TestsSetsTableRow from '../components/TestsSetsTableRow';
 
 const Wrapper = styled.div``;
 
@@ -33,7 +34,9 @@ const TestsView = ({
   location: any;
   match: any;
 }) => {
-  const { value: collection } = useCollection(firestore.collection('tests'));
+  const { value: collection } = useCollection(
+    firestore.collection('test-sets'),
+  );
 
   const handleCloseTest = () => {
     history.push('/archived-tests');
@@ -77,35 +80,24 @@ const TestsView = ({
 
   return (
     <Wrapper>
-      {/* <Toolbar>
-        <Button onClick={handleCreateTest} variant="contained" color="primary">
-          New Test
+      <Toolbar>
+        <Button variant="contained" color="primary">
+          New Test Set
         </Button>
         <Margin />
-        <Button
-          onClick={handleCreateTestSet}
-          variant="contained"
-          color="default"
-        >
-          Create Test Set
-        </Button>
-      </Toolbar> */}
+      </Toolbar>
       <Table
-        columns={testsTableColumns}
+        columns={testSetsTableColumns}
         onOpenTest={handleOpenTest}
         onAction={handleAction}
-        data={getArchivedTests(getCollectionData(collection))}
+        data={getCollectionData(collection)}
         actions={[
-          {
-            title: 'Unarchive',
-            icon: UnarchiveIcon,
-          },
           {
             title: 'Delete',
             icon: DeleteIcon,
           },
         ]}
-        rowRenderer={TestsTableRow}
+        rowRenderer={TestsSetsTableRow}
       />
       {showTestModal && (
         <TestView testId={match.params.testId} onClose={handleCloseTest} />

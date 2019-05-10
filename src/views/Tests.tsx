@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import TestsTable from '../components/TestsTable';
+import Table from '../components/Table';
 import TestView from './Test';
 import Button from '@material-ui/core/Button';
 import { FilePlus } from 'react-feather';
@@ -12,6 +12,8 @@ import { firestore } from '../firebase';
 import { getTestById, updateTest, getCollectionData } from '../utils';
 import { Test } from '../types';
 import { createTest } from '../model/test';
+import { testsTableColumns } from '../data/table-columns';
+import TestsTableRow from '../components/TestsTableRow';
 
 const Wrapper = styled.div``;
 
@@ -125,7 +127,8 @@ const TestsView = ({
           Create Test Set
         </Button>
       </Toolbar>
-      <TestsTable
+      <Table
+        columns={testsTableColumns}
         onOpenTest={handleOpenTest}
         onAction={handleAction}
         actions={[
@@ -139,6 +142,7 @@ const TestsView = ({
           },
         ]}
         data={getUnarchivedTests(getCollectionData(collection))}
+        rowRenderer={TestsTableRow}
       />
       {showTestModal && (
         <TestView testId={match.params.testId} onClose={handleCloseTest} />

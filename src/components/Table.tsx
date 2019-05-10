@@ -22,25 +22,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Input from '@material-ui/core/Input';
 import moment from 'moment';
+import { Column } from '../data/table-columns';
+import TestsTableRow from './TestsTableRow';
 
 const Wrapper = styled.div``;
-
-const TableLink = styled.a`
-  text-decoration: none;
-  color: #000000de;
-  outline: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:focus {
-    background: #00000022;
-    border-radius: 4px;
-    padding: 4px;
-    margin: -4px;
-  }
-`;
 
 let counter = 0;
 
@@ -70,46 +55,6 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-interface Column {
-  id: string;
-  numeric: boolean;
-  disablePadding: boolean;
-  label: string;
-  large?: boolean;
-}
-
-const columns: Column[] = [
-  {
-    id: 'id',
-    numeric: true,
-    disablePadding: false,
-    label: 'Id',
-  },
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: true,
-    label: 'Name',
-    large: true,
-  },
-  { id: 'state', numeric: false, disablePadding: false, label: 'State' },
-  { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
-  { id: 'lastRun', numeric: false, disablePadding: false, label: 'Last Run' },
-  { id: 'modified', numeric: false, disablePadding: false, label: 'Modified' },
-  {
-    id: 'component',
-    numeric: false,
-    disablePadding: false,
-    label: 'Component',
-  },
-  {
-    id: 'area',
-    numeric: false,
-    disablePadding: false,
-    label: 'Area',
-  },
-];
-
 type EnhancedTableHeadProps = {
   numSelected: number;
   onRequestSort: (event: any, property: any) => void;
@@ -118,11 +63,15 @@ type EnhancedTableHeadProps = {
   orderBy: string;
   rowCount: number;
   classes: any;
+  columns: Column[];
 };
 
 const tableHeadStyles = theme => ({
   wide: {
     width: '40%',
+  },
+  narrow: {
+    width: '10px',
   },
 });
 
@@ -139,6 +88,7 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
       numSelected,
       rowCount,
       classes,
+      columns,
     } = this.props;
 
     return (
@@ -156,6 +106,7 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
               <TableCell
                 className={classNames({
                   [classes.wide]: column.large,
+                  [classes.narrow]: column.small,
                 })}
                 key={column.id}
                 align={column.numeric ? 'right' : 'left'}
@@ -317,6 +268,8 @@ type EnhancedTableProps = {
   // onDuplicate: (selectedIds: string[]) => void;
   // onArchive: (selectedIds: string[]) => void;
   onOpenTest: (id: string) => void;
+  columns: Column[];
+  rowRenderer: any;
 };
 
 type EnhancedTableState = {
@@ -393,7 +346,7 @@ class EnhancedTable extends React.Component<
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  handleLinkClick = (id: string, e: React.MouseEvent) => {
+  handleLinkClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     e.stopPropagation();
     this.props.onOpenTest(id);
@@ -414,11 +367,11 @@ class EnhancedTable extends React.Component<
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes, data } = this.props;
+    const { classes, data, columns, rowRenderer } = this.props;
     const { order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
+    const RowRenderer = rowRenderer;
     return (
       <Wrapper>
         <Paper className={classes.root}>
@@ -430,6 +383,7 @@ class EnhancedTable extends React.Component<
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
               <EnhancedTableHeadWithStyles
+                columns={columns}
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
@@ -443,74 +397,17 @@ class EnhancedTable extends React.Component<
                   .map(n => {
                     const isSelected = this.isSelected(n.id);
                     return (
-                      <TableRow
-                        hover
-                        onClick={event => this.handleClick(event, n.id)}
-                        role="checkbox"
-                        aria-checked={isSelected}
-                        tabIndex={-1}
-                        key={n.id}
+                      <RowRenderer
+                        onLinkClick={this.handleLinkClick}
+                        onClick={this.handleClick}
                         selected={isSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isSelected} />
-                        </TableCell>
-                        <TableCell component="th" scope="row" align="right">
-                          {n.id}
-                        </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <TableLink
-                            onClick={this.handleLinkClick.bind(null, n.id)}
-                            href="#"
-                          >
-                            {n.name || '(untitled)'}
-                          </TableLink>
-                        </TableCell>
-                        <TableCell align="left">{n.state}</TableCell>
-                        <TableCell align="left">
-                          <div>
-                            {n.status === 'passed' && (
-                              <CheckIcon color="primary" />
-                            )}
-                            {n.status === 'failed' && (
-                              <CloseIcon color="error" />
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell align="left">
-                          {n.lastRun ? (
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: moment(n.lastRun.seconds * 1000)
-                                  .format('D/M/Y HH:MM')
-                                  .replace(' ', '&nbsp;'),
-                              }}
-                            />
-                          ) : (
-                            '-'
-                          )}
-                        </TableCell>
-                        <TableCell align="left">
-                          {n.modified ? (
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: moment(n.modified.seconds * 1000)
-                                  .format('D/M/Y HH:MM')
-                                  .replace(' ', '&nbsp;'),
-                              }}
-                            />
-                          ) : (
-                            '-'
-                          )}
-                        </TableCell>
-                        <TableCell align="left">{n.component}</TableCell>
-                        <TableCell align="left">{n.area}</TableCell>
-                      </TableRow>
+                        data={n}
+                      />
                     );
                   })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 49 * emptyRows }}>
-                    <TableCell colSpan={9} />
+                    <TableCell colSpan={columns.length + 1} />
                   </TableRow>
                 )}
               </TableBody>

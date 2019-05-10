@@ -1,3 +1,4 @@
+import uuidv1 from 'uuid/v1';
 import { Test } from '../types';
 
 export function createTest(id: string): Test {
@@ -12,7 +13,7 @@ export function createTest(id: string): Test {
     area: '',
     steps: [
       {
-        id: '1',
+        id: uuidv1(),
         description: '',
         result: '',
       },
