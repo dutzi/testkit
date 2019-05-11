@@ -26,8 +26,19 @@ const MaxWidth = styled.div`
 `;
 
 const Title = styled.div`
+  display: flex;
   font-weight: 600;
   margin-bottom: 12px;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const NumTests = styled.div`
+  padding: 10px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
 `;
 
 const Steps = styled.div``;
@@ -162,6 +173,9 @@ const TestRunner = ({
       <MaxWidth>
         <Title>
           {test.name} (#{test.id})
+          <NumTests>
+            {testIndex + 1} of {numTests}
+          </NumTests>
         </Title>
         <Steps>
           <base target="_blank" />

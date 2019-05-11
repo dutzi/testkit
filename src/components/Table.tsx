@@ -59,6 +59,9 @@ type EnhancedTableHeadProps = {
 };
 
 const tableHeadStyles = theme => ({
+  root: {
+    background: 'white',
+  },
   wide: {
     width: '40%',
   },
@@ -84,7 +87,7 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
     } = this.props;
 
     return (
-      <TableHead>
+      <TableHead className={classes.root}>
         <TableRow>
           <TableCell padding="checkbox">
             <Checkbox
@@ -115,7 +118,7 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
                     direction={order}
                     onClick={this.createSortHandler(column.id)}
                   >
-                    {column.label}
+                    <div dangerouslySetInnerHTML={{ __html: column.label }} />
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
@@ -348,6 +351,16 @@ class EnhancedTable extends React.Component<
     this.props.onAction(action, this.state.selected);
   };
 
+  handleScroll = e => {
+    const head = document.querySelector<HTMLTableHeaderCellElement>(
+      'table thead',
+    );
+    if (head) {
+      head.style.transform = `translateY(${e.target.scrollTop}px)`;
+      // console.log(e.target.scrollTop);
+    }
+  };
+
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
@@ -364,7 +377,7 @@ class EnhancedTable extends React.Component<
             onAction={this.handleAction}
             numSelected={selected.length}
           />
-          <div className={classes.tableWrapper}>
+          <div className={classes.tableWrapper} onScroll={this.handleScroll}>
             <Table className={classes.table} aria-labelledby="tableTitle">
               <EnhancedTableHeadWithStyles
                 columns={columns}

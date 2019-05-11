@@ -24,7 +24,12 @@ export const testsTableColumns: Column[] = [
   },
   { id: 'state', numeric: false, disablePadding: false, label: 'State' },
   { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
-  { id: 'lastRun', numeric: false, disablePadding: false, label: 'Last Run' },
+  {
+    id: 'lastRun',
+    numeric: false,
+    disablePadding: false,
+    label: 'Last&nbsp;Run',
+  },
   { id: 'modified', numeric: false, disablePadding: false, label: 'Modified' },
   {
     id: 'component',

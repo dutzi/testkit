@@ -157,7 +157,7 @@ const TestSet = ({ id, onRun }: { id: string; onRun: () => void }) => {
           </InputsWrapper>
           <ActionsWrapper>
             <Button variant="text" color="primary">
-              Run Remaining
+              Run&nbsp;Remaining
             </Button>
             <MarginV margin="12px" />
             <Button variant="contained" color="primary" onClick={onRun}>

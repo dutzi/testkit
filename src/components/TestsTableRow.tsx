@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -6,6 +6,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import moment from 'moment';
+import { getComponents } from '../data/components';
+import { Component } from '../types';
 
 const TableLink = styled.a`
   text-decoration: none;
@@ -41,6 +43,55 @@ const TestsTableRow = ({
     id: string,
   ) => void;
 }) => {
+  const [components, setComponents] = useState<Component[]>([]);
+  getComponents().then(setComponents);
+
+  function getComponentLabel(componentName: string) {
+    let component = components.find(component => {
+      return component.name === componentName;
+    });
+
+    if (component) {
+      return component.label;
+    } else {
+      return '-';
+    }
+  }
+
+  function getAreaLabel(componentName: string, areaName: string) {
+    let component = components.find(component => {
+      return component.name === componentName;
+    });
+
+    if (component) {
+      let area = component.areas.find(area => {
+        return area.name === areaName;
+      });
+
+      if (area) {
+        return area.label;
+      } else {
+        return '-';
+      }
+    } else {
+      return '-';
+    }
+  }
+
+  function renderDateTime(data: any) {
+    return data ? (
+      <div
+        dangerouslySetInnerHTML={{
+          __html: moment(data.seconds * 1000)
+            .format('D/M/Y HH:MM')
+            .replace(' ', '&nbsp;'),
+        }}
+      />
+    ) : (
+      '-'
+    );
+  }
+
   return (
     <TableRow
       hover
@@ -68,34 +119,12 @@ const TestsTableRow = ({
           {data.status === 'failed' && <CloseIcon color="error" />}
         </div>
       </TableCell>
+      <TableCell align="left">{renderDateTime(data.lastRun)}</TableCell>
+      <TableCell align="left">{renderDateTime(data.modified)}</TableCell>
+      <TableCell align="left">{getComponentLabel(data.component)}</TableCell>
       <TableCell align="left">
-        {data.lastRun ? (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: moment(data.lastRun.seconds * 1000)
-                .format('D/M/Y HH:MM')
-                .replace(' ', '&nbsp;'),
-            }}
-          />
-        ) : (
-          '-'
-        )}
+        {getAreaLabel(data.component, data.area)}
       </TableCell>
-      <TableCell align="left">
-        {data.modified ? (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: moment(data.modified.seconds * 1000)
-                .format('D/M/Y HH:MM')
-                .replace(' ', '&nbsp;'),
-            }}
-          />
-        ) : (
-          '-'
-        )}
-      </TableCell>
-      <TableCell align="left">{data.component}</TableCell>
-      <TableCell align="left">{data.area}</TableCell>
     </TableRow>
   );
 };
