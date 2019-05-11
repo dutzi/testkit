@@ -40,7 +40,7 @@ const NoRun = styled.div`
   ${border}
 `;
 
-const TestStatusBar = ({
+const TestProgressBar = ({
   test,
   status,
 }: {
@@ -54,7 +54,7 @@ const TestStatusBar = ({
     let aggregatedStatus: StepStatus[] = [];
 
     test.steps.forEach(step => {
-      const stepStatus = _.get(status, `[${step.id}].status`, 'no-run');
+      const stepStatus = _.get(status, `[${step.id}].status`, 'skipped');
       if (stepStatus === 'passed') numPassed++;
       else if (stepStatus === 'failed') numFailed++;
       else numNoRun++;
@@ -69,13 +69,13 @@ const TestStatusBar = ({
       return <Passed key={index} />;
     } else if (status === 'failed') {
       return <Failed key={index} />;
-    } else if (status === 'no-run') {
+    } else if (status === 'skipped') {
       return <NoRun key={index} />;
     }
   }
 
   function getTooltipTitle(numPassed, numFailed, numNoRun) {
-    return `Passed: ${numPassed} – Failed: ${numFailed} – No Run: ${numNoRun}`;
+    return `Passed: ${numPassed} – Failed: ${numFailed} – Skipped: ${numNoRun}`;
   }
 
   let { aggregatedStatus, numPassed, numFailed, numNoRun } = getTestStatus(
@@ -93,4 +93,4 @@ const TestStatusBar = ({
   );
 };
 
-export default TestStatusBar;
+export default TestProgressBar;

@@ -45,7 +45,7 @@ export interface TestStatus {
   };
 }
 
-export type StepStatus = 'passed' | 'failed' | 'no-run';
+export type StepStatus = 'passed' | 'failed' | 'skipped';
 
 export interface TestSet {
   id: string;

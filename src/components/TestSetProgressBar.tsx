@@ -38,7 +38,7 @@ const NoRun = styled.div`
   ${border}
 `;
 
-const TestSetStatusBar = ({ testSet }: { testSet: TestSet }) => {
+const TestSetProgressBar = ({ testSet }: { testSet: TestSet }) => {
   const { value: tests } = useCollectionData(firestore.collection('tests'));
 
   function getTestById(id: string, tests: Test[]): Test | undefined {
@@ -64,7 +64,7 @@ const TestSetStatusBar = ({ testSet }: { testSet: TestSet }) => {
           if (status === 'passed') numPassed++;
           else if (status === 'failed') numFailed++;
           else numNoRun++;
-          return status || 'no-run';
+          return status || 'skipped';
         });
         aggregatedStatus = aggregatedStatus.concat(testAggregatedStatus);
       }
@@ -78,13 +78,13 @@ const TestSetStatusBar = ({ testSet }: { testSet: TestSet }) => {
       return <Passed key={index} />;
     } else if (status === 'failed') {
       return <Failed key={index} />;
-    } else if (status === 'no-run') {
+    } else if (status === 'skipped') {
       return <NoRun key={index} />;
     }
   }
 
   function getTooltipTitle(numPassed, numFailed, numNoRun) {
-    return `Passed: ${numPassed} – Failed: ${numFailed} – No Run: ${numNoRun}`;
+    return `Passed: ${numPassed} – Failed: ${numFailed} – Skipped: ${numNoRun}`;
   }
 
   let { aggregatedStatus, numPassed, numFailed, numNoRun } = getTestStatus(
@@ -102,4 +102,4 @@ const TestSetStatusBar = ({ testSet }: { testSet: TestSet }) => {
   );
 };
 
-export default TestSetStatusBar;
+export default TestSetProgressBar;

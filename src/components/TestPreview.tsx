@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import _ from 'lodash';
 import ReactMarkdown from 'react-markdown';
 import { Test, TestStatus } from '../types';
-import TestStatusBar from './TestStatusBar';
+import TestProgressBar from './TestProgressBar';
 import { markdownOverrides } from '../styles';
 
 const Wrapper = styled.div`
@@ -70,30 +71,33 @@ const TestPreview = ({ test, status }: { test: Test; status?: TestStatus }) => {
         <TestName>
           {test.name} (#{test.id})
         </TestName>
-        <TestStatusBar test={test} status={status} />
+        <TestProgressBar test={test} status={status} />
       </FlexRow>
       <Steps>
         <base target="_blank" />
-        {test.steps.map(step => (
-          <Step>
-            <HBox>
-              <Description>
-                <ReactMarkdown source={step.description} />
-              </Description>
-              <Result>
-                <ReactMarkdown source={step.result} />
-              </Result>
-            </HBox>
-            {status && status[step.id] && (
-              <React.Fragment>
-                <Title>Test Message</Title>
-                <TestStatusMessage>
-                  <ReactMarkdown source={status[step.id].message} />
-                </TestStatusMessage>
-              </React.Fragment>
-            )}
-          </Step>
-        ))}
+        {test.steps.map(step => {
+          const message = _.get(status, `[${step.id}].message`);
+          return (
+            <Step>
+              <HBox>
+                <Description>
+                  <ReactMarkdown source={step.description} />
+                </Description>
+                <Result>
+                  <ReactMarkdown source={step.result} />
+                </Result>
+              </HBox>
+              {message && (
+                <React.Fragment>
+                  <Title>Test Message</Title>
+                  <TestStatusMessage>
+                    <ReactMarkdown source={message} />
+                  </TestStatusMessage>
+                </React.Fragment>
+              )}
+            </Step>
+          );
+        })}
       </Steps>
     </Wrapper>
   );

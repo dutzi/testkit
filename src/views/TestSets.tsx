@@ -154,10 +154,54 @@ const TestsView = ({
   }
 
   function handleRun() {
-    let testSet = getCurrentTestSet(testSetsCollection);
+    const testSet = getCurrentTestSet(testSetsCollection);
     if (testSet) {
       history.push(`/test-sets/${match.params.testSetId}/${testSet.tests[0]}`);
     }
+  }
+
+  function handleNextTest() {
+    const testSet = getCurrentTestSet(testSetsCollection);
+    if (testSet) {
+      const testIndex = getTestIndex();
+
+      if (testIndex === testSet.tests.length - 1) {
+        history.push(`/test-sets`);
+      } else {
+        history.push(
+          `/test-sets/${match.params.testSetId}/${
+            testSet.tests[testIndex + 1]
+          }`,
+        );
+      }
+    }
+  }
+
+  function handlePrevTest() {
+    const testSet = getCurrentTestSet(testSetsCollection);
+    if (testSet) {
+      const testIndex = getTestIndex();
+
+      history.push(
+        `/test-sets/${match.params.testSetId}/${testSet.tests[testIndex - 1]}`,
+      );
+    }
+  }
+
+  function getTestIndex() {
+    const testSet = getCurrentTestSet(testSetsCollection);
+    if (testSet) {
+      return testSet.tests.findIndex(testId => testId === match.params.testId);
+    }
+    return -1;
+  }
+
+  function getNumTests() {
+    const testSet = getCurrentTestSet(testSetsCollection);
+    if (testSet) {
+      return testSet.tests.length;
+    }
+    return 0;
   }
 
   const showSingleTestSet = !!match.params.testSetId;
@@ -199,6 +243,10 @@ const TestsView = ({
         <TestRunner
           testSetId={match.params.testSetId}
           testId={match.params.testId}
+          onNext={handleNextTest}
+          onPrev={handlePrevTest}
+          testIndex={getTestIndex()}
+          numTests={getNumTests()}
         />
       )}
     </Wrapper>

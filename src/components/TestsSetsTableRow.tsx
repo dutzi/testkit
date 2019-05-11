@@ -5,7 +5,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import moment from 'moment';
 import { TestSet } from '../types';
-import TestSetStatusBar from './TestSetStatusBar';
+import TestSetProgressBar from './TestSetProgressBar';
 
 const TableLink = styled.a`
   text-decoration: none;
@@ -62,7 +62,7 @@ const TestsSetsTableRow = ({
         </TableLink>
       </TableCell>
       <TableCell align="left">
-        <TestSetStatusBar testSet={data} />
+        <TestSetProgressBar testSet={data} />
       </TableCell>
       <TableCell align="left">
         {data.lastRun ? (

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { firestore } from '../firebase';
 import { getDocById } from '../data-utils';
+import produce from 'immer';
 import { Test, Step as IStep, TestSet } from '../types';
 import ReactMarkdown from 'react-markdown';
 import { markdownOverrides, MarginV } from '../styles';
@@ -11,8 +12,9 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import _ from 'lodash';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import MarkdownEditor from '../components/MarkdownEditor';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -66,7 +68,7 @@ const Result = styled.div`
 const TestStatusMessage = styled.div`
   border-radius: 4px;
   background: white;
-  padding: 12px;
+  overflow: hidden;
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
   ${markdownOverrides}
@@ -78,12 +80,25 @@ const StepActions = styled.div`
   margin: 24px 0px;
 `;
 
+const Actions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
 const TestRunner = ({
   testSetId,
   testId,
+  onNext,
+  onPrev,
+  testIndex,
+  numTests,
 }: {
   testSetId: string;
   testId: string;
+  onNext: () => void;
+  onPrev: () => void;
+  testIndex: number;
+  numTests: number;
 }) => {
   const { value: testSetsCollection } = useCollection(
     firestore.collection('test-sets'),
@@ -111,34 +126,42 @@ const TestRunner = ({
   const test: Test = testDoc.data() as Test;
   const testSet: TestSet = testSetDoc!.data() as TestSet;
 
-  // function handlePass(step: IStep) {}
-  function handleChange(step: IStep, e: any) {
+  function updateStepStatus(step: IStep, value) {
     if (testSetDoc) {
       var testSetRef = firestore.collection('test-sets').doc(testSetDoc.id);
       if (testSetRef) {
         const testSet = testSetDoc.data();
-        testSetRef.update({
-          ...testSet,
-          status: {
-            ...testSet.status,
-            [testId]: {
-              ...testSet.status[testId],
-              [step.id]: {
-                ...testSet.status[testId][step.id],
-                status: e.target.value,
-              },
-            },
-          },
+
+        const nextState = produce(testSet, draftState => {
+          draftState.status[testId] = draftState.status[testId] || {};
+          draftState.status[testId][step.id] = {
+            ...draftState.status[testId][step.id],
+            ...value,
+          };
         });
+
+        testSetRef.update(nextState);
       }
     }
+  }
+
+  function handleStatusChange(step: IStep, e: any) {
+    updateStepStatus(step, {
+      status: e.target.value,
+    });
+  }
+
+  function handleMessageChange(step: IStep, value: string) {
+    updateStepStatus(step, {
+      message: value,
+    });
   }
 
   return (
     <Wrapper>
       <MaxWidth>
         <Title>
-          {test.name} ({test.id})
+          {test.name} (#{test.id})
         </Title>
         <Steps>
           <base target="_blank" />
@@ -153,22 +176,32 @@ const TestRunner = ({
                 </Result>
               </HBox>
               <React.Fragment>
-                <Title>Test Message</Title>
+                <Title>Actual Results</Title>
                 <TestStatusMessage>
-                  <ReactMarkdown source={'asda'} />
+                  <MarkdownEditor
+                    minHeight="120px"
+                    onChange={handleMessageChange.bind(null, step)}
+                    placeholder="Description"
+                    showBorder={false}
+                    initialValue={_.get(
+                      testSet,
+                      `status[${testId}][${step.id}].message`,
+                      '',
+                    )}
+                  />
                 </TestStatusMessage>
               </React.Fragment>
               <StepActions>
                 <FormControl component="fieldset">
                   <RadioGroup
                     aria-label="position"
-                    name="position"
+                    name={`stepStatus_${step.id}`}
                     value={_.get(
                       testSet,
                       `status[${testId}][${step.id}].status`,
                       '',
                     )}
-                    onChange={handleChange.bind(null, step)}
+                    onChange={handleStatusChange.bind(null, step)}
                     row
                   >
                     <FormControlLabel
@@ -191,34 +224,30 @@ const TestRunner = ({
                     />
                   </RadioGroup>
                 </FormControl>
-
-                {/* <Button
-                  onClick={handlePass.bind(null, step)}
-                  variant="text"
-                  color="default"
-                >
-                  Skip
-                </Button>
-                <MarginV margin="12px" />
-                <Button
-                  onClick={handlePass.bind(null, step)}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Fail
-                </Button>
-                <MarginV margin="12px" />
-                <Button
-                  onClick={handlePass.bind(null, step)}
-                  variant="contained"
-                  color="primary"
-                >
-                  Pass
-                </Button> */}
               </StepActions>
             </Step>
           ))}
         </Steps>
+        <Actions>
+          {testIndex > 0 && (
+            <Button onClick={onPrev} variant="text" color="default">
+              Previous Test
+            </Button>
+          )}
+          <MarginV margin="12px" />
+          <Button onClick={onNext} variant="contained" color="primary">
+            {numTests - 1 === testIndex ? (
+              'Done'
+            ) : (
+              <React.Fragment>
+                Next Test
+                <MarginV margin="6px" />
+                <PlayArrowIcon />
+                <MarginV margin="-6px" />
+              </React.Fragment>
+            )}
+          </Button>
+        </Actions>
       </MaxWidth>
     </Wrapper>
   );

@@ -1,19 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-markdown';
+
+type HasBorder = { showBorder: boolean };
 
 const Wrapper = styled.div`
   color: black;
   outline: none;
   font-size: 16px;
 
-  border-left: 1px solid #e6e6e6;
+  ${(p: HasBorder) =>
+    p.showBorder &&
+    css`
+      border-left: 1px solid #e6e6e6;
+    `}
 
   &:first-child {
-    border-bottom: 1px solid #e6e6e6;
+    ${(p: HasBorder) =>
+      p.showBorder &&
+      css`
+        border-bottom: 1px solid #e6e6e6;
+      `}
   }
   /* box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); */
@@ -56,11 +66,13 @@ const MarkdownEditor = ({
   minHeight,
   onChange,
   placeholder,
+  showBorder = true,
 }: {
   initialValue: string;
   minHeight: string;
   placeholder: string;
   onChange: (value: string) => void;
+  showBorder?: boolean;
 }) => {
   const uniqueIdentifier = Math.floor(Math.random() * 1000000000);
   const [state, setState] = useState(initialValue);
@@ -136,7 +148,7 @@ const MarkdownEditor = ({
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper showBorder={showBorder}>
       <Editor
         value={state}
         onValueChange={setState}
