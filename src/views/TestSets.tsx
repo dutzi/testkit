@@ -13,7 +13,11 @@ import TestsSetsTableRow from '../components/TestsSetsTableRow';
 import Breadcrumbs from '../components/Breadcrumbs';
 import TestSet from './TestSet';
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  height: 100vh;
+`;
 
 const BreadcrumbsWrapper = styled.div`
   padding: 10px;

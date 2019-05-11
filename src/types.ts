@@ -9,6 +9,17 @@ export interface Component {
   areas: Area[];
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface Platform {
+  id: string;
+  name: string;
+}
+
 export interface Step {
   id: string;
   description: string;
@@ -44,4 +55,6 @@ export interface TestSet {
     [testId: string]: TestStatus;
   };
   tests: string[];
+  user: string;
+  platform: string;
 }

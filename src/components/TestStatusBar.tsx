@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   border-radius: 10px;
   overflow: hidden;
   width: 150px;
+  height: 10px;
 `;
 
 const Passed = styled.div`
@@ -32,7 +33,7 @@ const TestStatusBar = ({
   status,
 }: {
   test: Test;
-  status: TestStatus;
+  status?: TestStatus;
 }) => {
   function getTestStatus(test: Test) {
     let numPassed = 0;
