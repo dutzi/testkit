@@ -8,7 +8,7 @@ import Table from '../components/Table';
 import TestView from './Test';
 import Button from '@material-ui/core/Button';
 import { firestore } from '../firebase';
-import { getDocById, updateTest, getCollectionData } from '../utils';
+import { getDocById, updateTest, getCollectionData } from '../data-utils';
 import { Test } from '../types';
 import { createTest } from '../model/test';
 import { testsTableColumns } from '../data/table-columns';

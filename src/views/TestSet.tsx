@@ -2,12 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import { firestore } from '../firebase';
-import { getCollectionData, getDocById } from '../utils';
+import { getCollectionData, getDocById } from '../data-utils';
 import {
   TestSet as ITestSet,
   Test,
@@ -21,6 +17,8 @@ import { getUsers } from '../data/users';
 import { getPlatforms } from '../data/platforms';
 import { Button } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import Select from '../components/Select';
+import { MarginH, MarginV } from '../styles';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -29,14 +27,6 @@ const Wrapper = styled.div`
 
 const MaxWidth = styled.div`
   max-width: 1024px;
-`;
-
-const MarginH = styled.div`
-  margin-bottom: 12px;
-`;
-
-const MarginV = styled.div`
-  margin-right: ${(p: { margin?: string }) => p.margin || '24px'};
 `;
 
 const SelectsWrapper = styled.div`
@@ -60,7 +50,7 @@ const ActionsWrapper = styled.div`
   align-items: flex-start;
 `;
 
-const TestSet = ({ id }: { id: string }) => {
+const TestSet = ({ id, onRun }: { id: string; onRun: () => void }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [platforms, setPlatforms] = useState<Platform[]>([]);
 
@@ -146,47 +136,23 @@ const TestSet = ({ id }: { id: string }) => {
             />
             <MarginH />
             <SelectsWrapper>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="platform">Platform</InputLabel>
-                <Select
-                  value={testSet.platform}
-                  onChange={handlePlatformChange}
-                  inputProps={{
-                    name: 'platform',
-                    id: 'platform',
-                  }}
-                >
-                  <MenuItem key="-1" value="-1">
-                    None
-                  </MenuItem>
-                  {platforms.map(platform => (
-                    <MenuItem key={platform.id} value={platform.id}>
-                      {platform.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <Select
+                title="Platform"
+                name="platform"
+                onChange={handlePlatformChange}
+                allowNone
+                data={platforms}
+                value={testSet.platform}
+              />
               <MarginV />
-              <FormControl fullWidth>
-                <InputLabel htmlFor="user">User</InputLabel>
-                <Select
-                  value={testSet.user}
-                  onChange={handleUserChange}
-                  inputProps={{
-                    name: 'user',
-                    id: 'user',
-                  }}
-                >
-                  <MenuItem key="-1" value="-1">
-                    None
-                  </MenuItem>
-                  {users.map(user => (
-                    <MenuItem key={user.id} value={user.id}>
-                      {user.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <Select
+                title="Assignee"
+                name="user"
+                onChange={handleUserChange}
+                allowNone
+                data={users}
+                value={testSet.user}
+              />
             </SelectsWrapper>
           </InputsWrapper>
           <ActionsWrapper>
@@ -194,7 +160,7 @@ const TestSet = ({ id }: { id: string }) => {
               Run Remaining
             </Button>
             <MarginV margin="12px" />
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={onRun}>
               <MarginV margin="-6px" />
               <PlayArrowIcon />
               <MarginV margin="6px" />
@@ -202,7 +168,7 @@ const TestSet = ({ id }: { id: string }) => {
             </Button>
           </ActionsWrapper>
         </FormWrapper>
-        <Typography variant="subtitle1" component="p">
+        <Typography variant="h6" component="p">
           Tests
         </Typography>
         <MarginH />

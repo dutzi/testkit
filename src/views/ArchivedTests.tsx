@@ -7,7 +7,7 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import Table from '../components/Table';
 import TestView from './Test';
 import { firestore } from '../firebase';
-import { updateTest, deleteTest, getCollectionData } from '../utils';
+import { updateTest, deleteTest, getCollectionData } from '../data-utils';
 import { Test } from '../types';
 import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';

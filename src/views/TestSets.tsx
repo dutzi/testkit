@@ -7,11 +7,19 @@ import Button from '@material-ui/core/Button';
 import Table from '../components/Table';
 import TestView from './Test';
 import { firestore } from '../firebase';
-import { updateTest, deleteTest, getCollectionData } from '../utils';
+import {
+  updateTest,
+  deleteTest,
+  getCollectionData,
+  getFirstTestInTestSet,
+  getDocById,
+} from '../data-utils';
 import { testSetsTableColumns } from '../data/table-columns';
 import TestsSetsTableRow from '../components/TestsSetsTableRow';
 import Breadcrumbs from '../components/Breadcrumbs';
 import TestSet from './TestSet';
+import TestRunner from './TestRunner';
+import { TestSet as ITestSet, Test } from '../types';
 
 const Wrapper = styled.div`
   display: grid;
@@ -42,9 +50,17 @@ const TestsView = ({
   location: any;
   match: any;
 }) => {
-  const { value: collection } = useCollection(
+  const { value: testSetsCollection } = useCollection(
     firestore.collection('test-sets'),
   );
+
+  const { value: testsCollection } = useCollection(
+    firestore.collection('tests'),
+  );
+
+  if (!testSetsCollection || !testsCollection) {
+    return null;
+  }
 
   const handleCloseTest = () => {
     history.push('/archived-tests');
@@ -57,14 +73,14 @@ const TestsView = ({
         {
           state: 'ready',
         },
-        collection!,
+        testSetsCollection!,
       );
     });
   }
 
   function handleDelete(testIds: string[]) {
     testIds.forEach(id => {
-      deleteTest(id, collection!);
+      deleteTest(id, testSetsCollection!);
     });
   }
 
@@ -80,7 +96,7 @@ const TestsView = ({
     history.push(`/test-sets/${id}`);
   }
 
-  function getCurrentTestSet(collection) {
+  function getCurrentTestSet(collection): ITestSet | undefined {
     if (collection) {
       return getCollectionData(collection).find(
         testSet => testSet.id === match.params.testSetId,
@@ -89,16 +105,42 @@ const TestsView = ({
   }
 
   function getBreadcrumbLocations() {
-    if (match.params.testSetId) {
-      const testSet = getCurrentTestSet(collection);
+    function getTestSetName() {
+      const testSet = getCurrentTestSet(testSetsCollection);
       let name = '';
       if (testSet) {
         name = testSet.name || '';
       }
+      return name;
+    }
+
+    function getTestName() {
+      const test = getDocById(match.params.testId, testsCollection!.docs);
+      let name = '';
+      if (test) {
+        name = test.data().name || '';
+      }
+
+      return name;
+    }
+
+    if (match.params.testId) {
       return [
         { name: 'Test Sets', href: '/test-sets' },
         {
-          name,
+          name: getTestSetName(),
+          href: `/test-sets/${match.params.testSetId}`,
+        },
+        {
+          name: getTestName(),
+          href: `/test-sets/${match.params.testSetId}`,
+        },
+      ];
+    } else if (match.params.testSetId) {
+      return [
+        { name: 'Test Sets', href: '/test-sets' },
+        {
+          name: getTestSetName(),
           href: `/test-sets/${match.params.testSetId}`,
         },
       ];
@@ -111,7 +153,15 @@ const TestsView = ({
     history.push(location.href);
   }
 
+  function handleRun() {
+    let testSet = getCurrentTestSet(testSetsCollection);
+    if (testSet) {
+      history.push(`/test-sets/${match.params.testSetId}/${testSet.tests[0]}`);
+    }
+  }
+
   const showSingleTestSet = !!match.params.testSetId;
+  const showTestRunner = !!match.params.testId;
 
   return (
     <Wrapper>
@@ -127,12 +177,12 @@ const TestsView = ({
           locations={getBreadcrumbLocations()}
         />
       </BreadcrumbsWrapper>
-      {!showSingleTestSet && (
+      {!showSingleTestSet && !showTestRunner && (
         <Table
           columns={testSetsTableColumns}
           onOpenTest={handleOpenTest}
           onAction={handleAction}
-          data={getCollectionData(collection)}
+          data={getCollectionData(testSetsCollection)}
           actions={[
             {
               title: 'Delete',
@@ -142,7 +192,15 @@ const TestsView = ({
           rowRenderer={TestsSetsTableRow}
         />
       )}
-      {showSingleTestSet && <TestSet id={match.params.testSetId} />}
+      {showSingleTestSet && !showTestRunner && (
+        <TestSet id={match.params.testSetId} onRun={handleRun} />
+      )}
+      {showTestRunner && (
+        <TestRunner
+          testSetId={match.params.testSetId}
+          testId={match.params.testId}
+        />
+      )}
     </Wrapper>
   );
 };

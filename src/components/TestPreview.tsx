@@ -1,8 +1,9 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 import { Test, TestStatus } from '../types';
 import TestStatusBar from './TestStatusBar';
+import { markdownOverrides } from '../styles';
 
 const Wrapper = styled.div`
   margin-bottom: 24px;
@@ -17,6 +18,7 @@ const Steps = styled.div``;
 
 const TestName = styled.div`
   flex: 1;
+  font-weight: 600;
 `;
 
 const Step = styled.div`
@@ -26,21 +28,6 @@ const Step = styled.div`
 const HBox = styled.div`
   display: flex;
   margin-bottom: 24px;
-`;
-
-const markdownOverrides = css`
-  ol {
-    margin: 0px;
-    padding: 0px 20px;
-  }
-
-  p {
-    margin: 0px;
-  }
-
-  blockquote {
-    margin-inline-start: 20px;
-  }
 `;
 
 const Description = styled.div`
@@ -81,7 +68,7 @@ const TestPreview = ({ test, status }: { test: Test; status?: TestStatus }) => {
     <Wrapper>
       <FlexRow>
         <TestName>
-          #{test.id} {test.name}
+          {test.name} (#{test.id})
         </TestName>
         <TestStatusBar test={test} status={status} />
       </FlexRow>

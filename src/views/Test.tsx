@@ -18,7 +18,7 @@ import Select from '@material-ui/core/Select';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import StepsProp from '../components/StepsProp';
 import { firestore } from '../firebase';
-import { getDocById } from '../utils';
+import { getDocById } from '../data-utils';
 import { Component, Step } from '../types';
 import { getComponents } from '../data/components';
 

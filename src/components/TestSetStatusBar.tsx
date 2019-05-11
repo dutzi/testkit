@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { TestSet, Test, Step, StepStatus } from '../types';
 import { firestore } from '../firebase';
@@ -13,17 +13,29 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
+const border = css`
+  margin-right: 2px
+
+  &:last-child {
+    margin-right: 0px;
+  }
+`;
+
 const Passed = styled.div`
   background-color: #66bb66;
   flex: 1;
+
+  ${border}
 `;
 const Failed = styled.div`
   background-color: #ee4444;
   flex: 1;
+  ${border}
 `;
 const NoRun = styled.div`
   background-color: #d1d1d1;
   flex: 1;
+  ${border}
 `;
 
 const TestSetStatusBar = ({ testSet }: { testSet: TestSet }) => {

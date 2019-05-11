@@ -3,9 +3,9 @@ import { firestore } from './firebase';
 
 export function getDocById(
   id: any,
-  tests: firebase.firestore.QueryDocumentSnapshot[],
+  collection: firebase.firestore.QueryDocumentSnapshot[],
 ) {
-  return tests.find(test => test.data().id === id);
+  return collection.find(test => test.data().id === id);
 }
 
 export function updateTest(
@@ -37,4 +37,8 @@ export function getCollectionData(collection): any[] {
   } else {
     return [];
   }
+}
+
+export function getFirstTestInTestSet(testSetId: string) {
+  return 1;
 }

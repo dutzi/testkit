@@ -23,7 +23,10 @@ const MainView = () => {
       <ContentWrapper>
         <Route path="/tests/:testId?" component={TestsView} />
         <Route path="/archived-tests/:testId?" component={ArchivedTestsView} />
-        <Route path="/test-sets/:testSetId?" component={TestSetsView} />
+        <Route
+          path="/test-sets/:testSetId?/:testId?"
+          component={TestSetsView}
+        />
       </ContentWrapper>
     </Wrapper>
   );
