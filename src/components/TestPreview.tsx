@@ -63,22 +63,29 @@ const TestStatusMessage = styled.div`
   ${markdownOverrides}
 `;
 
-const TestPreview = ({ test, status }: { test: Test; status?: TestStatus }) => {
-  console.log({ status });
+const TestPreview = ({
+  test,
+  status,
+  showProgress,
+}: {
+  test: Test;
+  status?: TestStatus;
+  showProgress: boolean;
+}) => {
   return (
     <Wrapper>
       <FlexRow>
         <TestName>
           {test.name} (#{test.id})
         </TestName>
-        <TestProgressBar test={test} status={status} />
+        {showProgress && <TestProgressBar test={test} status={status} />}
       </FlexRow>
       <Steps>
         <base target="_blank" />
         {test.steps.map(step => {
           const message = _.get(status, `[${step.id}].message`);
           return (
-            <Step>
+            <Step key={step.id}>
               <HBox>
                 <Description>
                   <ReactMarkdown source={step.description} />

@@ -8,7 +8,12 @@ import Table from '../components/Table';
 import TestView from './Test';
 import Button from '@material-ui/core/Button';
 import { firestore } from '../firebase';
-import { getDocById, updateTest, getCollectionData } from '../data-utils';
+import {
+  getDocById,
+  updateTest,
+  getCollectionData,
+  getNextId,
+} from '../data-utils';
 import { Test } from '../types';
 import { createTest } from '../model/test';
 import { testsTableColumns } from '../data/table-columns';
@@ -52,18 +57,9 @@ const TestsView = ({
     history.push('/tests');
   };
 
-  const handleCreateTestSet = () => {};
-
-  function getNextId(tests: firebase.firestore.QuerySnapshot) {
-    let maxId = 0;
-    tests.docs.forEach(test => {
-      if (parseInt(test.data().id) > maxId) {
-        maxId = parseInt(test.data().id);
-      }
-    });
-
-    return maxId + 1;
-  }
+  const handleCreateTestSet = () => {
+    history.push(`/test-sets/create?tests=${'43' + ',47'}`);
+  };
 
   const handleDuplicate = (testIds: string[]) => {
     testIds.forEach((id, index) => {

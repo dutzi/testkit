@@ -106,6 +106,10 @@ const TestsView = ({
 
   function getBreadcrumbLocations() {
     function getTestSetName() {
+      if (match.params.testSetId === 'create') {
+        return 'Create Test Set';
+      }
+
       const testSet = getCurrentTestSet(testSetsCollection);
       let name = '';
       if (testSet) {

@@ -42,3 +42,14 @@ export function getCollectionData(collection): any[] {
 export function getFirstTestInTestSet(testSetId: string) {
   return 1;
 }
+
+export function getNextId(collection: firebase.firestore.QuerySnapshot) {
+  let maxId = 0;
+  collection.docs.forEach(test => {
+    if (parseInt(test.data().id) > maxId) {
+      maxId = parseInt(test.data().id);
+    }
+  });
+
+  return maxId + 1;
+}
