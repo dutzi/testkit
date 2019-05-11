@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
 import moment from 'moment';
 import { TestSet } from '../types';
 import TestSetStatusBar from './TestSetStatusBar';
@@ -50,7 +48,6 @@ const TestsSetsTableRow = ({
       role="checkbox"
       aria-checked={selected}
       tabIndex={-1}
-      key={data.id}
       selected={selected}
     >
       <TableCell padding="checkbox">

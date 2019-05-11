@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FilePlus, FolderPlus, BookOpen } from 'react-feather';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import TestsView from './Tests';
 import ArchivedTestsView from './ArchivedTests';
 import TestSetsView from './TestSets';

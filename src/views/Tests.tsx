@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import { useCollection } from 'react-firebase-hooks/firestore';
@@ -7,9 +7,8 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Table from '../components/Table';
 import TestView from './Test';
 import Button from '@material-ui/core/Button';
-import { FilePlus } from 'react-feather';
 import { firestore } from '../firebase';
-import { getTestById, updateTest, getCollectionData } from '../utils';
+import { getDocById, updateTest, getCollectionData } from '../utils';
 import { Test } from '../types';
 import { createTest } from '../model/test';
 import { testsTableColumns } from '../data/table-columns';
@@ -68,7 +67,7 @@ const TestsView = ({
 
   const handleDuplicate = (testIds: string[]) => {
     testIds.forEach((id, index) => {
-      const test = getTestById(id, collection!.docs);
+      const test = getDocById(id, collection!.docs);
       const nextId = String(getNextId(collection!) + index);
 
       if (test) {

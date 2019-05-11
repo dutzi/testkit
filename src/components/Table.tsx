@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -17,17 +16,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-import Input from '@material-ui/core/Input';
-import moment from 'moment';
 import { Column } from '../data/table-columns';
-import TestsTableRow from './TestsTableRow';
 
 const Wrapper = styled.div``;
-
-let counter = 0;
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -352,14 +344,6 @@ class EnhancedTable extends React.Component<
     this.props.onOpenTest(id);
   };
 
-  // handleDuplicate = () => {
-  //   this.props.onDuplicate(this.state.selected);
-  // };
-
-  // handleArchive = () => {
-  //   this.props.onArchive(this.state.selected);
-  // };
-
   handleAction = (action: string) => {
     this.props.onAction(action, this.state.selected);
   };
@@ -398,6 +382,7 @@ class EnhancedTable extends React.Component<
                     const isSelected = this.isSelected(n.id);
                     return (
                       <RowRenderer
+                        key={n.id}
                         onLinkClick={this.handleLinkClick}
                         onClick={this.handleClick}
                         selected={isSelected}

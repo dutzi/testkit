@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { TestSet, Test, Step, StepStatus } from '../types';
+import { Test, StepStatus, TestStatus } from '../types';
 import { firestore } from '../firebase';
 import _ from 'lodash';
 import { Tooltip } from '@material-ui/core';
@@ -11,6 +11,7 @@ const Wrapper = styled.div`
   height: 20px;
   border-radius: 10px;
   overflow: hidden;
+  width: 150px;
 `;
 
 const Passed = styled.div`
@@ -26,36 +27,25 @@ const NoRun = styled.div`
   flex: 1;
 `;
 
-const TestSetStatusBar = ({ testSet }: { testSet: TestSet }) => {
-  const { value: tests } = useCollectionData(firestore.collection('tests'));
-
-  function getTestById(id: string, tests: Test[]): Test | undefined {
-    if (tests) {
-      return tests.find(test => test.id === id);
-    }
-  }
-
-  function getTestStatus(testSet: TestSet) {
+const TestStatusBar = ({
+  test,
+  status,
+}: {
+  test: Test;
+  status: TestStatus;
+}) => {
+  function getTestStatus(test: Test) {
     let numPassed = 0;
     let numFailed = 0;
     let numNoRun = 0;
     let aggregatedStatus: StepStatus[] = [];
 
-    testSet.tests.forEach(testId => {
-      const test = getTestById(testId, tests as Test[]);
-      if (test) {
-        let testAggregatedStatus = test.steps.map((step: Step) => {
-          const status: StepStatus = _.get(
-            testSet,
-            `status[${testId}][${step.id}].status`,
-          );
-          if (status === 'passed') numPassed++;
-          else if (status === 'failed') numFailed++;
-          else numNoRun++;
-          return status || 'no-run';
-        });
-        aggregatedStatus = aggregatedStatus.concat(testAggregatedStatus);
-      }
+    test.steps.forEach(step => {
+      const stepStatus = _.get(status, `[${step.id}].status`, 'no-run');
+      if (stepStatus === 'passed') numPassed++;
+      else if (stepStatus === 'failed') numFailed++;
+      else numNoRun++;
+      aggregatedStatus.push(stepStatus);
     });
 
     return { aggregatedStatus, numPassed, numFailed, numNoRun };
@@ -76,7 +66,7 @@ const TestSetStatusBar = ({ testSet }: { testSet: TestSet }) => {
   }
 
   let { aggregatedStatus, numPassed, numFailed, numNoRun } = getTestStatus(
-    testSet,
+    test,
   );
 
   return (
@@ -90,4 +80,4 @@ const TestSetStatusBar = ({ testSet }: { testSet: TestSet }) => {
   );
 };
 
-export default TestSetStatusBar;
+export default TestStatusBar;

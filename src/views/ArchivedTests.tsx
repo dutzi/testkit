@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -9,21 +9,10 @@ import TestView from './Test';
 import { firestore } from '../firebase';
 import { updateTest, deleteTest, getCollectionData } from '../utils';
 import { Test } from '../types';
-import { createTest } from '../model/test';
 import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
 
 const Wrapper = styled.div``;
-
-const Toolbar = styled.div`
-  display: flex;
-  background-color: var(--background-blue);
-  padding: 10px;
-`;
-
-const Margin = styled.div`
-  margin-right: 10px;
-`;
 
 const TestsView = ({
   history,

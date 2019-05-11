@@ -1,25 +1,25 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Dialog, { DialogProps } from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
+// import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+// import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import Input from '@material-ui/core/Input';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FilledInput from '@material-ui/core/FilledInput';
+// import Input from '@material-ui/core/Input';
+// import OutlinedInput from '@material-ui/core/OutlinedInput';
+// import FilledInput from '@material-ui/core/FilledInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
+// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import StepsProp from '../components/StepsProp';
 import { firestore } from '../firebase';
-import { getTestById, updateTest } from '../utils';
-import { Test, Component, Step } from '../types';
+import { getDocById } from '../utils';
+import { Component, Step } from '../types';
 import { getComponents } from '../data/components';
 
 const SelectsWrapper = styled.div`
@@ -58,7 +58,7 @@ function ScrollDialog({
   }, []);
 
   if (collection) {
-    test = getTestById(testId, collection.docs);
+    test = getDocById(testId, collection.docs);
   }
 
   if (!test) {
@@ -79,7 +79,7 @@ function ScrollDialog({
   }
 
   function updateTest(data: object) {
-    const test = getTestById(testId, collection!.docs);
+    const test = getDocById(testId, collection!.docs);
     if (test) {
       var testRef = firestore.collection('tests').doc(test.id);
       if (testRef) {

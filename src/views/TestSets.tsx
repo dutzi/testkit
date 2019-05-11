@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import DeleteIcon from '@material-ui/icons/Delete';
-import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import Button from '@material-ui/core/Button';
 import Table from '../components/Table';
 import TestView from './Test';
 import { firestore } from '../firebase';
 import { updateTest, deleteTest, getCollectionData } from '../utils';
-import { Test } from '../types';
-import { createTest } from '../model/test';
-import { testsTableColumns, testSetsTableColumns } from '../data/table-columns';
+import { testSetsTableColumns } from '../data/table-columns';
 import TestsSetsTableRow from '../components/TestsSetsTableRow';
+import Breadcrumbs from '../components/Breadcrumbs';
+import TestSet from './TestSet';
 
 const Wrapper = styled.div``;
+
+const BreadcrumbsWrapper = styled.div`
+  padding: 10px;
+  background-color: #eaeaea;
+`;
 
 const Toolbar = styled.div`
   display: flex;
@@ -68,15 +72,42 @@ const TestsView = ({
     }
   };
 
-  function getArchivedTests(tests: Test[]) {
-    return tests.filter(test => test.state === 'archived');
-  }
-
   function handleOpenTest(id: string) {
-    history.push(`/archived-tests/${id}`);
+    history.push(`/test-sets/${id}`);
   }
 
-  const showTestModal = !!match.params.testId;
+  function getCurrentTestSet(collection) {
+    if (collection) {
+      return getCollectionData(collection).find(
+        testSet => testSet.id === match.params.testSetId,
+      );
+    }
+  }
+
+  function getBreadcrumbLocations() {
+    if (match.params.testSetId) {
+      const testSet = getCurrentTestSet(collection);
+      let name = '';
+      if (testSet) {
+        name = testSet.name || '';
+      }
+      return [
+        { name: 'Test Sets', href: '/test-sets' },
+        {
+          name,
+          href: `/test-sets/${match.params.testSetId}`,
+        },
+      ];
+    } else {
+      return [{ name: 'Test Sets', href: '/test-sets' }];
+    }
+  }
+
+  function handleBreadcrumbClick(location) {
+    history.push(location.href);
+  }
+
+  const showSingleTestSet = !!match.params.testSetId;
 
   return (
     <Wrapper>
@@ -86,22 +117,28 @@ const TestsView = ({
         </Button>
         <Margin />
       </Toolbar>
-      <Table
-        columns={testSetsTableColumns}
-        onOpenTest={handleOpenTest}
-        onAction={handleAction}
-        data={getCollectionData(collection)}
-        actions={[
-          {
-            title: 'Delete',
-            icon: DeleteIcon,
-          },
-        ]}
-        rowRenderer={TestsSetsTableRow}
-      />
-      {showTestModal && (
-        <TestView testId={match.params.testId} onClose={handleCloseTest} />
+      <BreadcrumbsWrapper>
+        <Breadcrumbs
+          onClick={handleBreadcrumbClick}
+          locations={getBreadcrumbLocations()}
+        />
+      </BreadcrumbsWrapper>
+      {!showSingleTestSet && (
+        <Table
+          columns={testSetsTableColumns}
+          onOpenTest={handleOpenTest}
+          onAction={handleAction}
+          data={getCollectionData(collection)}
+          actions={[
+            {
+              title: 'Delete',
+              icon: DeleteIcon,
+            },
+          ]}
+          rowRenderer={TestsSetsTableRow}
+        />
       )}
+      {showSingleTestSet && <TestSet id={match.params.testSetId} />}
     </Wrapper>
   );
 };

@@ -27,6 +27,13 @@ export interface Test {
   steps: Step[];
 }
 
+export interface TestStatus {
+  [testStepId: string]: {
+    message: string;
+    status: StepStatus;
+  };
+}
+
 export type StepStatus = 'passed' | 'failed' | 'no-run';
 
 export interface TestSet {
@@ -34,12 +41,7 @@ export interface TestSet {
   name: string;
   lastRun: any | null;
   status: {
-    [testId: string]: {
-      [testStepId: string]: {
-        message: string;
-        status: StepStatus;
-      };
-    };
+    [testId: string]: TestStatus;
   };
   tests: string[];
 }

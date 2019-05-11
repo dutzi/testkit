@@ -1,28 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Button from '@material-ui/core/Button';
+import React from 'react';
 import styled from 'styled-components';
 import uuidv1 from 'uuid/v1';
 import TestStep from './TestStep';
 import { Step } from '../types';
 
 const Wrapper = styled.div``;
-
-const TopLabel = styled.div`
-  margin-bottom: 13px;
-`;
-
-const Label = styled.div`
-  text-transform: uppercase;
-  color: #676d98;
-  margin-bottom: 13px;
-`;
-
-const AddStepContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 13px;
-  margin-top: 13px;
-`;
 
 class StepsProp extends React.Component<{
   steps: Step[];
