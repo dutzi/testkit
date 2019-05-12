@@ -1,10 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Route } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import TestsView from './Tests';
 import ArchivedTestsView from './ArchivedTests';
 import TestSetsView from './TestSets';
+import ProfileView from './Profile';
 import Navigator from '../components/Navigator';
+import { auth } from '../firebase';
+import Welcome from './Welcome';
+import CreateWorkspace from './CreateWorkspace';
 
 const Wrapper = styled.div`
   display: grid;
@@ -17,6 +22,20 @@ const ContentWrapper = styled.div`
 `;
 
 const MainView = () => {
+  const { initialising, user } = useAuthState(auth);
+
+  if (initialising) {
+    return null;
+  }
+
+  if (!user) {
+    return <Welcome />;
+  }
+
+  if (true) {
+    return <CreateWorkspace />;
+  }
+
   return (
     <Wrapper>
       <Navigator />
@@ -27,6 +46,7 @@ const MainView = () => {
           path="/test-sets/:testSetId?/:testId?"
           component={TestSetsView}
         />
+        <Route path="/profile" component={ProfileView} />
       </ContentWrapper>
     </Wrapper>
   );

@@ -14,6 +14,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 // import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import SettingsIcon from '@material-ui/icons/Settings';
+import PersonIcon from '@material-ui/icons/Person';
 import { withRouter } from 'react-router';
 
 const styles = theme => ({
@@ -97,10 +98,16 @@ const Navigator = ({
       id: 'Settings',
       children: [
         {
-          id: 'Settings',
+          id: 'Project Settings',
           icon: <SettingsIcon />,
           path: '/settings',
           active: location.pathname.startsWith('/settings'),
+        },
+        {
+          id: 'Profile',
+          icon: <PersonIcon />,
+          path: '/profile',
+          active: location.pathname.startsWith('/profile'),
         },
       ],
     },
