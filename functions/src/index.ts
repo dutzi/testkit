@@ -1,108 +1,118 @@
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+import createWorkspace from './create-workspace';
+// import * as functions from 'firebase-functions';
+// import * as admin from 'firebase-admin';
+// import * as express from 'express';
+// // const cors = require('cors')({ origin: true });
+// const cors = require('cors')();
 
-admin.initializeApp(functions.config().firebase);
+// const app = express();
 
-const firestore = admin.firestore();
-firestore.settings({ timestampsInSnapshots: true });
+// admin.initializeApp(functions.config().firebase);
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-export const helloWorld = functions.https.onRequest((request, response) => {
-  response.send('Hello from Firebase!');
-});
+// const firestore = admin.firestore();
+// firestore.settings({ timestampsInSnapshots: true });
 
-export const createWorkspace = functions.https.onRequest(
-  async (request, response) => {
-    const name = request.param('name').trim();
-    const id = name;
+// // // Start writing Firebase Functions
+// // // https://firebase.google.com/docs/functions/typescript
+// //
+// export const helloWorld = functions.https.onRequest((request, response) => {
+//   response.send('Hello from Firebase!');
+// });
 
-    if (
-      (await firestore
-        .collection('workspaces')
-        .doc(id)
-        .get()).exists
-    ) {
-      response.json({
-        status: 'error',
-        error: 'NameIsTaken',
-      });
-    } else {
-      await firestore
-        .collection('workspaces')
-        .doc(id)
-        .create({
-          name,
-        });
+// export const createWorkspace = async (
+//   request: express.Request,
+//   response: express.Response,
+// ) => {
+//   const name = request.param('name').trim();
+//   const id = name;
 
-      const collectionDoc = firestore
-        .collection('workspaces')
-        .doc(id)
-        .collection('components')
-        .doc();
+//   if (
+//     (await firestore
+//       .collection('workspaces')
+//       .doc(id)
+//       .get()).exists
+//   ) {
+//     response.status(409).send({
+//       status: 'error',
+//       error: 'NameIsTaken',
+//     });
+//   } else {
+//     await firestore
+//       .collection('workspaces')
+//       .doc(id)
+//       .create({
+//         name,
+//       });
 
-      await collectionDoc.create({
-        label: 'My First Component',
-        name: 'my-first-component',
-      });
+//     const collectionDoc = firestore
+//       .collection('workspaces')
+//       .doc(id)
+//       .collection('components')
+//       .doc();
 
-      await collectionDoc
-        .collection('areas')
-        .doc()
-        .create({
-          label: 'My First Area',
-          name: 'my-first-area',
-        });
+//     await collectionDoc.create({
+//       label: 'My First Component',
+//       name: 'my-first-component',
+//     });
 
-      const platformsCollection = firestore
-        .collection('workspaces')
-        .doc(id)
-        .collection('platforms');
+//     await collectionDoc
+//       .collection('areas')
+//       .doc()
+//       .create({
+//         label: 'My First Area',
+//         name: 'my-first-area',
+//       });
 
-      await platformsCollection
-        .doc()
-        .create({ id: '1', name: 'iPhone (Safari)' });
+//     const platformsCollection = firestore
+//       .collection('workspaces')
+//       .doc(id)
+//       .collection('platforms');
 
-      await platformsCollection
-        .doc()
-        .create({ id: '1', name: 'Android (Chrome)' });
+//     await platformsCollection
+//       .doc()
+//       .create({ id: '1', name: 'iPhone (Safari)' });
 
-      await firestore
-        .collection('workspaces')
-        .doc(id)
-        .collection('tests')
-        .doc()
-        .create({
-          area: 'my-first-area',
-          component: 'my-first-component',
-          id: '1',
-          lastRun: null,
-          modified: null,
-          name: 'My first test',
-          state: 'ready',
-          status: 'passed',
-          steps: [],
-        });
+//     await platformsCollection
+//       .doc()
+//       .create({ id: '1', name: 'Android (Chrome)' });
 
-      // const user = await admin.auth().verifyIdToken;
-      // await firestore
-      //   .collection('workspaces')
-      //   .doc(id)
-      //   .collection('users')
-      //   .doc()
-      //   .create({
-      //     email: user.email,
-      //     id: '1',
-      //     name: user.displayName,
-      //   });
+//     await firestore
+//       .collection('workspaces')
+//       .doc(id)
+//       .collection('tests')
+//       .doc()
+//       .create({
+//         area: 'my-first-area',
+//         component: 'my-first-component',
+//         id: '1',
+//         lastRun: null,
+//         modified: null,
+//         name: 'My first test',
+//         state: 'ready',
+//         status: 'passed',
+//         steps: [],
+//       });
 
-      response.json({
-        status: 'ok',
-      });
-    }
-    response.json({
-      wtf: 'wtf',
-    });
-  },
-);
+//     // const user = await admin.auth().verifyIdToken;
+//     // await firestore
+//     //   .collection('workspaces')
+//     //   .doc(id)
+//     //   .collection('users')
+//     //   .doc()
+//     //   .create({
+//     //     email: user.email,
+//     //     id: '1',
+//     //     name: user.displayName,
+//     //   });
+
+//     response.status(200).send({
+//       status: 'ok',
+//     });
+//   }
+// };
+
+// app.use(createWorkspace);
+// app.use(cors);
+
+// exports.app = functions.https.onRequest(app);
+exports.createWorkspace = createWorkspace;

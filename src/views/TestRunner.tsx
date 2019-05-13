@@ -13,7 +13,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import _ from 'lodash';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MarkdownEditor from '../components/MarkdownEditor';
 
 const Wrapper = styled.div`
@@ -256,7 +256,7 @@ const TestRunner = ({
               <React.Fragment>
                 Next Test
                 <MarginV margin="6px" />
-                <PlayArrowIcon />
+                <ChevronRightIcon />
                 <MarginV margin="-6px" />
               </React.Fragment>
             )}

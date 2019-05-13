@@ -30,6 +30,11 @@ const PacmanWrapper = styled.div`
   transform: translateX(50px) translateY(-4px);
 `;
 
+const Error = styled.div`
+  color: #f55246;
+  float: left;
+`;
+
 const ButtonLabel = styled.div`
   ${(p: { show: boolean }) =>
     !p.show &&
@@ -39,14 +44,24 @@ const ButtonLabel = styled.div`
 `;
 
 const CreateWorkspace = () => {
-  const [name, setName] = useState<string>('');
+  const [name, setName] = useState('');
+  const [nameIsTaken, setNameIsTaken] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
   const { user } = useAuthState(auth);
 
   async function handleCreate() {
     if (name.trim()) {
       setShowSpinner(true);
-      await createWorkspace(name);
+      const idToken = await auth.currentUser!.getIdToken(true);
+
+      try {
+        let res = await createWorkspace(name, idToken);
+        console.log(res.data.status);
+      } catch (err) {
+        if (err.response.data.error === 'NameIsTaken') {
+          setNameIsTaken(true);
+        }
+      }
       setShowSpinner(false);
     }
   }
@@ -58,6 +73,11 @@ const CreateWorkspace = () => {
 
   function handleLogout() {
     auth.signOut();
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setName(e.target.value);
+    setNameIsTaken(false);
   }
 
   let displayName = '';
@@ -83,13 +103,15 @@ const CreateWorkspace = () => {
             <TextField
               id="standard-required"
               variant="outlined"
-              label="Name"
+              label={'Name'}
               margin="normal"
+              error={nameIsTaken}
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={handleChange}
               fullWidth
               autoFocus
             />
+            {nameIsTaken && <Error>That name is already taken 😞</Error>}
             <MarginH />
             <FlexEnd>
               <Button

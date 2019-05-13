@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Route } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useDocument } from 'react-firebase-hooks/firestore';
 import TestsView from './Tests';
 import ArchivedTestsView from './ArchivedTests';
 import TestSetsView from './TestSets';
 import ProfileView from './Profile';
 import Navigator from '../components/Navigator';
-import { auth } from '../firebase';
+import { auth, firestore } from '../firebase';
 import Welcome from './Welcome';
 import CreateWorkspace from './CreateWorkspace';
 
@@ -22,9 +23,30 @@ const ContentWrapper = styled.div`
 `;
 
 const MainView = () => {
-  const { initialising, user } = useAuthState(auth);
+  const { initialising: initializingUser, user } = useAuthState(auth);
+  const [workspace, setWorkspace] = useState(null);
+  const [initializingWorkspace, setInitializingWorkspace] = useState(true);
+  let cancelSnapshotLisener;
 
-  if (initialising) {
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    cancelSnapshotLisener = firestore
+      .doc(`users/${user.uid}`)
+      .onSnapshot(snapshot => {
+        const data = snapshot.data();
+
+        setInitializingWorkspace(false);
+        if (data) {
+          setWorkspace(data.workspace);
+          cancelSnapshotLisener();
+        }
+      });
+  }, [user]);
+
+  if (initializingUser) {
     return null;
   }
 
@@ -32,7 +54,11 @@ const MainView = () => {
     return <Welcome />;
   }
 
-  if (true) {
+  if (initializingWorkspace) {
+    return null;
+  }
+
+  if (!workspace) {
     return <CreateWorkspace />;
   }
 
