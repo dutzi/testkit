@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import { useCollection } from 'react-firebase-hooks/firestore';
@@ -18,6 +18,7 @@ import { Test } from '../types';
 import { createTest } from '../model/test';
 import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
+import { WorkspaceContext } from './Main';
 
 const Wrapper = styled.div``;
 
@@ -40,13 +41,16 @@ const TestsView = ({
   location: any;
   match: any;
 }) => {
-  const { value: collection } = useCollection(firestore.collection('tests'));
+  const workspace = useContext(WorkspaceContext);
+  const { value: collection } = useCollection(
+    firestore.collection(`workspaces/${workspace}/tests`),
+  );
 
   const handleCreateTest = () => {
     const nextId = getNextId(collection!);
 
     firestore
-      .collection('tests')
+      .collection(`workspaces/${workspace}/tests`)
       .add(createTest(String(nextId)))
       .then(() => {
         history.push(`/tests/${nextId}`);
@@ -67,7 +71,7 @@ const TestsView = ({
       const nextId = String(getNextId(collection!) + index);
 
       if (test) {
-        firestore.collection('tests').add({
+        firestore.collection(`workspaces/${workspace}/tests`).add({
           ...test.data(),
           id: nextId,
           modified: new Date(),
@@ -137,7 +141,9 @@ const TestsView = ({
           },
         ]}
         data={getUnarchivedTests(getCollectionData(collection))}
-        rowRenderer={TestsTableRow}
+        rowRenderer={props => (
+          <TestsTableRow workspace={workspace} {...props} />
+        )}
       />
       {showTestModal && (
         <TestView testId={match.params.testId} onClose={handleCloseTest} />

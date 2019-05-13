@@ -1,11 +1,11 @@
 import { firestore } from '../firebase';
 import { Component, Area } from '../types';
 
-export function getComponents() {
+export function getComponents(workspace: string) {
   const components: Component[] = [];
 
   return firestore
-    .collection('components')
+    .collection(`workspaces/${workspace}/components`)
     .get()
     .then(res => {
       return Promise.all(
@@ -14,7 +14,7 @@ export function getComponents() {
           component.areas = [];
           components.push(component);
           return firestore
-            .collection(`components/${doc.id}/areas`)
+            .collection(`workspaces/${workspace}/components/${doc.id}/areas`)
             .get()
             .then(res => {
               res.docs.forEach(doc => {

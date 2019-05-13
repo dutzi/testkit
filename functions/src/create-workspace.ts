@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as express from 'express';
 const cors = require('cors');
+const uuidv1 = require('uuid/v1');
 
 admin.initializeApp(functions.config().firebase);
 
@@ -108,7 +109,13 @@ app.post('/', async (request: express.Request, response: express.Response) => {
         name: 'My first test',
         state: 'ready',
         status: 'passed',
-        steps: [],
+        steps: [
+          {
+            id: uuidv1(),
+            description: '',
+            result: '',
+          },
+        ],
       });
 
     await firestore

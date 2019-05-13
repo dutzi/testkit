@@ -31,6 +31,7 @@ const TestsTableRow = ({
   selected,
   onClick,
   onLinkClick,
+  workspace,
 }: {
   data: any;
   selected: boolean;
@@ -42,9 +43,10 @@ const TestsTableRow = ({
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     id: string,
   ) => void;
+  workspace: string;
 }) => {
   const [components, setComponents] = useState<Component[]>([]);
-  getComponents().then(setComponents);
+  getComponents(workspace).then(setComponents);
 
   function getComponentLabel(componentName: string) {
     let component = components.find(component => {

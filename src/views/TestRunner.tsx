@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { firestore } from '../firebase';
@@ -15,6 +15,7 @@ import FormControl from '@material-ui/core/FormControl';
 import _ from 'lodash';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MarkdownEditor from '../components/MarkdownEditor';
+import { WorkspaceContext } from './Main';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -111,12 +112,14 @@ const TestRunner = ({
   testIndex: number;
   numTests: number;
 }) => {
+  const workspace = useContext(WorkspaceContext);
+
   const { value: testSetsCollection } = useCollection(
-    firestore.collection('test-sets'),
+    firestore.collection(`workspaces/${workspace}/test-sets`),
   );
 
   const { value: testsCollection } = useCollection(
-    firestore.collection('tests'),
+    firestore.collection(`workspaces/${workspace}/tests`),
   );
 
   if (!testSetsCollection || !testsCollection) {
@@ -139,7 +142,9 @@ const TestRunner = ({
 
   function updateStepStatus(step: IStep, value) {
     if (testSetDoc) {
-      var testSetRef = firestore.collection('test-sets').doc(testSetDoc.id);
+      var testSetRef = firestore
+        .collection(`workspaces/${workspace}/test-sets`)
+        .doc(testSetDoc.id);
       if (testSetRef) {
         const testSet = testSetDoc.data();
 

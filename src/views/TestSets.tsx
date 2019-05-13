@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -20,6 +20,7 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import TestSet from './TestSet';
 import TestRunner from './TestRunner';
 import { TestSet as ITestSet, Test } from '../types';
+import { WorkspaceContext } from './Main';
 
 const Wrapper = styled.div`
   display: grid;
@@ -50,12 +51,14 @@ const TestsView = ({
   location: any;
   match: any;
 }) => {
+  const workspace = useContext(WorkspaceContext);
+
   const { value: testSetsCollection } = useCollection(
-    firestore.collection('test-sets'),
+    firestore.collection(`workspaces/${workspace}/test-sets`),
   );
 
   const { value: testsCollection } = useCollection(
-    firestore.collection('tests'),
+    firestore.collection(`workspaces/${workspace}/tests`),
   );
 
   if (!testSetsCollection || !testsCollection) {

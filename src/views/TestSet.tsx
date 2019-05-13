@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import { useCollection } from 'react-firebase-hooks/firestore';
@@ -22,6 +22,7 @@ import PublishIcon from '@material-ui/icons/Publish';
 import Select from '../components/Select';
 import { MarginH, MarginV } from '../styles';
 import { createTestSet } from '../model/test-set';
+import { WorkspaceContext } from './Main';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -66,6 +67,8 @@ const TestSet = ({
   location: any;
   match: any;
 }) => {
+  const workspace = useContext(WorkspaceContext);
+
   const [users, setUsers] = useState<User[]>([]);
   const [platforms, setPlatforms] = useState<Platform[]>([]);
   const [createdTestSet, setCreatedTestSet] = useState<ITestSet>(
@@ -73,11 +76,11 @@ const TestSet = ({
   );
 
   const { value: testSetsCollection } = useCollection(
-    firestore.collection('test-sets'),
+    firestore.collection(`workspaces/${workspace}/test-sets`),
   );
 
   const { value: testsCollection } = useCollection(
-    firestore.collection('tests'),
+    firestore.collection(`workspaces/${workspace}/tests`),
   );
 
   let isCreating = id === 'create';
@@ -121,7 +124,9 @@ const TestSet = ({
     } else {
       const testSet = getDocById(id, testSetsCollection!.docs);
       if (testSet) {
-        var testSetRef = firestore.collection('test-sets').doc(testSet.id);
+        var testSetRef = firestore
+          .collection(`workspaces/${workspace}/test-sets`)
+          .doc(testSet.id);
         if (testSetRef) {
           testSetRef.update(data);
         }
@@ -168,7 +173,7 @@ const TestSet = ({
       const nextId = getNextId(testSetsCollection!);
 
       firestore
-        .collection('test-sets')
+        .collection(`workspaces/${workspace}/test-sets`)
         .add({
           ...createdTestSet,
           id: String(nextId),

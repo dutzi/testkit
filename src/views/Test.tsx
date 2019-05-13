@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 // import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -21,6 +21,7 @@ import { firestore } from '../firebase';
 import { getDocById } from '../data-utils';
 import { Component, Step } from '../types';
 import { getComponents } from '../data/components';
+import { WorkspaceContext } from './Main';
 
 const SelectsWrapper = styled.div`
   display: flex;
@@ -48,13 +49,16 @@ function ScrollDialog({
     setOpen(true);
   }, []);
 
-  const { value: collection } = useCollection(firestore.collection('tests'));
+  const workspace = useContext(WorkspaceContext);
+  const { value: collection } = useCollection(
+    firestore.collection(`workspaces/${workspace}/tests`),
+  );
   const [components, setComponents] = useState<Component[]>([]);
 
   let test: firebase.firestore.QueryDocumentSnapshot | undefined;
 
   useEffect(() => {
-    getComponents().then(setComponents);
+    getComponents(workspace).then(setComponents);
   }, []);
 
   if (collection) {
@@ -81,7 +85,9 @@ function ScrollDialog({
   function updateTest(data: object) {
     const test = getDocById(testId, collection!.docs);
     if (test) {
-      var testRef = firestore.collection('tests').doc(test.id);
+      var testRef = firestore
+        .collection(`workspaces/${workspace}/tests`)
+        .doc(test.id);
       if (testRef) {
         testRef.update(data);
       }

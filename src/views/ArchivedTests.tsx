@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -11,6 +11,7 @@ import { updateTest, deleteTest, getCollectionData } from '../data-utils';
 import { Test } from '../types';
 import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
+import { WorkspaceContext } from './Main';
 
 const Wrapper = styled.div``;
 
@@ -22,7 +23,11 @@ const TestsView = ({
   location: any;
   match: any;
 }) => {
-  const { value: collection } = useCollection(firestore.collection('tests'));
+  const workspace = useContext(WorkspaceContext);
+
+  const { value: collection } = useCollection(
+    firestore.collection(`workspaces/${workspace}/tests`),
+  );
 
   const handleCloseTest = () => {
     history.push('/archived-tests');

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { Route } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -12,6 +12,8 @@ import { auth, firestore } from '../firebase';
 import Welcome from './Welcome';
 import CreateWorkspace from './CreateWorkspace';
 
+export const WorkspaceContext = React.createContext('');
+
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 256px auto;
@@ -24,7 +26,7 @@ const ContentWrapper = styled.div`
 
 const MainView = () => {
   const { initialising: initializingUser, user } = useAuthState(auth);
-  const [workspace, setWorkspace] = useState(null);
+  const [workspace, setWorkspace] = useState('');
   const [initializingWorkspace, setInitializingWorkspace] = useState(true);
   let cancelSnapshotLisener;
 
@@ -64,16 +66,21 @@ const MainView = () => {
 
   return (
     <Wrapper>
-      <Navigator />
-      <ContentWrapper>
-        <Route path="/tests/:testId?" component={TestsView} />
-        <Route path="/archived-tests/:testId?" component={ArchivedTestsView} />
-        <Route
-          path="/test-sets/:testSetId?/:testId?"
-          component={TestSetsView}
-        />
-        <Route path="/profile" component={ProfileView} />
-      </ContentWrapper>
+      <WorkspaceContext.Provider value={workspace}>
+        <Navigator />
+        <ContentWrapper>
+          <Route path="/tests/:testId?" component={TestsView} />
+          <Route
+            path="/archived-tests/:testId?"
+            component={ArchivedTestsView}
+          />
+          <Route
+            path="/test-sets/:testSetId?/:testId?"
+            component={TestSetsView}
+          />
+          <Route path="/profile" component={ProfileView} />
+        </ContentWrapper>
+      </WorkspaceContext.Provider>
     </Wrapper>
   );
 };

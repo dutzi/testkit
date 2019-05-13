@@ -264,7 +264,7 @@ type EnhancedTableProps = {
   // onArchive: (selectedIds: string[]) => void;
   onOpenTest: (id: string) => void;
   columns: Column[];
-  rowRenderer: any;
+  rowRenderer: (props: any) => any;
 };
 
 type EnhancedTableState = {
@@ -368,7 +368,7 @@ class EnhancedTable extends React.Component<
     const { order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-    const RowRenderer = rowRenderer;
+
     return (
       <Wrapper>
         <Paper className={classes.root}>
@@ -393,15 +393,13 @@ class EnhancedTable extends React.Component<
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(n => {
                     const isSelected = this.isSelected(n.id);
-                    return (
-                      <RowRenderer
-                        key={n.id}
-                        onLinkClick={this.handleLinkClick}
-                        onClick={this.handleClick}
-                        selected={isSelected}
-                        data={n}
-                      />
-                    );
+                    return rowRenderer({
+                      key: n.id,
+                      onLinkClick: this.handleLinkClick,
+                      onClick: this.handleClick,
+                      selected: isSelected,
+                      data: n,
+                    });
                   })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 49 * emptyRows }}>

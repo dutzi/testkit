@@ -3,11 +3,11 @@ import 'firebase/firestore'; // NEW
 import 'firebase/auth';
 import 'firebase/storage';
 
-// declare global {
-//   interface Window {
-//     firebase: any;
-//   }
-// }
+declare global {
+  interface Window {
+    [k: string]: any;
+  }
+}
 
 const config = {
   apiKey: 'AIzaSyChaxreNcpS0dXv6BsmFVnNXI7Qr-cfYUs',
@@ -19,7 +19,7 @@ const config = {
   appId: '1:432747880734:web:88d6236b84b80c91',
 };
 
-// window.firebase = firebase;
+window.firebase = firebase;
 
 firebase.initializeApp(config);
 
