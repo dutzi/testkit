@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { TestSet, Test, Step, StepStatus } from '../types';
 import { firestore } from '../firebase';
 import _ from 'lodash';
 import { Tooltip } from '@material-ui/core';
+import { WorkspaceContext } from '../views/Main';
 
 const Wrapper = styled.div`
   display: flex;
@@ -39,7 +40,11 @@ const NoRun = styled.div`
 `;
 
 const TestSetProgressBar = ({ testSet }: { testSet: TestSet }) => {
-  const { value: tests } = useCollectionData(firestore.collection('tests'));
+  const workspace = useContext(WorkspaceContext);
+
+  const { value: tests } = useCollectionData(
+    firestore.collection(`workspaces/${workspace}/tests`),
+  );
 
   function getTestById(id: string, tests: Test[]): Test | undefined {
     if (tests) {

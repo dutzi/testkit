@@ -1,0 +1,22 @@
+[debug] [2019-05-13T23:19:32.563Z] ----------------------------------------------------------------------
+[debug] [2019-05-13T23:19:32.566Z] Command:       /Users/eldad/.nvm/versions/node/v8.15.0/bin/node /Users/eldad/.nvm/versions/node/v8.15.0/bin/firebase deploy
+[debug] [2019-05-13T23:19:32.566Z] CLI Version:   6.5.0
+[debug] [2019-05-13T23:19:32.566Z] Platform:      darwin
+[debug] [2019-05-13T23:19:32.566Z] Node Version:  v8.15.0
+[debug] [2019-05-13T23:19:32.567Z] Time:          Tue May 14 2019 02:19:32 GMT+0300 (IDT)
+[debug] [2019-05-13T23:19:32.567Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-05-13T23:19:32.578Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-05-13T23:19:32.578Z] > authorizing via signed-in user
+[debug] [2019-05-13T23:19:32.578Z] [iam] checking project testkit-c0228 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2019-05-13T23:19:32.580Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/testkit-c0228:testIamPermissions  
+
+[debug] [2019-05-13T23:19:33.686Z] <<< HTTP RESPONSE 200
+[debug] [2019-05-13T23:19:33.688Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/testkit-c0228  
+ 
+[debug] [2019-05-13T23:19:34.158Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'testkit-c0228'...
+[info] 
+[info] i  deploying storage, firestore, functions, hosting
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
