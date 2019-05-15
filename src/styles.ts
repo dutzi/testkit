@@ -22,3 +22,29 @@ export const MarginH = styled.div`
 export const MarginV = styled.div`
   margin-right: ${(p: { margin?: string }) => p.margin || '24px'};
 `;
+
+export const TableLink = styled.a`
+  text-decoration: none;
+  color: #000000de;
+  outline: none;
+  padding: 16px 0px;
+  position: relative;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus {
+    :before {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 0px;
+      right: 0px;
+      bottom: 16px;
+      background: #00000022;
+      border-radius: 4px;
+      margin: -4px;
+    }
+  }
+`;

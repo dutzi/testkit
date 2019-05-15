@@ -7,23 +7,7 @@ import moment from 'moment';
 import { TestSet } from '../types';
 import TestSetProgressBar from './TestSetProgressBar';
 import { formatDate } from '../utils';
-
-const TableLink = styled.a`
-  text-decoration: none;
-  color: #000000de;
-  outline: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:focus {
-    background: #00000022;
-    border-radius: 4px;
-    padding: 4px;
-    margin: -4px;
-  }
-`;
+import { TableLink } from '../styles';
 
 const TestsSetsTableRow = ({
   data,
