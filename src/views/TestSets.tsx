@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -13,6 +13,7 @@ import {
   getCollectionData,
   getFirstTestInTestSet,
   getDocById,
+  deleteTestSet,
 } from '../data-utils';
 import { testSetsTableColumns } from '../data/table-columns';
 import TestsSetsTableRow from '../components/TestsSetsTableRow';
@@ -51,6 +52,7 @@ const TestsView = ({
   location: any;
   match: any;
 }) => {
+  const [selected, setSelected] = useState<string[]>([]);
   const workspace = useContext(WorkspaceContext);
 
   const { value: testSetsCollection } = useCollection(
@@ -73,6 +75,7 @@ const TestsView = ({
     testIds.forEach(id => {
       updateTest(
         id,
+        workspace,
         {
           state: 'ready',
         },
@@ -81,18 +84,17 @@ const TestsView = ({
     });
   }
 
-  function handleDelete(testIds: string[]) {
-    testIds.forEach(id => {
-      deleteTest(id, testSetsCollection!);
+  function handleDelete(testSetIds: string[]) {
+    testSetIds.forEach(id => {
+      deleteTestSet(id, workspace, testSetsCollection!);
     });
   }
 
   const handleAction = (action: string, testIds: string[]) => {
     if (action === 'Delete') {
       handleDelete(testIds);
-    } else if (action === 'Unarchive') {
-      handleUnarchive(testIds);
     }
+    setSelected([]);
   };
 
   function handleOpenTest(id: string) {
@@ -230,6 +232,8 @@ const TestsView = ({
       </BreadcrumbsWrapper>
       {!showSingleTestSet && !showTestRunner && (
         <Table
+          selected={selected}
+          setSelected={setSelected}
           columns={testSetsTableColumns}
           onOpenTest={handleOpenTest}
           onAction={handleAction}

@@ -8,7 +8,7 @@ import PacmanLoader from 'react-spinners/PacmanLoader';
 import { MarginH } from '../styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { createWorkspace } from '../data/create-workspace';
+import { createWorkspace } from '../clients/create-workspace';
 import { auth, firestore } from '../firebase';
 
 const Wrapper = styled.div`

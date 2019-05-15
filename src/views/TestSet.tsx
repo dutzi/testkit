@@ -144,13 +144,17 @@ const TestSet = ({
     testSet = isCreating ? createdTestSet : testSet;
 
     if (testSet) {
-      return testSet.tests.map(testId => {
-        const test = getDocById(testId, testsCollection!.docs);
-        return {
-          test: test!.data() as Test,
-          status: testSet!.status[testId],
-        };
-      });
+      return testSet.tests
+        .filter(testId => {
+          return !!getDocById(testId, testsCollection!.docs);
+        })
+        .map(testId => {
+          const test = getDocById(testId, testsCollection!.docs);
+          return {
+            test: test!.data() as Test,
+            status: testSet!.status[testId],
+          };
+        });
     } else {
       return [];
     }
@@ -226,6 +230,8 @@ const TestSet = ({
     }
   }
 
+  const testsInTestSet = getTests();
+
   return (
     <Wrapper>
       <MaxWidth>
@@ -264,10 +270,10 @@ const TestSet = ({
           <ActionsWrapper>{renderActions()}</ActionsWrapper>
         </FormWrapper>
         <Typography variant="h6" component="p">
-          Tests
+          Tests ({testsInTestSet.length})
         </Typography>
         <MarginH />
-        {getTests().map(
+        {testsInTestSet.map(
           ({ test, status }: { test: Test; status: TestStatus }) => (
             <TestPreview
               key={test.id}

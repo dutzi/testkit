@@ -49,6 +49,7 @@ const TestsSetsTableRow = ({
       aria-checked={selected}
       tabIndex={-1}
       selected={selected}
+      key={data.id}
     >
       <TableCell padding="checkbox">
         <Checkbox checked={selected} />

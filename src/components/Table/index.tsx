@@ -1,23 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import { lighten } from '@material-ui/core/styles/colorManipulator';
-import { Column } from '../data/table-columns';
+import { Column } from '../../data/table-columns';
+import Toolbar from './Toolbar';
+import TableHead from './TableHead';
 
 const Wrapper = styled.div``;
 
@@ -46,195 +38,6 @@ function getSorting(order, orderBy) {
     ? (a, b) => desc(a, b, orderBy)
     : (a, b) => -desc(a, b, orderBy);
 }
-
-type EnhancedTableHeadProps = {
-  numSelected: number;
-  onRequestSort: (event: any, property: any) => void;
-  onSelectAllClick: (event: any) => void;
-  order: 'desc' | 'asc' | undefined;
-  orderBy: string;
-  rowCount: number;
-  classes: any;
-  columns: Column[];
-};
-
-const tableHeadStyles = theme => ({
-  root: {
-    background: 'white',
-  },
-  wide: {
-    width: '40%',
-  },
-  narrow: {
-    width: '10px',
-  },
-});
-
-class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
-  createSortHandler = property => event => {
-    this.props.onRequestSort(event, property);
-  };
-
-  render() {
-    const {
-      onSelectAllClick,
-      order,
-      orderBy,
-      numSelected,
-      rowCount,
-      classes,
-      columns,
-    } = this.props;
-
-    return (
-      <TableHead className={classes.root}>
-        <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell>
-          {columns.map(
-            column => (
-              <TableCell
-                className={classNames({
-                  [classes.wide]: column.large,
-                  [classes.narrow]: column.small,
-                })}
-                key={column.id}
-                align={column.numeric ? 'right' : 'left'}
-                padding={column.disablePadding ? 'none' : 'default'}
-                sortDirection={orderBy === column.id ? order : false}
-              >
-                <Tooltip
-                  title="Sort"
-                  placement={column.numeric ? 'bottom-end' : 'bottom-start'}
-                  enterDelay={300}
-                >
-                  <TableSortLabel
-                    active={orderBy === column.id}
-                    direction={order}
-                    onClick={this.createSortHandler(column.id)}
-                  >
-                    <div dangerouslySetInnerHTML={{ __html: column.label }} />
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-            ),
-            this,
-          )}
-        </TableRow>
-      </TableHead>
-    );
-  }
-}
-
-const EnhancedTableHeadWithStyles = withStyles(tableHeadStyles)(
-  EnhancedTableHead,
-);
-
-const toolbarStyles = theme => ({
-  root: {
-    paddingRight: theme.spacing(1),
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
-  spacer: {
-    flex: '1 1 100%',
-  },
-  actions: {
-    color: theme.palette.text.secondary,
-    display: 'flex',
-  },
-  title: {
-    flex: '0 0 auto',
-  },
-});
-
-const EnhancedTableToolbar = ({
-  classes,
-  numSelected,
-  onAction,
-  actions,
-}: // onDuplicate,
-// onArchive,
-{
-  classes: {
-    root: string;
-    highlight: string;
-    spacer: string;
-    actions: string;
-    title: string;
-  };
-  numSelected: number;
-  onAction: (action: string) => void;
-  actions: any[];
-  // onDuplicate: () => void;
-  // onArchive: () => void;
-}) => {
-  return (
-    <Toolbar
-      className={classNames(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      <div className={classes.title}>
-        {numSelected > 0 ? (
-          <Typography color="inherit" variant="subtitle1">
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography variant="h6" id="tableTitle">
-            Tests
-          </Typography>
-        )}
-      </div>
-      <div className={classes.spacer} />
-      {/* <Input
-        placeholder="Filter"
-        // className={classes.input}
-        fullWidth
-        inputProps={{
-          'aria-label': 'Filter',
-        }}
-      /> */}
-      <div className={classes.spacer} />
-
-      <div className={classes.actions}>
-        {numSelected > 0 &&
-          actions.map(action => (
-            <Tooltip key={action.title} title={action.title}>
-              <IconButton
-                onClick={onAction.bind(null, action.title)}
-                aria-label={action.title}
-              >
-                <action.icon />
-              </IconButton>
-            </Tooltip>
-          ))}
-        <Tooltip title="Filter list">
-          <IconButton aria-label="Filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      </div>
-    </Toolbar>
-  );
-};
-
-const EnhancedTableToolbarWithStyles = withStyles(toolbarStyles)(
-  EnhancedTableToolbar,
-);
 
 const styles = theme => ({
   root: {
@@ -265,12 +68,13 @@ type EnhancedTableProps = {
   onOpenTest: (id: string) => void;
   columns: Column[];
   rowRenderer: (props: any) => any;
+  selected: string[];
+  setSelected: (selected: string[]) => void;
 };
 
 type EnhancedTableState = {
   order: 'asc' | 'desc' | undefined;
   orderBy: string;
-  selected: string[];
   page: number;
   rowsPerPage: number;
 };
@@ -285,7 +89,6 @@ class EnhancedTable extends React.Component<
     this.state = {
       order: 'asc',
       orderBy: 'calories',
-      selected: [],
       page: 0,
       rowsPerPage: 5,
     };
@@ -304,16 +107,14 @@ class EnhancedTable extends React.Component<
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      this.setState(state => ({
-        selected: this.props.data.map((n: any) => n.id),
-      }));
+      this.props.setSelected(this.props.data.map((n: any) => n.id));
       return;
     }
-    this.setState({ selected: [] });
+    this.props.setSelected([]);
   };
 
   handleClick = (event: React.MouseEvent, id: string) => {
-    const { selected } = this.state;
+    const { selected } = this.props;
     const selectedIndex = selected.indexOf(id);
     let newSelected: string[] = [];
 
@@ -330,7 +131,8 @@ class EnhancedTable extends React.Component<
       );
     }
 
-    this.setState({ selected: newSelected });
+    this.props.setSelected(newSelected);
+    // this.setState({ selected: newSelected });
   };
 
   handleChangePage = (event, page) => {
@@ -348,7 +150,7 @@ class EnhancedTable extends React.Component<
   };
 
   handleAction = (action: string) => {
-    this.props.onAction(action, this.state.selected);
+    this.props.onAction(action, this.props.selected);
   };
 
   handleScroll = e => {
@@ -361,25 +163,25 @@ class EnhancedTable extends React.Component<
     }
   };
 
-  isSelected = id => this.state.selected.indexOf(id) !== -1;
+  isSelected = id => this.props.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes, data, columns, rowRenderer } = this.props;
-    const { order, orderBy, selected, rowsPerPage, page } = this.state;
+    const { classes, data, columns, selected, rowRenderer } = this.props;
+    const { order, orderBy, rowsPerPage, page } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
       <Wrapper>
         <Paper className={classes.root}>
-          <EnhancedTableToolbarWithStyles
+          <Toolbar
             actions={this.props.actions}
             onAction={this.handleAction}
             numSelected={selected.length}
           />
           <div className={classes.tableWrapper} onScroll={this.handleScroll}>
             <Table className={classes.table} aria-labelledby="tableTitle">
-              <EnhancedTableHeadWithStyles
+              <TableHead
                 columns={columns}
                 numSelected={selected.length}
                 order={order}

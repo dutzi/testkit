@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import { useCollection } from 'react-firebase-hooks/firestore';
@@ -42,6 +42,8 @@ const TestsView = ({
   match: any;
 }) => {
   const workspace = useContext(WorkspaceContext);
+  const [selected, setSelected] = useState<string[]>([]);
+
   const { value: collection } = useCollection(
     firestore.collection(`workspaces/${workspace}/tests`),
   );
@@ -85,12 +87,14 @@ const TestsView = ({
     testIds.forEach(id => {
       updateTest(
         id,
+        workspace,
         {
           state: 'archived',
         },
         collection!,
       );
     });
+    setSelected([]);
   };
 
   function handleAction(action: string, testIds: string[]) {
@@ -121,12 +125,14 @@ const TestsView = ({
         <Button
           onClick={handleCreateTestSet}
           variant="contained"
-          color="default"
+          color="primary"
         >
           Create Test Set
         </Button>
       </Toolbar>
       <Table
+        selected={selected}
+        setSelected={setSelected}
         columns={testsTableColumns}
         onOpenTest={handleOpenTest}
         onAction={handleAction}

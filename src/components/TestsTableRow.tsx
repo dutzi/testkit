@@ -5,6 +5,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import RemoveIcon from '@material-ui/icons/Remove';
 import moment from 'moment';
 import { getComponents } from '../data/components';
 import { Component } from '../types';
@@ -24,6 +25,10 @@ const TableLink = styled.a`
     padding: 4px;
     margin: -4px;
   }
+`;
+
+const StatusIconWrapper = styled.div`
+  line-height: 0px;
 `;
 
 const TestsTableRow = ({
@@ -116,10 +121,11 @@ const TestsTableRow = ({
       </TableCell>
       <TableCell align="left">{data.state}</TableCell>
       <TableCell align="left">
-        <div>
+        <StatusIconWrapper>
           {data.status === 'passed' && <CheckIcon color="primary" />}
           {data.status === 'failed' && <CloseIcon color="error" />}
-        </div>
+          {data.status === 'no-run' && <RemoveIcon color="disabled" />}
+        </StatusIconWrapper>
       </TableCell>
       <TableCell align="left">{renderDateTime(data.lastRun)}</TableCell>
       <TableCell align="left">{renderDateTime(data.modified)}</TableCell>

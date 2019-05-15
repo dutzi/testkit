@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -15,7 +15,7 @@ import { WorkspaceContext } from './Main';
 
 const Wrapper = styled.div``;
 
-const TestsView = ({
+const ArchivedTestsView = ({
   history,
   match,
 }: {
@@ -24,6 +24,7 @@ const TestsView = ({
   match: any;
 }) => {
   const workspace = useContext(WorkspaceContext);
+  const [selected, setSelected] = useState<string[]>([]);
 
   const { value: collection } = useCollection(
     firestore.collection(`workspaces/${workspace}/tests`),
@@ -37,18 +38,21 @@ const TestsView = ({
     testIds.forEach(id => {
       updateTest(
         id,
+        workspace,
         {
           state: 'ready',
         },
         collection!,
       );
     });
+    setSelected([]);
   }
 
   function handleDelete(testIds: string[]) {
     testIds.forEach(id => {
-      deleteTest(id, collection!);
+      deleteTest(id, workspace, collection!);
     });
+    setSelected([]);
   }
 
   const handleAction = (action: string, testIds: string[]) => {
@@ -85,6 +89,8 @@ const TestsView = ({
         </Button>
       </Toolbar> */}
       <Table
+        selected={selected}
+        setSelected={setSelected}
         columns={testsTableColumns}
         onOpenTest={handleOpenTest}
         onAction={handleAction}
@@ -99,7 +105,9 @@ const TestsView = ({
             icon: DeleteIcon,
           },
         ]}
-        rowRenderer={TestsTableRow}
+        rowRenderer={props => (
+          <TestsTableRow workspace={workspace} {...props} />
+        )}
       />
       {showTestModal && (
         <TestView testId={match.params.testId} onClose={handleCloseTest} />
@@ -108,4 +116,4 @@ const TestsView = ({
   );
 };
 
-export default withRouter(TestsView);
+export default withRouter(ArchivedTestsView);

@@ -10,23 +10,43 @@ export function getDocById(
 
 export function updateTest(
   id: string,
+  workspace: string,
   data: object,
   collection: firebase.firestore.QuerySnapshot,
 ) {
   const test = getDocById(id, collection!.docs);
   if (test) {
-    var testRef = firestore.collection('tests').doc(test.id);
+    var testRef = firestore
+      .collection(`workspaces/${workspace}/tests`)
+      .doc(test.id);
     testRef.update(data);
   }
 }
 
 export function deleteTest(
   id: string,
+  workspace: string,
   collection: firebase.firestore.QuerySnapshot,
 ) {
   const test = getDocById(id, collection.docs);
   if (test) {
-    var testRef = firestore.collection('tests').doc(test.id);
+    var testRef = firestore
+      .collection(`workspaces/${workspace}/tests`)
+      .doc(test.id);
+    testRef.delete();
+  }
+}
+
+export function deleteTestSet(
+  id: string,
+  workspace: string,
+  collection: firebase.firestore.QuerySnapshot,
+) {
+  const test = getDocById(id, collection.docs);
+  if (test) {
+    var testRef = firestore
+      .collection(`workspaces/${workspace}/test-sets`)
+      .doc(test.id);
     testRef.delete();
   }
 }
