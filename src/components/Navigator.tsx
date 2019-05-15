@@ -17,6 +17,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import PersonIcon from '@material-ui/icons/Person';
 import { withRouter } from 'react-router';
 import { navigateTo } from '../utils';
+import { MarginV } from '../styles';
 
 const styles = theme => ({
   categoryHeader: {
@@ -124,7 +125,9 @@ const Navigator = ({
         <ListItem
           className={clsx(classes.firebase, classes.item, classes.itemCategory)}
         >
-          TestKit
+          <MarginV margin="5px" />
+          {'🧪'}
+          <MarginV /> TestKit
         </ListItem>
         <ListItem className={clsx(classes.item, classes.itemCategory)}>
           <ListItemIcon>
