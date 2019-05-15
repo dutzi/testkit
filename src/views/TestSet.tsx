@@ -128,7 +128,7 @@ const TestSet = ({
           .collection(`workspaces/${workspace}/test-sets`)
           .doc(testSet.id);
         if (testSetRef) {
-          testSetRef.update(data);
+          testSetRef.update({ modified: new Date(), ...data });
         }
       }
     }
@@ -200,6 +200,11 @@ const TestSet = ({
     }
   }
 
+  function handleRun(e: React.MouseEvent) {
+    updateTestSet({ lastRun: new Date() });
+    onRun(e);
+  }
+
   function renderActions() {
     if (isCreating) {
       return (
@@ -219,7 +224,7 @@ const TestSet = ({
             Run&nbsp;Remaining
           </Button>
           <MarginV margin="12px" />
-          <Button variant="contained" color="primary" onClick={onRun}>
+          <Button variant="contained" color="primary" onClick={handleRun}>
             <MarginV margin="-6px" />
             <PlayArrowIcon />
             <MarginV margin="6px" />
