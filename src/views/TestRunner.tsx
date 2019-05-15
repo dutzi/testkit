@@ -107,8 +107,8 @@ const TestRunner = ({
 }: {
   testSetId: string;
   testId: string;
-  onNext: () => void;
-  onPrev: () => void;
+  onNext: (e: React.MouseEvent) => void;
+  onPrev: (e: React.MouseEvent) => void;
   testIndex: number;
   numTests: number;
 }) => {

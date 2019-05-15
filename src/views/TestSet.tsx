@@ -62,7 +62,7 @@ const TestSet = ({
   match,
 }: {
   id: string;
-  onRun: () => void;
+  onRun: (e: React.MouseEvent) => void;
   history: any;
   location: any;
   match: any;

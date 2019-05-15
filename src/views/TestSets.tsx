@@ -22,6 +22,7 @@ import TestSet from './TestSet';
 import TestRunner from './TestRunner';
 import { TestSet as ITestSet, Test } from '../types';
 import { WorkspaceContext } from './Main';
+import { navigateTo } from '../utils';
 
 const Wrapper = styled.div`
   display: grid;
@@ -67,23 +68,6 @@ const TestsView = ({
     return null;
   }
 
-  const handleCloseTest = () => {
-    history.push('/archived-tests');
-  };
-
-  function handleUnarchive(testIds: string[]) {
-    testIds.forEach(id => {
-      updateTest(
-        id,
-        workspace,
-        {
-          state: 'ready',
-        },
-        testSetsCollection!,
-      );
-    });
-  }
-
   function handleDelete(testSetIds: string[]) {
     testSetIds.forEach(id => {
       deleteTestSet(id, workspace, testSetsCollection!);
@@ -97,8 +81,8 @@ const TestsView = ({
     setSelected([]);
   };
 
-  function handleOpenTest(id: string) {
-    history.push(`/test-sets/${id}`);
+  function handleOpenTest(id: string, e: React.MouseEvent) {
+    navigateTo(`/test-sets/${id}`, e, history);
   }
 
   function getCurrentTestSet(collection): ITestSet | undefined {
@@ -158,29 +142,35 @@ const TestsView = ({
     }
   }
 
-  function handleBreadcrumbClick(location) {
-    history.push(location.href);
+  function handleBreadcrumbClick(location, e: React.MouseEvent) {
+    navigateTo(location.href, e, history);
   }
 
-  function handleRun() {
+  function handleRun(e: React.MouseEvent) {
     const testSet = getCurrentTestSet(testSetsCollection);
     if (testSet) {
-      history.push(`/test-sets/${match.params.testSetId}/${testSet.tests[0]}`);
+      navigateTo(
+        `/test-sets/${match.params.testSetId}/${testSet.tests[0]}`,
+        e,
+        history,
+      );
     }
   }
 
-  function handleNextTest() {
+  function handleNextTest(e: React.MouseEvent) {
     const testSet = getCurrentTestSet(testSetsCollection);
     if (testSet) {
       const testIndex = getTestIndex();
 
       if (testIndex === testSet.tests.length - 1) {
-        history.push(`/test-sets`);
+        navigateTo(`/test-sets`, e, history);
       } else {
-        history.push(
+        navigateTo(
           `/test-sets/${match.params.testSetId}/${
             testSet.tests[testIndex + 1]
           }`,
+          e,
+          history,
         );
       }
     }

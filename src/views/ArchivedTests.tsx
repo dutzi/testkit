@@ -12,6 +12,7 @@ import { Test } from '../types';
 import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
 import { WorkspaceContext } from './Main';
+import { navigateTo } from '../utils';
 
 const Wrapper = styled.div``;
 
@@ -30,8 +31,8 @@ const ArchivedTestsView = ({
     firestore.collection(`workspaces/${workspace}/tests`),
   );
 
-  const handleCloseTest = () => {
-    history.push('/archived-tests');
+  const handleCloseTest = (e: React.MouseEvent) => {
+    navigateTo('/archived-tests', e, history);
   };
 
   function handleUnarchive(testIds: string[]) {
@@ -67,8 +68,8 @@ const ArchivedTestsView = ({
     return tests.filter(test => test.state === 'archived');
   }
 
-  function handleOpenTest(id: string) {
-    history.push(`/archived-tests/${id}`);
+  function handleOpenTest(id: string, e: React.MouseEvent) {
+    navigateTo(`/archived-tests/${id}`, e, history);
   }
 
   const showTestModal = !!match.params.testId;

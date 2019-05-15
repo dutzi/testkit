@@ -40,7 +40,7 @@ function ScrollDialog({
   onClose,
   testId,
 }: {
-  onClose: () => void;
+  onClose: (e: React.MouseEvent) => void;
   testId: string;
 }) {
   const [open, setOpen] = React.useState(false);
@@ -69,9 +69,12 @@ function ScrollDialog({
     return <div />;
   }
 
-  function handleClose() {
-    setOpen(false);
-    onClose();
+  function handleClose(e: React.MouseEvent) {
+    if (!e.ctrlKey && !e.metaKey) {
+      setOpen(false);
+    }
+
+    onClose(e);
   }
 
   function getTitle() {

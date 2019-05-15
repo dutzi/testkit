@@ -65,7 +65,7 @@ type EnhancedTableProps = {
   onAction: (action: string, selectedIds: string[]) => void;
   // onDuplicate: (selectedIds: string[]) => void;
   // onArchive: (selectedIds: string[]) => void;
-  onOpenTest: (id: string) => void;
+  onOpenTest: (id: string, e: React.MouseEvent) => void;
   columns: Column[];
   rowRenderer: (props: any) => any;
   selected: string[];
@@ -146,7 +146,7 @@ class EnhancedTable extends React.Component<
   handleLinkClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     e.stopPropagation();
-    this.props.onOpenTest(id);
+    this.props.onOpenTest(id, e);
   };
 
   handleAction = (action: string) => {

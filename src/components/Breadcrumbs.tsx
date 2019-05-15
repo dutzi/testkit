@@ -26,11 +26,11 @@ function Breadcrumbs({
   onClick,
 }: {
   locations: Location[];
-  onClick: (location: Location) => void;
+  onClick: (location: Location, e: React.MouseEvent) => void;
 }) {
-  function handleClick(location: Location, event) {
-    event.preventDefault();
-    onClick(location);
+  function handleClick(location: Location, e: React.MouseEvent) {
+    e.preventDefault();
+    onClick(location, e);
   }
 
   const classes = useStyles();

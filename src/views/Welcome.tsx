@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { MarginH } from '../styles';
-import { auth}  from '../firebase';
+import { auth } from '../firebase';
 import Logo from '../components/Logo';
 
 const Wrapper = styled.div`
@@ -34,7 +34,7 @@ const Welcome = () => {
           <Typography variant="h6">Welcome to the beta 😃</Typography>
           <MarginH />
           <Typography variant="body1">
-            We will be rolling out features on a weekly basis.
+            We will be rolling out features on a biweekly basis.
           </Typography>
           <MarginH />
           <Typography variant="body1">

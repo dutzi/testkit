@@ -19,6 +19,7 @@ import { createTest } from '../model/test';
 import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
 import { WorkspaceContext } from './Main';
+import { navigateTo } from '../utils';
 
 const Wrapper = styled.div``;
 
@@ -48,23 +49,23 @@ const TestsView = ({
     firestore.collection(`workspaces/${workspace}/tests`),
   );
 
-  const handleCreateTest = () => {
+  const handleCreateTest = (e: React.MouseEvent) => {
     const nextId = getNextId(collection!);
 
     firestore
       .collection(`workspaces/${workspace}/tests`)
       .add(createTest(String(nextId)))
       .then(() => {
-        history.push(`/tests/${nextId}`);
+        navigateTo(`/tests/${nextId}`, e, history);
       });
   };
 
-  const handleCloseTest = () => {
-    history.push('/tests');
+  const handleCloseTest = (e: React.MouseEvent) => {
+    navigateTo('/tests', e, history);
   };
 
-  const handleCreateTestSet = () => {
-    history.push(`/test-sets/create?tests=${'43' + ',47'}`);
+  const handleCreateTestSet = (e: React.MouseEvent) => {
+    navigateTo(`/test-sets/create?tests=${'43' + ',47'}`, e, history);
   };
 
   const handleDuplicate = (testIds: string[]) => {
@@ -109,8 +110,8 @@ const TestsView = ({
     return tests.filter(test => test.state !== 'archived');
   }
 
-  function handleOpenTest(id: string) {
-    history.push(`/tests/${id}`);
+  function handleOpenTest(id: string, e: React.MouseEvent) {
+    navigateTo(`/tests/${id}`, e, history);
   }
 
   const showTestModal = !!match.params.testId;

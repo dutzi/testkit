@@ -16,6 +16,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PersonIcon from '@material-ui/icons/Person';
 import { withRouter } from 'react-router';
+import { navigateTo } from '../utils';
 
 const styles = theme => ({
   categoryHeader: {
@@ -113,8 +114,8 @@ const Navigator = ({
     },
   ];
 
-  function handleListItemClick(path: string) {
-    history.push(path);
+  function handleListItemClick(path: string, e: React.MouseEvent) {
+    navigateTo(path, e, history);
   }
 
   return (
