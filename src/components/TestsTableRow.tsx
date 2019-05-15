@@ -15,16 +15,25 @@ const TableLink = styled.a`
   text-decoration: none;
   color: #000000de;
   outline: none;
+  padding: 20px 0px;
+  position: relative;
 
   &:hover {
     text-decoration: underline;
   }
 
   &:focus {
-    background: #00000022;
-    border-radius: 4px;
-    padding: 4px;
-    margin: -4px;
+    :before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 0px;
+      right: 0px;
+      bottom: 20px;
+      background: #00000022;
+      border-radius: 4px;
+      margin: -4px;
+    }
   }
 `;
 
