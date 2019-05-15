@@ -6,7 +6,7 @@ import { getDocById } from '../data-utils';
 import produce from 'immer';
 import { Test, Step as IStep, TestSet } from '../types';
 import ReactMarkdown from 'react-markdown';
-import { markdownOverrides, MarginV } from '../styles';
+import { markdownOverrides, MarginV, MarginH } from '../styles';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -16,6 +16,7 @@ import _ from 'lodash';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MarkdownEditor from '../components/MarkdownEditor';
 import { WorkspaceContext } from './Main';
+import Paper from '@material-ui/core/Paper';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -130,7 +131,15 @@ const TestRunner = ({
   const testDoc = getDocById(testId, testsCollection!.docs);
 
   if (!testDoc) {
-    return null;
+    return (
+      <Wrapper>
+        <MaxWidth>
+          <div>This test does not exist 🤔</div>
+          <MarginH />
+          {renderActions()}
+        </MaxWidth>
+      </Wrapper>
+    );
   }
 
   if (!testSetDoc) {
@@ -171,6 +180,31 @@ const TestRunner = ({
     updateStepStatus(step, {
       message: value,
     });
+  }
+
+  function renderActions() {
+    return (
+      <Actions>
+        {testIndex > 0 && (
+          <Button onClick={onPrev} variant="text" color="default">
+            Previous Test
+          </Button>
+        )}
+        <MarginV margin="12px" />
+        <Button onClick={onNext} variant="contained" color="primary">
+          {numTests - 1 === testIndex ? (
+            'Done'
+          ) : (
+            <React.Fragment>
+              Next Test
+              <MarginV margin="6px" />
+              <ChevronRightIcon />
+              <MarginV margin="-6px" />
+            </React.Fragment>
+          )}
+        </Button>
+      </Actions>
+    );
   }
 
   return (
@@ -247,26 +281,7 @@ const TestRunner = ({
             </Step>
           ))}
         </Steps>
-        <Actions>
-          {testIndex > 0 && (
-            <Button onClick={onPrev} variant="text" color="default">
-              Previous Test
-            </Button>
-          )}
-          <MarginV margin="12px" />
-          <Button onClick={onNext} variant="contained" color="primary">
-            {numTests - 1 === testIndex ? (
-              'Done'
-            ) : (
-              <React.Fragment>
-                Next Test
-                <MarginV margin="6px" />
-                <ChevronRightIcon />
-                <MarginV margin="-6px" />
-              </React.Fragment>
-            )}
-          </Button>
-        </Actions>
+        {renderActions()}
       </MaxWidth>
     </Wrapper>
   );
