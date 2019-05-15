@@ -9,6 +9,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import moment from 'moment';
 import { getComponents } from '../data/components';
 import { Component } from '../types';
+import { formatDate } from '../utils';
 
 const TableLink = styled.a`
   text-decoration: none;
@@ -89,9 +90,7 @@ const TestsTableRow = ({
     return data ? (
       <div
         dangerouslySetInnerHTML={{
-          __html: moment(data.seconds * 1000)
-            .format('D/M/Y HH:MM')
-            .replace(' ', '&nbsp;'),
+          __html: formatDate(data),
         }}
       />
     ) : (

@@ -65,7 +65,7 @@ const TestsView = ({
   };
 
   const handleCreateTestSet = (e: React.MouseEvent) => {
-    navigateTo(`/test-sets/create?tests=${'43' + ',47'}`, e, history);
+    navigateTo(`/test-sets/create?tests=${selected.join(',')}`, e, history);
   };
 
   const handleDuplicate = (testIds: string[]) => {
@@ -124,6 +124,7 @@ const TestsView = ({
         </Button>
         <Margin />
         <Button
+          disabled={selected.length === 0}
           onClick={handleCreateTestSet}
           variant="contained"
           color="primary"

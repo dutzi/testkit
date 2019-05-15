@@ -6,6 +6,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import moment from 'moment';
 import { TestSet } from '../types';
 import TestSetProgressBar from './TestSetProgressBar';
+import { formatDate } from '../utils';
 
 const TableLink = styled.a`
   text-decoration: none;
@@ -69,9 +70,7 @@ const TestsSetsTableRow = ({
         {data.lastRun ? (
           <div
             dangerouslySetInnerHTML={{
-              __html: moment(data.lastRun.seconds * 1000)
-                .format('D/M/Y HH:MM')
-                .replace(' ', '&nbsp;'),
+              __html: formatDate(data.lastRun),
             }}
           />
         ) : (

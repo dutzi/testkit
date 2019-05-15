@@ -5,22 +5,14 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import Button from '@material-ui/core/Button';
 import Table from '../components/Table';
-import TestView from './Test';
 import { firestore } from '../firebase';
-import {
-  updateTest,
-  deleteTest,
-  getCollectionData,
-  getFirstTestInTestSet,
-  getDocById,
-  deleteTestSet,
-} from '../data-utils';
+import { getCollectionData, getDocById, deleteTestSet } from '../data-utils';
 import { testSetsTableColumns } from '../data/table-columns';
 import TestsSetsTableRow from '../components/TestsSetsTableRow';
 import Breadcrumbs from '../components/Breadcrumbs';
 import TestSet from './TestSet';
 import TestRunner from './TestRunner';
-import { TestSet as ITestSet, Test } from '../types';
+import { TestSet as ITestSet } from '../types';
 import { WorkspaceContext } from './Main';
 import { navigateTo } from '../utils';
 

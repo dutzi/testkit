@@ -19,7 +19,7 @@ export function updateTest(
     var testRef = firestore
       .collection(`workspaces/${workspace}/tests`)
       .doc(test.id);
-    testRef.update(data);
+    testRef.update({ modified: new Date(), ...data });
   }
 }
 

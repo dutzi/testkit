@@ -18,7 +18,7 @@ import Select from '@material-ui/core/Select';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import StepsProp from '../components/StepsProp';
 import { firestore } from '../firebase';
-import { getDocById } from '../data-utils';
+import { getDocById, updateTest as updateTestImpl } from '../data-utils';
 import { Component, Step } from '../types';
 import { getComponents } from '../data/components';
 import { WorkspaceContext } from './Main';
@@ -86,15 +86,7 @@ function ScrollDialog({
   }
 
   function updateTest(data: object) {
-    const test = getDocById(testId, collection!.docs);
-    if (test) {
-      var testRef = firestore
-        .collection(`workspaces/${workspace}/tests`)
-        .doc(test.id);
-      if (testRef) {
-        testRef.update(data);
-      }
-    }
+    updateTestImpl(testId, workspace, data, collection!);
   }
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
