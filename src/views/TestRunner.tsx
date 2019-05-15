@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { firestore } from '../firebase';
-import { getDocById } from '../data-utils';
+import { getDocById, updateTest } from '../data-utils';
 import produce from 'immer';
-import { Test, Step as IStep, TestSet } from '../types';
+import { Test, Step as IStep, TestSet, TestStatus, StepStatus } from '../types';
 import ReactMarkdown from 'react-markdown';
 import { markdownOverrides, MarginV, MarginH } from '../styles';
 import Button from '@material-ui/core/Button';
@@ -149,7 +149,18 @@ const TestRunner = ({
   const test: Test = testDoc.data() as Test;
   const testSet: TestSet = testSetDoc!.data() as TestSet;
 
-  function updateStepStatus(step: IStep, value) {
+  function getOverallTestStatus(test: TestStatus): StepStatus {
+    if (Object.keys(test).find(stepId => test[stepId].status === 'failed')) {
+      return 'failed';
+    } else {
+      return 'passed';
+    }
+  }
+
+  function updateStepStatus(
+    step: IStep,
+    value: { status?: StepStatus; message?: string },
+  ) {
     if (testSetDoc) {
       var testSetRef = firestore
         .collection(`workspaces/${workspace}/test-sets`)
@@ -166,6 +177,21 @@ const TestRunner = ({
         });
 
         testSetRef.update(nextState);
+
+        const overallTestStatus = getOverallTestStatus(
+          nextState.status[testId],
+        );
+
+        updateTest(
+          testId,
+          workspace,
+          {
+            lastRun: new Date(),
+            status: overallTestStatus,
+          },
+          testsCollection!,
+          false,
+        );
       }
     }
   }

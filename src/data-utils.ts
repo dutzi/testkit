@@ -13,13 +13,23 @@ export function updateTest(
   workspace: string,
   data: object,
   collection: firebase.firestore.QuerySnapshot,
+  updateModified: boolean = true,
 ) {
   const test = getDocById(id, collection!.docs);
   if (test) {
     var testRef = firestore
       .collection(`workspaces/${workspace}/tests`)
       .doc(test.id);
-    testRef.update({ modified: new Date(), ...data });
+
+    const newData: any = {
+      ...data,
+    }
+
+    if (updateModified) {
+      newData.modified = new Date()
+    }
+
+    testRef.update(newData);
   }
 }
 
