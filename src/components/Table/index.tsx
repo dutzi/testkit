@@ -12,12 +12,25 @@ import TableHead from './TableHead';
 const Wrapper = styled.div``;
 
 function desc(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  // TODO generalize this
+  const isNumeric = orderBy === 'id';
+
+  let aValue, bValue;
+  if (isNumeric) {
+    aValue = Number(a[orderBy]);
+    bValue = Number(b[orderBy]);
+  } else {
+    aValue = a[orderBy];
+    bValue = b[orderBy];
+  }
+
+  if (bValue < aValue) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (bValue > aValue) {
     return 1;
   }
+
   return 0;
 }
 
