@@ -11,7 +11,11 @@ export default async function(tests: any[], idToken: string) {
     );
 
     tests.forEach(async test => {
-      await collection.doc(test.id).create(test);
+      try {
+        await collection.doc(test.id).create(test);
+      } catch (err) {
+        console.log(err, test);
+      }
     });
   }
 }
