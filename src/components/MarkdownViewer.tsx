@@ -25,7 +25,10 @@ const MarkdownViewer = ({
     isEmpty = true;
     source = `${label}: (empty)`;
   }
-  source = source.replace(/(\#(\d+))\b/g, '<a href="/test/$2">$1</a>');
+
+  source = source
+    .replace(/(\#(\d+))\b/g, '<a href="/test/$2">$1</a>')
+    .replace(/\n/g, '\n\n');
 
   return (
     <Wrapper isEmpty={isEmpty}>
