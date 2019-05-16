@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useCollection } from 'react-firebase-hooks/firestore';
 import Button from '@material-ui/core/Button';
 import Table from '../components/Table';
 import { firestore } from '../firebase';
@@ -13,7 +12,11 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import TestSet from './TestSet';
 import TestRunner from './TestRunner';
 import { TestSet as ITestSet } from '../types';
-import { WorkspaceContext } from './Main';
+import {
+  WorkspaceContext,
+  TestsCollectionContext,
+  TestSetsCollectionContext,
+} from './Main';
 import { navigateTo } from '../utils';
 
 const Wrapper = styled.div`
@@ -47,14 +50,8 @@ const TestsView = ({
 }) => {
   const [selected, setSelected] = useState<string[]>([]);
   const workspace = useContext(WorkspaceContext);
-
-  const { value: testSetsCollection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/test-sets`),
-  );
-
-  const { value: testsCollection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/tests`),
-  );
+  const testsCollection = useContext(TestsCollectionContext);
+  const testSetsCollection = useContext(TestSetsCollectionContext);
 
   if (!testSetsCollection || !testsCollection) {
     return null;

@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { useCollection } from 'react-firebase-hooks/firestore';
 import { firestore } from '../firebase';
 import { getDocById, updateTest } from '../data-utils';
 import produce from 'immer';
@@ -15,7 +14,11 @@ import FormControl from '@material-ui/core/FormControl';
 import _ from 'lodash';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MarkdownEditor from '../components/MarkdownEditor';
-import { WorkspaceContext } from './Main';
+import {
+  WorkspaceContext,
+  TestsCollectionContext,
+  TestSetsCollectionContext,
+} from './Main';
 import Paper from '@material-ui/core/Paper';
 
 const Wrapper = styled.div`
@@ -114,14 +117,8 @@ const TestRunner = ({
   numTests: number;
 }) => {
   const workspace = useContext(WorkspaceContext);
-
-  const { value: testSetsCollection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/test-sets`),
-  );
-
-  const { value: testsCollection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/tests`),
-  );
+  const testsCollection = useContext(TestsCollectionContext);
+  const testSetsCollection = useContext(TestSetsCollectionContext);
 
   if (!testSetsCollection || !testsCollection) {
     return null;

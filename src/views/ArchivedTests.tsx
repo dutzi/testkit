@@ -3,15 +3,13 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import DeleteIcon from '@material-ui/icons/Delete';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
-import { useCollection } from 'react-firebase-hooks/firestore';
 import Table from '../components/Table';
 import TestView from './Test';
-import { firestore } from '../firebase';
 import { updateTest, deleteTest, getCollectionData } from '../data-utils';
 import { Test } from '../types';
 import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
-import { WorkspaceContext } from './Main';
+import { WorkspaceContext, TestsCollectionContext } from './Main';
 import { navigateTo } from '../utils';
 
 const Wrapper = styled.div``;
@@ -26,10 +24,7 @@ const ArchivedTestsView = ({
 }) => {
   const workspace = useContext(WorkspaceContext);
   const [selected, setSelected] = useState<string[]>([]);
-
-  const { value: collection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/tests`),
-  );
+  const collection = useContext(TestsCollectionContext);
 
   const handleCloseTest = (e: React.MouseEvent) => {
     navigateTo('/archived-tests', e, history);

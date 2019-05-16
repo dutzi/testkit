@@ -1,8 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { Test, StepStatus, TestStatus } from '../types';
-import { firestore } from '../firebase';
 import _ from 'lodash';
 import { Tooltip } from '@material-ui/core';
 

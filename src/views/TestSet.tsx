@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
-import { useCollection } from 'react-firebase-hooks/firestore';
 import { firestore } from '../firebase';
 import { withRouter } from 'react-router';
 import { getCollectionData, getDocById, getNextId } from '../data-utils';
@@ -22,7 +21,11 @@ import PublishIcon from '@material-ui/icons/Publish';
 import Select from '../components/Select';
 import { MarginH, MarginV } from '../styles';
 import { createTestSet } from '../model/test-set';
-import { WorkspaceContext } from './Main';
+import {
+  WorkspaceContext,
+  TestsCollectionContext,
+  TestSetsCollectionContext,
+} from './Main';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -74,14 +77,8 @@ const TestSet = ({
   const [createdTestSet, setCreatedTestSet] = useState<ITestSet>(
     createTestSet(),
   );
-
-  const { value: testSetsCollection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/test-sets`),
-  );
-
-  const { value: testsCollection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/tests`),
-  );
+  const testsCollection = useContext(TestsCollectionContext);
+  const testSetsCollection = useContext(TestSetsCollectionContext);
 
   let isCreating = id === 'create';
 

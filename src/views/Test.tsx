@@ -15,7 +15,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 // import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { useCollection } from 'react-firebase-hooks/firestore';
 import StepsProp from '../components/StepsProp';
 import { firestore } from '../firebase';
 import { getDocById, updateTest as updateTestImpl } from '../data-utils';

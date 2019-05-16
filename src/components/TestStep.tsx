@@ -23,6 +23,7 @@ const Wrapper = styled.div`
   }
   border-bottom: 1px solid #00000022;
   display: flex;
+  line-height: 1.5;
 
   &:hover {
     ${ButtonContainer} {
@@ -46,6 +47,7 @@ const Header = styled.div`
 
 const Editors = styled.div`
   flex: 1;
+  width: calc(100% - 110px);
 `;
 
 class TestStep extends React.Component<{

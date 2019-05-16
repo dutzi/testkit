@@ -18,6 +18,9 @@ export const WorkspaceContext = React.createContext('');
 export const TestsCollectionContext = React.createContext<
   firebase.firestore.QuerySnapshot | undefined
 >(undefined);
+export const TestSetsCollectionContext = React.createContext<
+  firebase.firestore.QuerySnapshot | undefined
+>(undefined);
 
 const Wrapper = styled.div`
   display: grid;
@@ -36,6 +39,10 @@ const MainView = () => {
 
   const { value: testsCollection } = useCollection(
     firestore.collection(`workspaces/${workspace}/tests`),
+  );
+
+  const { value: testSetsCollection } = useCollection(
+    firestore.collection(`workspaces/${workspace}/test-sets`),
   );
 
   let cancelSnapshotLisener;
@@ -75,26 +82,28 @@ const MainView = () => {
   }
 
   return (
-    <TestsCollectionContext.Provider value={testsCollection}>
-      <Wrapper>
-        <WorkspaceContext.Provider value={workspace}>
-          <Navigator />
-          <ContentWrapper>
-            <Route path="/tests/:testId?" component={TestsView} />
-            <Route
-              path="/archived-tests/:testId?"
-              component={ArchivedTestsView}
-            />
-            <Route
-              path="/test-sets/:testSetId?/:testId?"
-              component={TestSetsView}
-            />
-            <Route path="/settings" component={SettingsView} />
-            <Route path="/profile" component={ProfileView} />
-          </ContentWrapper>
-        </WorkspaceContext.Provider>
-      </Wrapper>
-    </TestsCollectionContext.Provider>
+    <TestSetsCollectionContext.Provider value={testSetsCollection}>
+      <TestsCollectionContext.Provider value={testsCollection}>
+        <Wrapper>
+          <WorkspaceContext.Provider value={workspace}>
+            <Navigator />
+            <ContentWrapper>
+              <Route path="/tests/:testId?" component={TestsView} />
+              <Route
+                path="/archived-tests/:testId?"
+                component={ArchivedTestsView}
+              />
+              <Route
+                path="/test-sets/:testSetId?/:testId?"
+                component={TestSetsView}
+              />
+              <Route path="/settings" component={SettingsView} />
+              <Route path="/profile" component={ProfileView} />
+            </ContentWrapper>
+          </WorkspaceContext.Provider>
+        </Wrapper>
+      </TestsCollectionContext.Provider>
+    </TestSetsCollectionContext.Provider>
   );
 };
 

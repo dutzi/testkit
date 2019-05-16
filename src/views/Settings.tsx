@@ -59,11 +59,12 @@ const Settings = () => {
           <MarginH />
           <div>
             <p>
-              Currently you can import tests from either PractiTest or TestLodge
+              Currently you can import tests from either PractiTest or
+              TestLodge.
             </p>
             <p>
               First export the tests as CSV, then hit one of the buttons below
-              and upload the file here
+              and upload the file here.
             </p>
           </div>
           <MarginH />
