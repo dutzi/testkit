@@ -200,15 +200,6 @@ class EnhancedTable extends React.Component<
             onScroll={this.handleScroll}
           >
             <Table className={classes.table} aria-labelledby="tableTitle">
-              <TableHead
-                columns={columns}
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={this.handleSelectAllClick}
-                onRequestSort={this.handleRequestSort}
-                rowCount={data.length}
-              />
               <TableBody>
                 {stableSort(data, getSorting(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -228,6 +219,16 @@ class EnhancedTable extends React.Component<
                   </TableRow>
                 )} */}
               </TableBody>
+              {/* Because of z-index issues i'm rendering the head *after* the body */}
+              <TableHead
+                columns={columns}
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+              />
             </Table>
           </div>
           <TablePagination
