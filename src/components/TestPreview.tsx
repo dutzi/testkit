@@ -36,6 +36,7 @@ const Description = styled.div`
   background: #ececec;
   border-radius: 4px;
   padding: 12px;
+  word-break: break-word;
 `;
 
 const Result = styled.div`

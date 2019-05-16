@@ -4,7 +4,6 @@ import { firestore } from '../firebase';
 import { getDocById, updateTest } from '../data-utils';
 import produce from 'immer';
 import { Test, Step as IStep, TestSet, TestStatus, StepStatus } from '../types';
-import ReactMarkdown from 'react-markdown';
 import { markdownOverrides, MarginV, MarginH } from '../styles';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
@@ -20,6 +19,7 @@ import {
   TestSetsCollectionContext,
 } from './Main';
 import Paper from '@material-ui/core/Paper';
+import MarkdownViewer from '../components/MarkdownViewer';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -68,6 +68,7 @@ const Description = styled.div`
   background: #ececec;
   border-radius: 4px;
   padding: 12px;
+  word-break: break-word;
 
   ${markdownOverrides}
 `;
@@ -77,6 +78,7 @@ const Result = styled.div`
   border-radius: 4px;
   background: #ececec;
   padding: 12px;
+  word-break: break-word;
 
   ${markdownOverrides}
 `;
@@ -245,10 +247,16 @@ const TestRunner = ({
             <Step key={step.id}>
               <HBox>
                 <Description>
-                  <ReactMarkdown source={step.description} />
+                  <MarkdownViewer
+                    label="Description"
+                    source={step.description}
+                  />
                 </Description>
                 <Result>
-                  <ReactMarkdown source={step.result} />
+                  <MarkdownViewer
+                    label="Expected result"
+                    source={step.result}
+                  />
                 </Result>
               </HBox>
               <React.Fragment>
