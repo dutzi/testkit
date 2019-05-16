@@ -78,11 +78,13 @@ export default function(
 
           tests.push(currentTest);
         } else {
-          currentTest.steps.push({
-            id: testStep.stepPosition,
-            description: testStep.stepDescription,
-            result: testStep.stepExpectedResults,
-          });
+          if (testStep.stepPosition) {
+            currentTest.steps.push({
+              id: testStep.stepPosition,
+              description: testStep.stepDescription,
+              result: testStep.stepExpectedResults,
+            });
+          }
         }
       });
 
