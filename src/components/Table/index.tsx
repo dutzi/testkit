@@ -3,9 +3,7 @@ import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Column } from '../../data/table-columns';
 import Toolbar from './Toolbar';
@@ -49,7 +47,6 @@ const styles = theme => ({
     minWidth: 500,
   },
   tableWrapper: {
-    maxHeight: 'calc(100vh - 210px)',
     overflow: 'auto',
   },
 });
@@ -63,13 +60,12 @@ type EnhancedTableProps = {
   data: object[];
   actions: object[];
   onAction: (action: string, selectedIds: string[]) => void;
-  // onDuplicate: (selectedIds: string[]) => void;
-  // onArchive: (selectedIds: string[]) => void;
   onOpenTest: (id: string, e: React.MouseEvent) => void;
   columns: Column[];
   rowRenderer: (props: any) => any;
   selected: string[];
   setSelected: (selected: string[]) => void;
+  topPadding: string;
 };
 
 type EnhancedTableState = {
@@ -87,10 +83,10 @@ class EnhancedTable extends React.Component<
     super(props);
 
     this.state = {
-      order: 'asc',
-      orderBy: 'calories',
+      order: 'desc',
+      orderBy: 'id',
       page: 0,
-      rowsPerPage: 5,
+      rowsPerPage: 20,
     };
   }
 
@@ -132,7 +128,6 @@ class EnhancedTable extends React.Component<
     }
 
     this.props.setSelected(newSelected);
-    // this.setState({ selected: newSelected });
   };
 
   handleChangePage = (event, page) => {
@@ -166,7 +161,14 @@ class EnhancedTable extends React.Component<
   isSelected = id => this.props.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes, data, columns, selected, rowRenderer } = this.props;
+    const {
+      classes,
+      data,
+      columns,
+      selected,
+      rowRenderer,
+      topPadding,
+    } = this.props;
     const { order, orderBy, rowsPerPage, page } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
@@ -179,7 +181,11 @@ class EnhancedTable extends React.Component<
             onAction={this.handleAction}
             numSelected={selected.length}
           />
-          <div className={classes.tableWrapper} onScroll={this.handleScroll}>
+          <div
+            style={{ maxHeight: `calc(100vh - ${topPadding})` }}
+            className={classes.tableWrapper}
+            onScroll={this.handleScroll}
+          >
             <Table className={classes.table} aria-labelledby="tableTitle">
               <TableHead
                 columns={columns}
@@ -203,16 +209,16 @@ class EnhancedTable extends React.Component<
                       data: n,
                     });
                   })}
-                {emptyRows > 0 && (
+                {/* {emptyRows > 0 && (
                   <TableRow style={{ height: 49 * emptyRows }}>
                     <TableCell colSpan={columns.length + 1} />
                   </TableRow>
-                )}
+                )} */}
               </TableBody>
             </Table>
           </div>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[20, 50, 100]}
             component="div"
             count={data.length}
             rowsPerPage={rowsPerPage}

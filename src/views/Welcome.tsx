@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import _ from 'lodash';
@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import { MarginH } from '../styles';
 import { auth } from '../firebase';
 import Logo from '../components/Logo';
+import SignupModal from '../components/SignupModal';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -20,9 +21,19 @@ const Padder = styled.div`
 `;
 
 const Welcome = () => {
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
+
   function handleGoogleSignIn() {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider);
+  }
+
+  function handleEmailSignin() {
+    setShowRegistrationModal(true);
+  }
+
+  function handleCloseSignupModal() {
+    setShowRegistrationModal(false);
   }
 
   return (
@@ -49,8 +60,15 @@ const Welcome = () => {
           >
             Sign In With Google
           </Button>
+          <MarginH margin="12px" />
+          <Button variant="text" color="default" onClick={handleEmailSignin}>
+            Sign Up With Email
+          </Button>
         </Padder>
       </Paper>
+      {showRegistrationModal && (
+        <SignupModal onClose={handleCloseSignupModal} />
+      )}
     </Wrapper>
   );
 };

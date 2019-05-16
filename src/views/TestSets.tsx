@@ -227,6 +227,7 @@ const TestsView = ({
             },
           ]}
           rowRenderer={TestsSetsTableRow}
+          topPadding="250px"
         />
       )}
       {showSingleTestSet && !showTestRunner && (

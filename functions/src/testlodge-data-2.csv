@@ -1,0 +1,176 @@
+"Test suite name","Customized Publisher Regression"
+"Created on","2019-01-29 08:22:22 UTC"
+"Updated on","2019-03-01 11:42:17 UTC"
+
+
+"Id","Section","Test case number","Title","Description","Test steps","Expected result","Created at","Updated at"
+"2368867","Comment ","TC499","Add a Comment","Testing the ability to add a Comment
+Comment - is a feature in the conversation that let's a user add a comment and contribute","1)Go to: The publisher's conversation
+2)Click on SayConrol
+3)write a comment
+4)Click ""post""","The Comment will be added to the feed","2019-01-29 08:23:54 UTC","2019-01-29 08:27:10 UTC"
+"2368868","Comment ","TC500","Comment - rich editor","Testing the ability the rich edit a comment in the Comment sayCtrl","1)Go to: The publisher's conversation
+2)Click on SayConrol
+3)write a comment
+4)Click the rich editor
+5)Edit the text
+6)Click ""post""","The Comment with rich text will be added to the feed","2019-01-29 08:23:54 UTC","2019-01-29 08:27:18 UTC"
+"2368870","Comment ","TC502","Comment - Edit","Testing the ability to update a comment.
+Edit -  is a feature that lets the user change their comment after they clicking post.","1)Go to: The publisher's conversation
+2)Click on SayConrol
+3)write a comment
+4)Click ""post""
+5)click edit
+6)Change the comment
+7)Click update","1)After clicking edit - a SayCtrl will appear with the comment the user wants to update
+2)After clicking update the new text will appear in the conversation, and ""edited"" 
+will appear next to the timestamp","2019-01-29 08:23:54 UTC","2019-01-29 08:32:26 UTC"
+"2368914","Comment ","TC530","Comment - Edit after 5 minutes","Testing the ability to update a comment.
+Edit - is a feature that lets the user change their comment after they clicking post.
+In TOL you cannot edit after 5 minutes","1)Go to: The publisher's conversation
+2)Click on SayConrol
+3)write a comment
+4)Click ""post""
+5)Wait 5 minutes
+5)Choose edit","You will not have the option to edit after 5 minutes","2019-01-29 08:32:05 UTC","2019-01-29 08:32:05 UTC"
+"2368871","Comment ","TC503","Comment - Edit - cancel","Testing the ability to update a comment.
+Edit -  is a feature that lets the user change their comment after they clicking post.","1)Go to: The publisher's conversation
+2)Click on SayConrol
+3)write a comment
+4)Click ""post""
+5)click edit
+6)Change the comment
+7)Click update
+8)Change the comment
+9)Click cancel","1)Your comment will not be changed","2019-01-29 08:23:54 UTC","2019-01-29 08:32:50 UTC"
+"2368872","Comment ","TC504","Comment - Delete","Testing the ability to delete a comment
+Delete - is a feature that lets the user delete their comment after posting it.","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)write a comment
+4)Click ""post""
+5)click delete
+6)refresh the page","1)The comment will be deleted
+2)After the refresh the comment will still not appear","2019-01-29 08:23:54 UTC","2019-01-29 08:36:42 UTC"
+"2401371","Comment ","TC677","Comment - Cancel","Verify Cancel button for publishers who have it","1. On the sun, we implemented a Cancel button for the SayCTL: https://drive.google.com/drive/folders/1HDEdUTqeMdPY1XAXkR6V3fb8_oGy5DA8
+1. Go to https://preview.c9users.io/borisyuz/staging_env/sun/post1.html
+2. Open main SayCTL, and write some text
+3. Click Cancel","SatCTL is minimized to the original state","2019-03-01 11:40:46 UTC","2019-03-01 11:40:46 UTC"
+"2368873","Reply","TC505","Add a reply","Testing if adding a reply works
+reply - is a feature in the conversation that lets a user reply to a comment or reply to a reply","1)Go to: The publisher's website
+2)To a comment click reply
+3)write a reply
+4)Click ""post""","The reply will be added with an indentation","2019-01-29 08:23:54 UTC","2019-01-29 08:37:01 UTC"
+"2368874","Reply","TC506","Reply - Update","Testing the ability to update a reply.
+Edit - is a feature that lets the user change their reply after they clicking post.","1)Do TC505
+2)Choose edit
+3)Change the comment
+4)Click update","1)After clicking edit - a SayCtrl will appear with the reply the user wants to update
+2)After clicking update the new text will appear in the conversation","2019-01-29 08:23:54 UTC","2019-01-29 08:37:36 UTC"
+"2368875","Reply","TC507","Reply - Delete","Testing the ability to delete a reply
+Delete - is a feature that lets the user delete their reply after posting it.","1)Do TC505
+2)Hover over the reply
+3)Choose delete
+4)refresh the page","1)The reply will be deleted
+2)After the refresh the reply will still not appear","2019-01-29 08:23:54 UTC","2019-01-29 08:37:54 UTC"
+"2401372","Reply","TC678","Reply - Cancel","Verify Cancel button on replies for publishers who have it","1. On the sun, we implemented a Cancel button for the SayCTL: https://drive.google.com/drive/folders/1HDEdUTqeMdPY1XAXkR6V3fb8_oGy5DA8
+1. Go to https://preview.c9users.io/borisyuz/staging_env/sun/post1.html
+2. On any comment, click the Reply button, and add text
+3. Click Cancel","SayCTL is minimized to its original state","2019-03-01 11:42:17 UTC","2019-03-01 11:42:17 UTC"
+"2368938","Typing","TC531","Typing - One User Typing","","1)Go to a publisher's site with user A
+2)With user A type and dont stop
+3)Go to the publisher's site with User B to the same conversation","1)User B will see User A typing(The first letter of the user)","2019-01-29 08:41:20 UTC","2019-01-29 08:45:20 UTC"
+"2368940","Typing","TC532","Typing - Multiple users typing","","1)Go to a publisher's site with a few users
+2)with those user type
+3)With a completely different user go to the same conversation","1)You will see a user typing and in the middle of the avatar the number of users typing will appear","2019-01-29 08:41:30 UTC","2019-01-29 08:47:46 UTC"
+"2368941","Typing","TC533","Typing - Aggregation","","1)Do:TC532
+2)post few of the typers comments","1)For user B and aggregation will appear 
+2)The first comment posted and under if will be a button ""view more comments""","2019-01-29 08:41:44 UTC","2019-01-29 08:57:52 UTC"
+"2368876","Rank","TC508","Like a comment","Liking a comment in the conversation","1)Go to: The publisher's site
+2)Like a comment","The number of likes to the comment will increase by one","2019-01-29 08:23:54 UTC","2019-01-29 08:38:19 UTC"
+"2368877","Rank","TC509","Dislike a comment","Disliking a comment in the conversation","1)Go to: The publisher's site
+2)Dislike a comment","The number of dislikes to the comment will increase by one","2019-01-29 08:23:54 UTC","2019-01-29 08:38:32 UTC"
+"2368878","Rank","TC510","Like a reply","Liking a reply in the conversation","
+1)Go to: The publisher's site
+2)Like a reply","The number of likes to the reply will increase by one","2019-01-29 08:23:54 UTC","2019-01-29 08:38:37 UTC"
+"2368879","Rank","TC511","Dislike a reply","Disliking a reply in the conversation","
+1)Go to: The publisher's site
+2)Dislike a reply","The number of dislikes to the reply will increase by one","2019-01-29 08:23:54 UTC","2019-01-29 08:38:46 UTC"
+"2368886","Report","TC518","Report - comment with no replies","Testing the ability to report a comment with replies.
+Report - is the ability of a user to report an offensive comment.","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Hover over a comment with no replies
+3)Click on the context menu icon
+4)Choose report","1)The comment will disappear from the reporters view.","2019-01-29 08:23:54 UTC","2019-01-29 08:23:54 UTC"
+"2368887","Report","TC519","Report - comment With replies","Testing the ability to report a comment with replies.
+Report - is the ability of a user to report an offensive comment.","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Hover over a comment with replies
+3)Click on the context menu icon
+4)Choose report","1)The comment will disappear from the reporters view but the replies will stay","2019-01-29 08:23:54 UTC","2019-01-29 08:23:54 UTC"
+"2368888","Report","TC520","Report - Reply","Testing the ability to report a reply
+Report - is the ability of a user to report an offensive reply.","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Hover over a reply
+3)Click on the context menu icon
+4)Choose report","1)The reply will disappear from the reporters view but the replies will stay","2019-01-29 08:23:54 UTC","2019-01-29 08:23:54 UTC"
+"2368889","Report","TC521","Report - Reply with replies","Testing the ability to report a reply with replies.
+Report - is the ability of a user to report an offensive reply.","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Hover over a reply with replies
+3)Click on the context menu icon
+4)Choose report","1)The reply will disappear from the reporters view but the replies will stay","2019-01-29 08:23:54 UTC","2019-01-29 08:23:54 UTC"
+"2368890","Notifications","TC522","Notifications - In view","Notifications - is a feature that notifies a user when they are replies to or their comment is mentioned or they are mentioned","1)The publisher's site
+2)Log in
+3)Click on the notification bell, 
+4)Click on a notification that is in view(A notification that appear in the conversation you are currently without the need to click ""Show more comment"")","1)The message will be highlighted and you will be scrolled to the message","2019-01-29 08:23:55 UTC","2019-01-29 08:40:20 UTC"
+"2368891","Notifications","TC523","Notifications - Not in view","Notifications - is a feature that notifies a user when they are replies to or their comment is mentioned or they are mentioned","1)The publisher's site
+2)Log in
+3)Click on the notification bell
+4)Click on a notification that is not in view(A notification that appear in the conversation and you need to click ""Show more comment"" to see it)","The message will appear as the first 
+message in the conversation and highlighted","2019-01-29 08:23:55 UTC","2019-01-29 08:40:25 UTC"
+"2368892","Notifications","TC524","Notifications - different conversation","Notifications - is a feature that notifies a user when they are replies to or their comment is mentioned or they are mentioned","1)The publisher's site
+2)Log in
+3)Click on the notification bell
+4)click on a notification from a different 
+conversation","1)You will be redirected to the conversation
+the notification is from, and the message 
+will be highlighted.","2019-01-29 08:23:55 UTC","2019-01-29 08:40:32 UTC"
+"2368893","VPN - Validation","TC525","USA - VPN - Validation","Testing conversation on USA VPN","1)Go to a conversation
+2)Turn on USA VPN
+3)Run the conversation sanity","1)The conversation will load
+2)Te conversation will act as in the Israeli VPN","2019-01-29 08:23:55 UTC","2019-01-29 08:23:55 UTC"
+"2368894","VPN - Validation","TC526","EU - VPN - Validation","Testing conversation on EU VPN","1)Go to a conversation
+2)Turn on EU VPN
+3)Run the conversation sanity","1)The conversation will load
+2)Te conversation will act as in the Israeli VPN","2019-01-29 08:23:55 UTC","2019-01-29 08:23:55 UTC"
+"2368895","Login Flow","TC527","Login as admin","","1. Go to admin login page
+2. Using your credentials, login","1. In spots dropdown you see all spots you are owner of, moderator of, and viewer of in alphabetical order in each section
+2. User can see settings, analytics, features tabs as well as moderators tab.
+3. For enabled community spots, user will also see topic pages","2019-01-29 08:24:54 UTC","2019-01-29 08:24:54 UTC"
+"2368896","Login Flow","TC528","Login as journalist","","1. Configure user as journalist
+2. Login on staging with journalist user","Login fails and the ""Request Demo"" page appears","2019-01-29 08:24:54 UTC","2019-01-29 08:24:54 UTC"
+"2368897","Login Flow","TC529","Login as moderator","","1. Configure user as moderator on a certain spot
+2. Login with moderator user","User can see only moderation tab, with all related sub-tabs.
+If spot has multiple moderators mode enabled, user will see toggle of moderation mode. Off by default","2019-01-29 08:24:54 UTC","2019-01-29 08:24:54 UTC"
+"2368983","Badges","TC535","Badges - Admin","","1)Go to the publisher's site
+2)Log in in the conversation as admin
+3)Post a comment","1)Next to the user name a badge will appear ""Staff member""
+2)The user's avatar will be the publisher's avatar","2019-01-29 08:59:11 UTC","2019-01-29 09:01:40 UTC"
+"2368984","Badges","TC536","Badges - Moderator","","1)Go to the publisher's site
+2)Log in in the conversation as moderator
+3)Post a comment","1)Next to the user name a badge will appear ""Staff member""
+2)The user's avatar will be the publisher's avatar","2019-01-29 08:59:18 UTC","2019-01-29 09:01:57 UTC"
+"2368985","Badges","TC537","Badges - Journalist","","1)Go to the publisher's site
+2)Log in in the conversation as journalist
+3)Post a comment","1)Next to the user name a badge will appear ""Staff member""
+2)The user's avatar will be the publisher's avatar","2019-01-29 08:59:27 UTC","2019-01-29 09:02:16 UTC"
+"2369000","Bozo","TC538","Bozo - enabled","","Pre Step: In the host panel enable Bozo
+1)Go to the publisher's site
+2)Choose a conversation
+3)Add a comment with a restricted word","1)The user will see the comment added like any other comment
+2)In the host panel the comment will go to pending/rejected","2019-01-29 09:06:32 UTC","2019-01-29 09:08:35 UTC"
+"2369002","Bozo","TC539","Bozo - Disabled","","Pre Step: In the host panel disable Bozo
+1)Go to the publisher's site
+2)Choose a conversation
+3)Add a comment with a restricted word","1)The comment will appear greyed and the badge pending approval will appear","2019-01-29 09:06:40 UTC","2019-01-29 09:09:25 UTC"
+"2368949","Design","TC534","Custom Designs","The design links, The staging links and the production links.","Design - Pay attention to avatars, verify colours and verify icons.
+
+Satging - https://preview.c9users.io/borisyuz/staging_env/times/post1.html
+
+Production - https://www.uat-thetimes.co.uk/edition/news/emergency-takeover-after-violence-and-squalor-at-chaotic-g4s-birmingham-jail-hvnz2jct0","","2019-01-29 08:43:43 UTC","2019-01-29 09:11:06 UTC"

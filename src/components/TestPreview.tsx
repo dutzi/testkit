@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
-import ReactMarkdown from 'react-markdown';
 import { Test, TestStatus } from '../types';
 import TestProgressBar from './TestProgressBar';
-import { markdownOverrides } from '../styles';
+import MarkdownViewer from './MarkdownViewer';
 
 const Wrapper = styled.div`
   margin-bottom: 24px;
@@ -37,8 +36,6 @@ const Description = styled.div`
   background: #ececec;
   border-radius: 4px;
   padding: 12px;
-
-  ${markdownOverrides}
 `;
 
 const Result = styled.div`
@@ -46,8 +43,6 @@ const Result = styled.div`
   border-radius: 4px;
   background: #ececec;
   padding: 12px;
-
-  ${markdownOverrides}
 `;
 
 const Title = styled.div`
@@ -60,7 +55,6 @@ const TestStatusMessage = styled.div`
   padding: 12px;
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
-  ${markdownOverrides}
 `;
 
 const TestPreview = ({
@@ -88,17 +82,23 @@ const TestPreview = ({
             <Step key={step.id}>
               <HBox>
                 <Description>
-                  <ReactMarkdown source={step.description} />
+                  <MarkdownViewer
+                    label="Description"
+                    source={step.description}
+                  />
                 </Description>
                 <Result>
-                  <ReactMarkdown source={step.result} />
+                  <MarkdownViewer
+                    label="Expected result"
+                    source={step.result}
+                  />
                 </Result>
               </HBox>
               {message && (
                 <React.Fragment>
                   <Title>Test Message</Title>
                   <TestStatusMessage>
-                    <ReactMarkdown source={message} />
+                    <MarkdownViewer label="Message" source={message} />
                   </TestStatusMessage>
                 </React.Fragment>
               )}

@@ -21,7 +21,7 @@ import { firestore } from '../firebase';
 import { getDocById, updateTest as updateTestImpl } from '../data-utils';
 import { Component, Step } from '../types';
 import { getComponents } from '../data/components';
-import { WorkspaceContext } from './Main';
+import { WorkspaceContext, TestsCollectionContext } from './Main';
 
 const SelectsWrapper = styled.div`
   display: flex;
@@ -50,9 +50,8 @@ function ScrollDialog({
   }, []);
 
   const workspace = useContext(WorkspaceContext);
-  const { value: collection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/tests`),
-  );
+  const collection = useContext(TestsCollectionContext);
+
   const [components, setComponents] = useState<Component[]>([]);
 
   let test: firebase.firestore.QueryDocumentSnapshot | undefined;

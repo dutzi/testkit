@@ -1,0 +1,281 @@
+"D","E","F","G"
+"","","",""
+"","","",""
+"","","",""
+"","","",""
+"Title","Description","Test steps","Expected result"
+"Facebook login","Testing facebook login","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click login
+3)Choose Facebook","You will be logged in as the facebook user"
+"Twitter login","Testing facebook login","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click login
+3)Choose Twitter","You will be logged in as the twitter user"
+"Google login","Testing google login","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click login
+3)Choose google","You will be logged in as the email user"
+"Email login","Testing emai login","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click login
+3)Choose email
+4)Go to tab login
+5)Enter username and passwork
+6)Click log in","You will be logged as the email user"
+"Sign up - login modal","","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click login
+3)Choose email
+4)Go to tab sign up tab
+5)Enter the credentials and click sign up","1)The user will be signed up"
+"Sign up - guest user after comment","","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html as guest
+2)Add a comment
+3)add a user name click next
+4)add email
+3)Verify the captcha and click next","1)Create you profile will appear under the say control
+2)You will be signed up as the new user"
+"Add a Comment","Testing the ability to add a Comment
+Comment - is a feature in the conversation that let's a user add a comment and contribute","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)write a comment
+4)Click ""post""","The Comment will be added to the feed"
+"Comment - rich editor","Testing the ability the rich edit a comment in the Comment sayCtrl","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)write a comment
+4)Click the rich editor
+5)Edit the text
+6)Click ""post""","The Comment with rich text will be added to the feed"
+"Comment - GIF","Testing the ability to add a gif in the Comment","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)write a comment
+4)Click on the GIF icon
+5)Choose a gif
+6)Click ""post""","1)When you choose a gif a preview of the gif will show under the comment
+2)The Comment will be added with a GIF"
+"Comment - photo","Testing the ability to add a photo in the Comment","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)write a comment
+4)Click on the camera icon
+5)Choose a photo
+6)Click ""post""","1)When you choose a preview of the photo will show under the comment
+2)The Comment will be added with a photo"
+"Comment - youtube extract","Testing the Ability of the Comment sayCtrl to extract","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)Add a youtube link
+4)Click ""post""","1)The link will be extracted and you will the extract
+2)The Comment will be added with the link's extract"
+"Comment - Twitter extract","Testing the Ability of the Comment sayCtrl to extract","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)Add a twitter link
+4)Click ""post""","1)The link will be extracted and you will the extract
+2)The Comment will be added with the link's extract"
+"Comment - Instagram Extract","","1. Go to the conversation, for example, https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2. Enter a comment with a link from Instagram, for example https://www.instagram.com/p/Br9CU4Xg9kg/","SayCTRL shows an extract of the Instagram page"
+"Comment - Article extract","Testing the Ability of the Comment sayCtrl to extract","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)Add an article link
+4)Click ""post""","1)The link will be extracted and you will the extract
+2)The Comment will be added with the link's extract"
+"Comment - Edit","Testing the ability to update a comment.
+Edit -  is a feature that lets the user change their comment after they clicking post.","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)write a comment
+4)Click ""post""
+5)Hover over the comment
+6)Click on the context menu icon
+7)Choose edit
+8)Change the comment
+9)Click update","1)After clicking edit - a SayCtrl will appear with the comment the user wants to update
+2)After clicking update the new text will appear in the conversation, and ""edited"" 
+will appear next to the timestamp"
+"Comment - Edit - cancel","Testing the ability to update a comment.
+Edit -  is a feature that lets the user change their comment after they clicking post.","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)write a comment
+4)Click ""post""
+5)Hover over the comment
+6)Click on the context menu icon
+7)Choose edit
+8)Change the comment
+9)Click cancel","1)Your comment will not be changed"
+"Comment - Anonymize","Testing the ability of a user to anonymize his comment
+Go anonymous - is a feature that lets user make his comment anonymous","1)Log in
+2)Do TC326
+2)Hover over the comment
+3)Click on the context menu icon
+4)Choose ""Go anonymous""","1)The comments profile picture and name will disappear and the comment will appear as a guest's comment"
+"Comment - Delete","Testing the ability to delete a comment
+Delete - is a feature that lets the user delete their comment after posting it.","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)write a comment
+4)Click ""post""
+5)Hover over the comment
+6)Click on the context menu icon
+7)Choose delete
+8)refresh the page","1)The comment will be deleted
+2)After the refresh the comment will still not appear"
+"Add a reply","Testing if adding a reply works
+reply - is a feature in the conversation that lets a user reply to a comment or reply to a reply","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)To a comment click reply
+3)write a reply
+4)Click ""post""","The reply will be added with an indentation"
+"Reply - Update","Testing the ability to update a reply.
+Edit - is a feature that lets the user change their reply after they clicking post.","1)Do TC333
+2)Hover over the comment
+3)Click on the context menu icon
+4)Choose edit
+5)Change the comment
+6)Click update","1)After clicking edit - a SayCtrl will appear with the reply the user wants to update
+2)After clicking update the new text will appear in the conversation"
+"Reply - Anonymize","Testing the ability of a user to anonymize his reply
+Go anonymous - is a feature that lets user make his reply anonymous","1)Log in
+2)Do TC333
+2)Hover over the reply you added
+3)Click on the context menu icon
+4)Choose ""Go anonymous""","1)The reply's profile picture and name will disappear and the comment will appear as a guest's comment"
+"Reply - Delete","Testing the ability to delete a reply
+Delete - is a feature that lets the user delete their reply after posting it.","1)Do TC333
+2)Hover over the reply
+3)Click on the context menu icon
+4)Choose delete
+5)refresh the page","1)The reply will be deleted
+2)After the refresh the reply will still not appear"
+"Like a comment","Liking a comment in the conversation","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Like a comment","The number of likes to the comment will increase by one"
+"Dislike a comment","Disliking a comment in the conversation","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Dislike a comment","The number of dislikes to the comment will increase by one"
+"Like a reply","Liking a reply in the conversation","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Like a reply","The number of likes to the reply will increase by one"
+"Dislike a reply","Disliking a reply in the conversation","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Dislike a reply","The number of dislikes to the reply will increase by one"
+"Share - desktop","Testing the share feature -
+Share is a feature that gives you the ability to share a comment or a reply through social media","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html on desktop
+3)Scroll to a comment
+2)Click on the share icon","1)Four options to share will appear:
+-Facebook
+-Twitter
+-Email
+-Link
+2)These BI event will fire:
+-Share button clicked"
+"Share - Facebook/Twitter","Sharing a community with social services","1)Do TC340
+2)Choose Twitter/Facebook","1)A window will open up to finish sharing the community on facebook or twitter"
+"Share - Email","Sharing community with an email","1)Do TC340
+2)Choose the email icon","1)Your email will open up to share the community"
+"Share - Link","Sharing community with a link","1)Do TC340
+2)Choose link
+3)Copy the link
+4)Paste and go","1)The link that will appear will be the link to the comment
+2)After pasting the link you will be redirected to the conversation and scrolled to the comment"
+"Share  - Android","Sharing on Android","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Click share","1)Clicking on the share button will open the device native share dialog."
+"Share Community - IOS","Sharing on IOS","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Click the share button","1)Will look as the attached design"
+"Report - comment with no replies","Testing the ability to report a comment with replies.
+Report - is the ability of a user to report an offensive comment.","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Hover over a comment with no replies
+3)Click on the context menu icon
+4)Choose report","1)The comment will disappear from the reporters view."
+"Report - comment With replies","Testing the ability to report a comment with replies.
+Report - is the ability of a user to report an offensive comment.","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Hover over a comment with replies
+3)Click on the context menu icon
+4)Choose report","1)The comment will disappear from the reporters view but the replies will stay"
+"Report - Reply","Testing the ability to report a reply
+Report - is the ability of a user to report an offensive reply.","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Hover over a reply
+3)Click on the context menu icon
+4)Choose report","1)The reply will disappear from the reporters view but the replies will stay"
+"Report - Reply with replies","Testing the ability to report a reply with replies.
+Report - is the ability of a user to report an offensive reply.","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Hover over a reply with replies
+3)Click on the context menu icon
+4)Choose report","1)The reply will disappear from the reporters view but the replies will stay"
+"User profile - mine","Opening your user profile","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Log in
+3)Click on your username
+4)Choose profile","The modal of your profile will open"
+"User profile - stranger","Opening a user profile modal that is not yours","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on a user's avatar","Their modal will open up"
+"Notifications - In view","Notifications - is a feature that notifies a user when they are replies to or their comment is mentioned or they are mentioned","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Log in
+3)Click on the notification bell, 
+4)Click on a notification that is in view(A notification that appear in the conversation you are currently without the need to click ""Show more comment"")","1)The message will be highlighted and you will be scrolled to the message"
+"Notifications - Not in view","Notifications - is a feature that notifies a user when they are replies to or their comment is mentioned or they are mentioned","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Log in
+3)Click on the notification bell
+4)Click on a notification that is not in view(A notification that appear in the conversation and you need to click ""Show more comment"" to see it)","The message will appear as the first 
+message in the conversation and highlighted"
+"Notifications - different conversation","Notifications - is a feature that notifies a user when they are replies to or their comment is mentioned or they are mentioned","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Log in
+3)Click on the notification bell
+4)click on a notification from a different 
+conversation","1)You will be redirected to the conversation
+the notification is from, and the message 
+will be highlighted."
+"Sticky - From recircualtion","Sticky is a feature that when a user is redirected to a different conversation he has the ability to choose to see the comment that redirected him.","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Click on a comment from the recirculation
+3)Click ""view in conversation""","1)You will be redirected to the conversation with
+the comment, a sticky will appear with the comment and a 
+button ""view in conversation"".
+2)You will be scrolled down to the conversation and the 
+message will be highlighted"
+"Sticky - From newsfeed","","1)Go to:https://preview.c9users.io/borisyuz/staging_env/Manual/post1.html
+2)Click on a comment from the newsfeed
+3)Click ""view in conversation""","1)You will be redirected to the conversation with
+the comment, a sticky will appear with the comment and a 
+button ""view in conversation""
+2)You will be scrolled down to the conversation and the 
+message will be highlighted"
+"Sticky - From email","Sticky is a feature that when a user is redirected to a different conversation he has the ability to choose to see the comment that redirected him.","1)Go to your mail
+2)Click on a comment from the email
+3)Click ""view in conversation""","1)You will be redirected to the conversation with
+the comment, a sticky will appear with the comment and a 
+button ""view in conversation""
+2)You will be scrolled down to the conversation and the 
+message will be highlighted"
+"Facebook login","pre step: enable newsfeed","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click login
+3)open the newsfeed
+4)Click log in
+3)Choose Facebook","You will be logged in as the facebook user"
+"Twitter login","pre step: enable newsfeed","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click login
+3)open the newsfeed
+4)Click log in
+3)Choose Twitter","You will be logged in as the twitter user"
+"Google login","pre step: enable newsfeed","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click login
+3)open the newsfeed
+4)Click log in
+3)Choose Google","You will be logged in as the email user"
+"Email login","Testing emai login","1)Go to:https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click login
+3)open the newsfeed
+4)Click log in
+5)Choose Facebook
+6)Enter username and password
+7)Click log in","You will be logged as the email user"
+"User profile","Opening your user profile","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)open the newsfeed
+3)Click on your username
+4)Choose profile","The modal of your profile will open"
+"USA - VPN - Validation","Testing conversation on USA VPN","1)Go to a conversation
+2)Turn on USA VPN
+3)Run the conversation sanity","1)The conversation will load
+2)Te conversation will act as in the Israeli VPN"
+"EU - VPN - Validation","Testing conversation on EU VPN","1)Go to a conversation
+2)Turn on EU VPN
+3)Run the conversation sanity","1)The conversation will load
+2)Te conversation will act as in the Israeli VPN"
+"Image Upload - Conversation","","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Click on SayConrol
+3)write a comment
+4)Click on the camera icon","The image upload dialog will open with the only showing this supported format: jpg, png, gif, webp"
+"Image Upload - Profile image","","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Log in
+3)Click on your username
+4)Choose profile
+5)Click to change profile picture","The image upload dialog will open with the only showing this supported format: jpg, png, gif, webp"
+"Image Upload - Cover Image","","1)Go to: https://dynamic-cdn.staging-spot.im/modules/launcher/demos/deferred/conversation-only.html
+2)Log in
+3)Click on your username
+4)Choose profile
+5)Click to edit profile
+6)Click to change the cover photo","The image upload dialog will open with the only showing this supported format: jpg, png, gif, webp"

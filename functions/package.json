@@ -14,10 +14,14 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "camelcase-keys": "^5.2.0",
+    "change-case": "^3.1.0",
     "cors": "^2.8.5",
+    "csvtojson": "^2.0.8",
     "express": "^4.16.4",
     "firebase-admin": "~7.0.0",
     "firebase-functions": "^2.3.0",
+    "fs-extra": "^8.0.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

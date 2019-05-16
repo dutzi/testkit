@@ -96,6 +96,7 @@ const ArchivedTestsView = ({
         onOpenTest={handleOpenTest}
         onAction={handleAction}
         data={getArchivedTests(getCollectionData(collection))}
+        topPadding="150px"
         actions={[
           {
             title: 'Unarchive',

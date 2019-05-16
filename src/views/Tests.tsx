@@ -18,7 +18,7 @@ import { Test } from '../types';
 import { createTest } from '../model/test';
 import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
-import { WorkspaceContext } from './Main';
+import { WorkspaceContext, TestsCollectionContext } from './Main';
 import { navigateTo } from '../utils';
 
 const Wrapper = styled.div``;
@@ -44,10 +44,7 @@ const TestsView = ({
 }) => {
   const workspace = useContext(WorkspaceContext);
   const [selected, setSelected] = useState<string[]>([]);
-
-  const { value: collection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/tests`),
-  );
+  const collection = useContext(TestsCollectionContext);
 
   const handleCreateTest = (e: React.MouseEvent) => {
     const nextId = getNextId(collection!);
@@ -152,6 +149,7 @@ const TestsView = ({
         rowRenderer={props => (
           <TestsTableRow workspace={workspace} {...props} />
         )}
+        topPadding="200px"
       />
       {showTestModal && (
         <TestView testId={match.params.testId} onClose={handleCloseTest} />
