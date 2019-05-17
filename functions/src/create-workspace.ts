@@ -128,7 +128,7 @@ app.post('/', async (request: express.Request, response: express.Response) => {
       .create({
         role: 'admin',
         email,
-        id: uid,
+        uid,
       });
 
     await firestore

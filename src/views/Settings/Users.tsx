@@ -53,20 +53,25 @@ const Actions = styled.div``;
 interface User {
   uid: string;
   email: string;
-  role: string;
+  role: 'admin' | 'user';
   isEditing?: boolean;
 }
+
+const userRoles = [
+  { name: 'admin', label: 'Admin' },
+  { name: 'user', label: 'User' },
+];
 
 const Import = () => {
   const [showDialog, setShowDialog] = useState(false);
   const workspace = useContext(WorkspaceContext);
 
-  const { value: usersCollection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/users`),
+  const usersCollectionRef = firestore.collection(
+    `workspaces/${workspace}/users`,
   );
-  const { value: users } = useCollectionData<User>(
-    firestore.collection(`workspaces/${workspace}/users`),
-  );
+
+  const { value: usersCollection } = useCollection(usersCollectionRef);
+  const { value: users } = useCollectionData<User>(usersCollectionRef);
 
   if (!usersCollection || !users) {
     return null;
@@ -76,11 +81,6 @@ const Import = () => {
     setShowDialog(true);
   }
 
-  const userRoles = [
-    { name: 'admin', label: 'Admin' },
-    { name: 'user', label: 'User' },
-  ];
-
   function getRoleByName(name: string) {
     return userRoles.find(role => role.name === name);
   }
@@ -89,11 +89,15 @@ const Import = () => {
     return users!.find(user => user.uid === uid);
   }
 
-  function handleUserRoleChange(e: any) {
-    // const user = getUserById(editedUserId);
-    // if (user) {
-    //   user.role = e.target.value;
-    // }
+  function handleUserRoleChange(user: User, e: any) {
+    if (users && usersCollection) {
+      const doc = usersCollection.docs.find(doc => doc.data().uid === user.uid);
+      if (doc) {
+        usersCollectionRef.doc(doc.id).update({
+          role: e.target.value,
+        });
+      }
+    }
   }
 
   function handleCloseDialog() {
@@ -102,7 +106,7 @@ const Import = () => {
 
   function handleSubmitDialog(email: string) {
     handleCloseDialog();
-    firestore.collection(`workspaces/${workspace}/users`).add({
+    usersCollectionRef.add({
       id: email,
       email,
       role: 'user',
@@ -118,25 +122,42 @@ const Import = () => {
     }
   }
 
+  function isCurrentUserAdmin() {
+    let user = getUserById(auth.currentUser!.uid);
+    return user && user.role === 'admin';
+  }
+
+  function isCurrentUser(user: User) {
+    return user.uid === auth.currentUser!.uid;
+  }
+
+  function renderRole(user: User) {
+    console.log(auth.currentUser!.uid);
+    if (isCurrentUserAdmin() && !isCurrentUser(user)) {
+      return (
+        <Select
+          value={user.role}
+          onChange={handleUserRoleChange.bind(null, user)}
+        >
+          {userRoles.map(role => (
+            <MenuItem key={role.name} value={role.name}>
+              {role.label}
+            </MenuItem>
+          ))}
+        </Select>
+      );
+    } else {
+      return <Role>{getRoleByName(user.role)!.label}</Role>;
+    }
+  }
+
   function renderUser(user: User) {
-    console.log(user, auth.currentUser);
     return (
       <React.Fragment key={user.uid}>
         <Email>{user.email}</Email>
-        {user.uid === auth.currentUser!.uid && (
-          <Role>{getRoleByName(user.role)!.label}</Role>
-        )}
-        {user.uid !== auth.currentUser!.uid && (
-          <Select value={user.role} onChange={handleUserRoleChange}>
-            {userRoles.map(role => (
-              <MenuItem key={role.name} value={role.name}>
-                {role.label}
-              </MenuItem>
-            ))}
-          </Select>
-        )}
+        {renderRole(user)}
         <Actions>
-          {user.uid !== auth.currentUser!.uid && (
+          {isCurrentUserAdmin() && !isCurrentUser(user) && (
             <Button onClick={handleDeleteUser.bind(null, user)} variant="text">
               <DeleteIcon fontSize="small" />
             </Button>
