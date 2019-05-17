@@ -30,6 +30,8 @@ app.use(restrictedMiddleware);
 // app.get('/:id', (req, res) => res.send(Widgets.getById(req.params.id)));
 app.post('/', async (request: express.Request, response: express.Response) => {
   const name = request.param('name').trim();
+  const email = request.param('email');
+
   const id = name.toLocaleLowerCase();
   let uid;
 
@@ -122,8 +124,12 @@ app.post('/', async (request: express.Request, response: express.Response) => {
       .collection('workspaces')
       .doc(id)
       .collection('users')
-      .doc(uid)
-      .create({});
+      .doc()
+      .create({
+        role: 'admin',
+        email,
+        id: uid,
+      });
 
     await firestore
       .collection('users')

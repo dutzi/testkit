@@ -11,6 +11,13 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import {
+  useCollection,
+  useCollectionData,
+} from 'react-firebase-hooks/firestore';
+import { WorkspaceContext } from '../Main';
+import AddUserDialog from './AddUserDialog';
+import { getDocById } from '../../data-utils';
 
 const Padding = styled.div`
   padding: 30px;
@@ -51,14 +58,22 @@ interface User {
 }
 
 const Import = () => {
-  const [editedUserId, setEditedUserId] = useState('');
-  const [users, setUsers] = useState<User[]>([
-    { uid: '1234', email: 'eldad@spot.im', role: 'admin' },
-    { uid: '1232', email: 'eldad.b@spot.im', role: 'user' },
-  ]);
+  const [showDialog, setShowDialog] = useState(false);
+  const workspace = useContext(WorkspaceContext);
+
+  const { value: usersCollection } = useCollection(
+    firestore.collection(`workspaces/${workspace}/users`),
+  );
+  const { value: users } = useCollectionData<User>(
+    firestore.collection(`workspaces/${workspace}/users`),
+  );
+
+  if (!usersCollection || !users) {
+    return null;
+  }
 
   function handleAddUser() {
-    alert(1);
+    setShowDialog(true);
   }
 
   const userRoles = [
@@ -66,80 +81,69 @@ const Import = () => {
     { name: 'user', label: 'User' },
   ];
 
+  function getRoleByName(name: string) {
+    return userRoles.find(role => role.name === name);
+  }
+
   function getUserById(uid: string) {
-    return users.find(user => user.uid === uid);
-  }
-
-  function handleUserEdit(user: User) {
-    setEditedUserId(user.uid);
-  }
-
-  function handleSaveUser(user: User) {
-    console.log('save');
-    setEditedUserId('');
-  }
-
-  function handleCloseUserEditor(user: User) {
-    setEditedUserId('');
+    return users!.find(user => user.uid === uid);
   }
 
   function handleUserRoleChange(e: any) {
-    const user = getUserById(editedUserId);
-    debugger;
-    if (user) {
-      user.role = e.target.value;
+    // const user = getUserById(editedUserId);
+    // if (user) {
+    //   user.role = e.target.value;
+    // }
+  }
+
+  function handleCloseDialog() {
+    setShowDialog(false);
+  }
+
+  function handleSubmitDialog(email: string) {
+    handleCloseDialog();
+    firestore.collection(`workspaces/${workspace}/users`).add({
+      id: email,
+      email,
+      role: 'user',
+    });
+  }
+
+  function handleDeleteUser(user: User) {
+    if (users && usersCollection) {
+      const doc = usersCollection.docs.find(doc => doc.data().uid === user.uid);
+      if (doc) {
+        firestore.doc(`workspaces/${workspace}/users/${doc.id}`).delete();
+      }
     }
   }
 
   function renderUser(user: User) {
-    if (user.uid === editedUserId) {
-      return (
-        <React.Fragment key={user.uid}>
-          <Email>{user.email}</Email>
-          <Select
-            value={user.role}
-            onChange={handleUserRoleChange}
-            // inputProps={{
-            //   name: 'component',
-            //   id: 'component',
-            // }}
-          >
+    console.log(user, auth.currentUser);
+    return (
+      <React.Fragment key={user.uid}>
+        <Email>{user.email}</Email>
+        {user.uid === auth.currentUser!.uid && (
+          <Role>{getRoleByName(user.role)!.label}</Role>
+        )}
+        {user.uid !== auth.currentUser!.uid && (
+          <Select value={user.role} onChange={handleUserRoleChange}>
             {userRoles.map(role => (
               <MenuItem key={role.name} value={role.name}>
                 {role.label}
               </MenuItem>
             ))}
           </Select>
-
-          <Actions>
-            <Button onClick={handleSaveUser.bind(null, user)} variant="text">
-              <CheckIcon fontSize="small" />
-            </Button>
-            <Button
-              onClick={handleCloseUserEditor.bind(null, user)}
-              variant="text"
-            >
-              <CloseIcon fontSize="small" />
-            </Button>
-          </Actions>
-        </React.Fragment>
-      );
-    } else {
-      return (
-        <React.Fragment key={user.uid}>
-          <Email>{user.email}</Email>
-          <Role>{user.role}</Role>
-          <Actions>
-            <Button onClick={handleUserEdit.bind(null, user)} variant="text">
-              <EditIcon fontSize="small" />
-            </Button>
-            <Button variant="text">
+        )}
+        <Actions>
+          {user.uid !== auth.currentUser!.uid && (
+            <Button onClick={handleDeleteUser.bind(null, user)} variant="text">
               <DeleteIcon fontSize="small" />
             </Button>
-          </Actions>
-        </React.Fragment>
-      );
-    }
+          )}
+        </Actions>
+      </React.Fragment>
+    );
   }
 
   return (
@@ -154,13 +158,19 @@ const Import = () => {
         <Users>
           <TableHead>Email</TableHead>
           <TableHead>Role</TableHead>
-          <TableHead alignCenter>Actions</TableHead>
+          <TableHead alignCenter />
           {users.map(user => renderUser(user))}
         </Users>
         <MarginH />
         <Button variant="contained" color="primary" onClick={handleAddUser}>
           Add User
         </Button>
+        {showDialog && (
+          <AddUserDialog
+            onClose={handleCloseDialog}
+            onSubmit={handleSubmitDialog}
+          />
+        )}
       </Padding>
     </Paper>
   );

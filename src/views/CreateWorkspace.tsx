@@ -53,9 +53,14 @@ const CreateWorkspace = () => {
     if (name.trim()) {
       setShowSpinner(true);
       const idToken = await auth.currentUser!.getIdToken(true);
+      const email = await auth.currentUser!.email;
+
+      if (!email) {
+        return;
+      }
 
       try {
-        let res = await createWorkspace(name, idToken);
+        let res = await createWorkspace(name, email, idToken);
         console.log(res.data.status);
       } catch (err) {
         if (err.response.data.error === 'NameIsTaken') {

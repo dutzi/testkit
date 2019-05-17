@@ -5,7 +5,7 @@ export function getDocById(
   id: any,
   collection: firebase.firestore.QueryDocumentSnapshot[],
 ) {
-  return collection.find(test => test.data().id === id);
+  return collection.find(doc => doc.data().id === id);
 }
 
 export function updateTest(
@@ -23,10 +23,10 @@ export function updateTest(
 
     const newData: any = {
       ...data,
-    }
+    };
 
     if (updateModified) {
-      newData.modified = new Date()
+      newData.modified = new Date();
     }
 
     testRef.update(newData);
