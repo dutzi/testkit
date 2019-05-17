@@ -5,17 +5,33 @@ const firestore = admin.firestore();
 
 export default async function(tests: any[], idToken: string) {
   const userData = await getUserData(idToken);
+  let numSuccess = 0;
+  let numFailed = 0;
+  let failedIds: string[] = [];
+
   if (userData) {
     const collection = firestore.collection(
       `workspaces/${userData.workspace}/tests`,
     );
+    for (let i = 0; i < tests.length; i++) {
+      const test = tests[i];
 
-    tests.forEach(async test => {
       try {
         await collection.doc(test.id).create(test);
+        numSuccess++;
       } catch (err) {
-        console.log(err, test);
+        console.error('[add-tests-buld]', err, test);
+        numFailed++;
+        failedIds.push(test.id);
       }
-    });
+    }
   }
+
+  console.log({ numSuccess, numFailed, failedIds });
+
+  return {
+    numSuccess,
+    numFailed,
+    failedIds,
+  };
 }

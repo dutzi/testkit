@@ -30,6 +30,7 @@ const Wrapper = styled.div`
 
 const ContentWrapper = styled.div`
   background-color: #f5f7f9;
+  overflow: auto;
 `;
 
 const MainView = () => {
