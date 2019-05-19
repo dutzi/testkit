@@ -100,7 +100,7 @@ const Navigator = ({
       id: 'Settings',
       children: [
         {
-          id: 'Project Settings',
+          id: 'Workspace Settings',
           icon: <SettingsIcon />,
           path: '/settings',
           active: location.pathname.startsWith('/settings'),
@@ -138,7 +138,7 @@ const Navigator = ({
               primary: classes.itemPrimary,
             }}
           >
-            Project Overview
+            Overview
           </ListItemText>
         </ListItem>
         {categories.map(({ id, children }) => (

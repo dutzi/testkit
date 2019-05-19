@@ -22,10 +22,10 @@ import Select from '../components/Select';
 import { MarginH, MarginV } from '../styles';
 import { createTestSet } from '../model/test-set';
 import {
-  WorkspaceContext,
+  GlobalUserContext,
   TestsCollectionContext,
   TestSetsCollectionContext,
-} from './Main';
+} from './ContextProviders';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -70,7 +70,7 @@ const TestSet = ({
   location: any;
   match: any;
 }) => {
-  const workspace = useContext(WorkspaceContext);
+  const globalUser = useContext(GlobalUserContext);
 
   const [users, setUsers] = useState<User[]>([]);
   const [platforms, setPlatforms] = useState<Platform[]>([]);
@@ -122,7 +122,7 @@ const TestSet = ({
       const testSet = getDocById(id, testSetsCollection!.docs);
       if (testSet) {
         var testSetRef = firestore
-          .collection(`workspaces/${workspace}/test-sets`)
+          .collection(`workspaces/${globalUser.workspace}/test-sets`)
           .doc(testSet.id);
         if (testSetRef) {
           testSetRef.update({ modified: new Date(), ...data });
@@ -174,7 +174,7 @@ const TestSet = ({
       const nextId = getNextId(testSetsCollection!);
 
       firestore
-        .collection(`workspaces/${workspace}/test-sets`)
+        .collection(`workspaces/${globalUser.workspace}/test-sets`)
         .add({
           ...createdTestSet,
           id: String(nextId),

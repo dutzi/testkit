@@ -20,7 +20,9 @@ export default async function(tests: any[], idToken: string) {
         await collection.doc(test.id).create(test);
         numSuccess++;
       } catch (err) {
-        console.error('[add-tests-buld]', err, test);
+        if (!err.details.startsWith('Document already exists')) {
+          console.error('[add-tests-buld]', err, test);
+        }
         numFailed++;
         failedIds.push(test.id);
       }

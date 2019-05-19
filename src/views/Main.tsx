@@ -13,14 +13,11 @@ import Navigator from '../components/Navigator';
 import { auth, firestore } from '../firebase';
 import Welcome from './Welcome';
 import CreateWorkspace from './CreateWorkspace';
+import ContextProviders from './ContextProviders';
 
-export const WorkspaceContext = React.createContext('');
-export const TestsCollectionContext = React.createContext<
-  firebase.firestore.QuerySnapshot | undefined
->(undefined);
-export const TestSetsCollectionContext = React.createContext<
-  firebase.firestore.QuerySnapshot | undefined
->(undefined);
+export interface GlobalUser {
+  workspace: string;
+}
 
 const Wrapper = styled.div`
   display: grid;
@@ -35,16 +32,10 @@ const ContentWrapper = styled.div`
 
 const MainView = () => {
   const { initialising: initializingUser, user } = useAuthState(auth);
-  const [workspace, setWorkspace] = useState('default');
+  const [globalUser, setGlobalUser] = useState<GlobalUser>({
+    workspace: 'default',
+  });
   const [initializingWorkspace, setInitializingWorkspace] = useState(true);
-
-  const { value: testsCollection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/tests`),
-  );
-
-  const { value: testSetsCollection } = useCollection(
-    firestore.collection(`workspaces/${workspace}/test-sets`),
-  );
 
   let cancelSnapshotLisener;
 
@@ -60,7 +51,7 @@ const MainView = () => {
 
         setInitializingWorkspace(false);
         if (data) {
-          setWorkspace(data.workspace);
+          setGlobalUser({ workspace: data.workspace });
           cancelSnapshotLisener();
         }
       });
@@ -78,33 +69,29 @@ const MainView = () => {
     return null;
   }
 
-  if (!workspace) {
+  if (globalUser.workspace === 'default') {
     return <CreateWorkspace />;
   }
 
   return (
-    <TestSetsCollectionContext.Provider value={testSetsCollection}>
-      <TestsCollectionContext.Provider value={testsCollection}>
-        <Wrapper>
-          <WorkspaceContext.Provider value={workspace}>
-            <Navigator />
-            <ContentWrapper>
-              <Route path="/tests/:testId?" component={TestsView} />
-              <Route
-                path="/archived-tests/:testId?"
-                component={ArchivedTestsView}
-              />
-              <Route
-                path="/test-sets/:testSetId?/:testId?"
-                component={TestSetsView}
-              />
-              <Route path="/settings" component={SettingsView} />
-              <Route path="/profile" component={ProfileView} />
-            </ContentWrapper>
-          </WorkspaceContext.Provider>
-        </Wrapper>
-      </TestsCollectionContext.Provider>
-    </TestSetsCollectionContext.Provider>
+    <ContextProviders user={globalUser}>
+      <Wrapper>
+        <Navigator />
+        <ContentWrapper>
+          <Route path="/tests/:testId?" component={TestsView} />
+          <Route
+            path="/archived-tests/:testId?"
+            component={ArchivedTestsView}
+          />
+          <Route
+            path="/test-sets/:testSetId?/:testId?"
+            component={TestSetsView}
+          />
+          <Route path="/settings" component={SettingsView} />
+          <Route path="/profile" component={ProfileView} />
+        </ContentWrapper>
+      </Wrapper>
+    </ContextProviders>
   );
 };
 

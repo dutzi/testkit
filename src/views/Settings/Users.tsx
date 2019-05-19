@@ -15,7 +15,7 @@ import {
   useCollection,
   useCollectionData,
 } from 'react-firebase-hooks/firestore';
-import { WorkspaceContext } from '../Main';
+import { GlobalUserContext } from '../ContextProviders';
 import AddUserDialog from './AddUserDialog';
 import { getDocById } from '../../data-utils';
 
@@ -50,7 +50,7 @@ const Role = styled.div``;
 
 const Actions = styled.div``;
 
-interface User {
+export interface User {
   uid: string;
   email: string;
   role: 'admin' | 'user';
@@ -64,10 +64,12 @@ const userRoles = [
 
 const Import = () => {
   const [showDialog, setShowDialog] = useState(false);
-  const workspace = useContext(WorkspaceContext);
+  const globalUser = useContext(GlobalUserContext);
+
+  const globalUsersCollectionRef = firestore.collection('/users');
 
   const usersCollectionRef = firestore.collection(
-    `workspaces/${workspace}/users`,
+    `workspaces/${globalUser.workspace}/users`,
   );
 
   const { value: usersCollection } = useCollection(usersCollectionRef);
@@ -111,13 +113,21 @@ const Import = () => {
       email,
       role: 'user',
     });
+
+    globalUsersCollectionRef.add({
+      email,
+      workspace: globalUser.workspace,
+      isTemporaryUser: true,
+    });
   }
 
   function handleDeleteUser(user: User) {
     if (users && usersCollection) {
       const doc = usersCollection.docs.find(doc => doc.data().uid === user.uid);
       if (doc) {
-        firestore.doc(`workspaces/${workspace}/users/${doc.id}`).delete();
+        firestore
+          .doc(`workspaces/${globalUser.workspace}/users/${doc.id}`)
+          .delete();
       }
     }
   }
@@ -167,6 +177,10 @@ const Import = () => {
     );
   }
 
+  if (!isCurrentUserAdmin()) {
+    return null;
+  }
+
   return (
     <Paper>
       <Padding>
@@ -174,6 +188,9 @@ const Import = () => {
         <MarginH />
         <div>
           <p>Add users and set their roles.</p>
+          <Typography variant="body2">
+            Admins can add and remove users and set their role.
+          </Typography>
         </div>
         <MarginH />
         <Users>
@@ -188,6 +205,7 @@ const Import = () => {
         </Button>
         {showDialog && (
           <AddUserDialog
+            users={users}
             onClose={handleCloseDialog}
             onSubmit={handleSubmitDialog}
           />

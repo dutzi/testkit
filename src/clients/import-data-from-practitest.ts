@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 let client = axios.create({
-  baseURL: 'http://localhost:5000/testkit-c0228/us-central1',
-  // baseURL: 'https://us-central1-testkit-c0228.cloudfunctions.net',
+  // baseURL: 'http://localhost:5000/testkit-c0228/us-central1',
+  baseURL: 'https://us-central1-testkit-c0228.cloudfunctions.net',
 });
 
 export async function importDataFromPractitest(

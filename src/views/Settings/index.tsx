@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { MarginH } from '../../styles';
 import { firestore } from '../../firebase';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { WorkspaceContext } from '../Main';
+import { GlobalUserContext } from '../ContextProviders';
 import Import from './Import';
 import Users from './Users';
 
@@ -14,10 +14,10 @@ const Wrapper = styled.div`
 `;
 
 const Settings = () => {
-  const workspace = useContext(WorkspaceContext);
+  const globalUser = useContext(GlobalUserContext);
 
   const { value: workspaceData } = useDocumentData(
-    firestore.doc(`workspaces/${workspace}`),
+    firestore.doc(`workspaces/${globalUser.workspace}`),
   );
 
   if (!workspaceData) {

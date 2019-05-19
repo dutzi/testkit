@@ -17,9 +17,16 @@ const Flex = styled.div`
 `;
 
 interface ImportSummary {
-  numSuccess: number;
-  numFailed: number;
-  failedIds: string[];
+  tests: {
+    numSuccess: number;
+    numFailed: number;
+    failedIds: string[];
+  };
+  components: {
+    numSuccess: number;
+    numFailed: number;
+    failedIds: string[];
+  };
 }
 
 const Import = () => {
@@ -49,10 +56,31 @@ const Import = () => {
 
         setIsProcessing(false);
 
-        setImportSummary(importSummary);
+        setImportSummary({
+          tests: importSummary.tests,
+          components: importSummary.components,
+        });
       });
     }
   };
+
+  function renderSummary(label, summary) {
+    return (
+      <React.Fragment>
+        <p>
+          Successfully imported <strong>{summary.numSuccess}</strong> {label}
+        </p>
+        {summary.numFailed && (
+          <div>
+            Error importing <strong>{summary.numFailed}</strong> {label}
+            {summary.failedIds.length > 0 && (
+              <span> ({summary.failedIds.join(', ')})</span>
+            )}
+          </div>
+        )}
+      </React.Fragment>
+    );
+  }
 
   return (
     <Paper>
@@ -79,7 +107,7 @@ const Import = () => {
           />
           <label htmlFor="raised-button-file">
             <Button variant="outlined" component="span">
-              Import from Practitest
+              Import from PractiTest
             </Button>
           </label>
           <MarginV />
@@ -95,16 +123,8 @@ const Import = () => {
         )}
         {importSummary && (
           <React.Fragment>
-            <p>
-              Successfully imported <strong>{importSummary.numSuccess}</strong>{' '}
-              tests
-            </p>
-            <div>
-              Error importing <strong>{importSummary.numFailed}</strong> tests
-              {importSummary.failedIds.length > 0 && (
-                <span> ({importSummary.failedIds.join(', ')})</span>
-              )}
-            </div>
+            {renderSummary('tests', importSummary.tests)}
+            {renderSummary('components', importSummary.components)}
           </React.Fragment>
         )}
       </Padding>

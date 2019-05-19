@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -7,10 +7,10 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import RemoveIcon from '@material-ui/icons/Remove';
 import moment from 'moment';
-import { getComponents } from '../data/components';
 import { Component } from '../types';
 import { formatDate } from '../utils';
 import { TableLink } from '../styles';
+import { WorkspaceContext } from '../views/ContextProviders';
 
 const StatusIconWrapper = styled.div`
   line-height: 0px;
@@ -21,7 +21,6 @@ const TestsTableRow = ({
   selected,
   onClick,
   onLinkClick,
-  workspace,
 }: {
   data: any;
   selected: boolean;
@@ -33,15 +32,13 @@ const TestsTableRow = ({
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     id: string,
   ) => void;
-  workspace: string;
 }) => {
-  const [components, setComponents] = useState<Component[]>([]);
-  getComponents(workspace).then(setComponents);
+  const workspace = useContext(WorkspaceContext);
+  // const [components, setComponents] = useState<Component[]>([]);
+  // getComponents(workspace).then(setComponents);
 
   function getComponentLabel(componentName: string) {
-    let component = components.find(component => {
-      return component.name === componentName;
-    });
+    let component = workspace!.components[componentName];
 
     if (component) {
       return component.label;
@@ -51,14 +48,10 @@ const TestsTableRow = ({
   }
 
   function getAreaLabel(componentName: string, areaName: string) {
-    let component = components.find(component => {
-      return component.name === componentName;
-    });
+    let component = workspace!.components[componentName];
 
     if (component) {
-      let area = component.areas.find(area => {
-        return area.name === areaName;
-      });
+      let area = component.areas[areaName];
 
       if (area) {
         return area.label;

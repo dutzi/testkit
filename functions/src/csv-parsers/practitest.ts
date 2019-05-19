@@ -23,17 +23,17 @@ function createDate(date: string) {
   }
 }
 
-export default function(
+export default async function(
   csvFilePath: string,
 ): Promise<{ tests: any; components: any }> {
-  return csv()
+  return await csv()
     .fromFile(csvFilePath)
     .then((jsonObj: any) => {
       const ccJsonObj = camelcaseKeys(jsonObj);
 
       let currentTest: any;
-      let tests: any[] = [];
-      let components: any = {};
+      const tests: any[] = [];
+      const components: any = {};
 
       ccJsonObj.forEach((testStep: any) => {
         if (!currentTest || testStep.stepPosition === '1') {
@@ -69,7 +69,7 @@ export default function(
             };
           }
 
-          if (!components[componentName].areas[areaName]) {
+          if (areaName && !components[componentName].areas[areaName]) {
             components[componentName].areas[areaName] = {
               name: areaName,
               label: testStep.subComponent,
@@ -92,8 +92,5 @@ export default function(
         tests,
         components,
       };
-    })
-    .catch(err => {
-      console.log(err);
     });
 }

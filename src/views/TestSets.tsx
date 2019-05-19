@@ -13,10 +13,10 @@ import TestSet from './TestSet';
 import TestRunner from './TestRunner';
 import { TestSet as ITestSet } from '../types';
 import {
-  WorkspaceContext,
+  GlobalUserContext,
   TestsCollectionContext,
   TestSetsCollectionContext,
-} from './Main';
+} from './ContextProviders';
 import { navigateTo } from '../utils';
 
 const Wrapper = styled.div`
@@ -49,7 +49,7 @@ const TestsView = ({
   match: any;
 }) => {
   const [selected, setSelected] = useState<string[]>([]);
-  const workspace = useContext(WorkspaceContext);
+  const globalUser = useContext(GlobalUserContext);
   const testsCollection = useContext(TestsCollectionContext);
   const testSetsCollection = useContext(TestSetsCollectionContext);
 
@@ -59,7 +59,7 @@ const TestsView = ({
 
   function handleDelete(testSetIds: string[]) {
     testSetIds.forEach(id => {
-      deleteTestSet(id, workspace, testSetsCollection!);
+      deleteTestSet(id, globalUser.workspace, testSetsCollection!);
     });
   }
 

@@ -17,7 +17,7 @@ import { Test } from '../types';
 import { createTest } from '../model/test';
 import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
-import { WorkspaceContext, TestsCollectionContext } from './Main';
+import { GlobalUserContext, TestsCollectionContext } from './ContextProviders';
 import { navigateTo } from '../utils';
 
 const Wrapper = styled.div``;
@@ -41,7 +41,7 @@ const TestsView = ({
   location: any;
   match: any;
 }) => {
-  const workspace = useContext(WorkspaceContext);
+  const globalUser = useContext(GlobalUserContext);
   const [selected, setSelected] = useState<string[]>([]);
   const collection = useContext(TestsCollectionContext);
 
@@ -49,7 +49,7 @@ const TestsView = ({
     const nextId = getNextId(collection!);
 
     firestore
-      .collection(`workspaces/${workspace}/tests`)
+      .collection(`workspaces/${globalUser.workspace}/tests`)
       .add(createTest(String(nextId)))
       .then(() => {
         navigateTo(`/tests/${nextId}`, e, history);
@@ -70,7 +70,7 @@ const TestsView = ({
       const nextId = String(getNextId(collection!) + index);
 
       if (test) {
-        firestore.collection(`workspaces/${workspace}/tests`).add({
+        firestore.collection(`workspaces/${globalUser.workspace}/tests`).add({
           ...test.data(),
           id: nextId,
           modified: new Date(),
@@ -84,7 +84,7 @@ const TestsView = ({
     testIds.forEach(id => {
       updateTest(
         id,
-        workspace,
+        globalUser.workspace,
         {
           state: 'archived',
         },
@@ -146,9 +146,9 @@ const TestsView = ({
         ]}
         data={getUnarchivedTests(getCollectionData(collection))}
         rowRenderer={props => (
-          <TestsTableRow workspace={workspace} {...props} />
+          <TestsTableRow workspace={globalUser.workspace} {...props} />
         )}
-        topPadding="200px"
+        topPadding="210px"
       />
       {showTestModal && (
         <TestView testId={match.params.testId} onClose={handleCloseTest} />

@@ -19,8 +19,11 @@ import StepsProp from '../components/StepsProp';
 import { firestore } from '../firebase';
 import { getDocById, updateTest as updateTestImpl } from '../data-utils';
 import { Component, Step } from '../types';
-import { getComponents } from '../data/components';
-import { WorkspaceContext, TestsCollectionContext } from './Main';
+import {
+  GlobalUserContext,
+  TestsCollectionContext,
+  WorkspaceContext,
+} from './ContextProviders';
 
 const SelectsWrapper = styled.div`
   display: flex;
@@ -48,16 +51,11 @@ function ScrollDialog({
     setOpen(true);
   }, []);
 
-  const workspace = useContext(WorkspaceContext);
+  const globalUser = useContext(GlobalUserContext);
   const collection = useContext(TestsCollectionContext);
-
-  const [components, setComponents] = useState<Component[]>([]);
+  const workspace = useContext(WorkspaceContext);
 
   let test: firebase.firestore.QueryDocumentSnapshot | undefined;
-
-  useEffect(() => {
-    getComponents(workspace).then(setComponents);
-  }, []);
 
   if (collection) {
     test = getDocById(testId, collection.docs);
@@ -84,7 +82,7 @@ function ScrollDialog({
   }
 
   function updateTest(data: object) {
-    updateTestImpl(testId, workspace, data, collection!);
+    updateTestImpl(testId, globalUser.workspace, data, collection!);
   }
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -94,10 +92,18 @@ function ScrollDialog({
   }
 
   function handleComponentChange(e: any) {
-    updateTest({
-      component: e.target.value,
-      area: getAreas(e.target.value)[0].name,
-    });
+    const areas = getAreas(e.target.value);
+    if (areas.length) {
+      updateTest({
+        component: e.target.value,
+        area: getAreas(e.target.value)[0].name,
+      });
+    } else {
+      updateTest({
+        component: null,
+        area: null,
+      });
+    }
   }
 
   function handleAreaChange(e: any) {
@@ -107,12 +113,14 @@ function ScrollDialog({
   }
 
   function getAreas(componentName?: string) {
-    const component = components.find(
-      component => component.name === (componentName || test!.data().component),
-    );
+    const component = workspace!.components[
+      componentName || test!.data().component
+    ];
 
     if (component) {
-      return component.areas;
+      return Object.keys(component.areas).map(
+        areaName => component.areas[areaName],
+      );
     } else {
       return [];
     }
@@ -121,6 +129,19 @@ function ScrollDialog({
   function handleStepsChange(steps: Step[]) {
     updateTest({
       steps,
+    });
+  }
+
+  function getComponents() {
+    const components = workspace!.components;
+
+    return Object.keys(components).map(componentName => {
+      const component = components[componentName];
+      return {
+        label: component.label,
+        name: component.name,
+        areas: getAreas(component.name),
+      };
     });
   }
 
@@ -158,7 +179,7 @@ function ScrollDialog({
                     id: 'component',
                   }}
                 >
-                  {components.map(component => (
+                  {getComponents().map(component => (
                     <MenuItem key={component.name} value={component.name}>
                       {component.label}
                     </MenuItem>

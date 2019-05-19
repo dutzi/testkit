@@ -14,10 +14,10 @@ import _ from 'lodash';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MarkdownEditor from '../components/MarkdownEditor';
 import {
-  WorkspaceContext,
+  GlobalUserContext,
   TestsCollectionContext,
   TestSetsCollectionContext,
-} from './Main';
+} from './ContextProviders';
 import Paper from '@material-ui/core/Paper';
 import MarkdownViewer from '../components/MarkdownViewer';
 
@@ -118,7 +118,7 @@ const TestRunner = ({
   testIndex: number;
   numTests: number;
 }) => {
-  const workspace = useContext(WorkspaceContext);
+  const globalUser = useContext(GlobalUserContext);
   const testsCollection = useContext(TestsCollectionContext);
   const testSetsCollection = useContext(TestSetsCollectionContext);
 
@@ -162,7 +162,7 @@ const TestRunner = ({
   ) {
     if (testSetDoc) {
       var testSetRef = firestore
-        .collection(`workspaces/${workspace}/test-sets`)
+        .collection(`workspaces/${globalUser.workspace}/test-sets`)
         .doc(testSetDoc.id);
       if (testSetRef) {
         const testSet = testSetDoc.data();
@@ -183,7 +183,7 @@ const TestRunner = ({
 
         updateTest(
           testId,
-          workspace,
+          globalUser.workspace,
           {
             lastRun: new Date(),
             status: overallTestStatus,

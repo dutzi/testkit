@@ -9,7 +9,7 @@ import { updateTest, deleteTest, getCollectionData } from '../data-utils';
 import { Test } from '../types';
 import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
-import { WorkspaceContext, TestsCollectionContext } from './Main';
+import { GlobalUserContext, TestsCollectionContext } from './ContextProviders';
 import { navigateTo } from '../utils';
 
 const Wrapper = styled.div``;
@@ -22,7 +22,7 @@ const ArchivedTestsView = ({
   location: any;
   match: any;
 }) => {
-  const workspace = useContext(WorkspaceContext);
+  const globalUser = useContext(GlobalUserContext);
   const [selected, setSelected] = useState<string[]>([]);
   const collection = useContext(TestsCollectionContext);
 
@@ -34,7 +34,7 @@ const ArchivedTestsView = ({
     testIds.forEach(id => {
       updateTest(
         id,
-        workspace,
+        globalUser.workspace,
         {
           state: 'ready',
         },
@@ -46,7 +46,7 @@ const ArchivedTestsView = ({
 
   function handleDelete(testIds: string[]) {
     testIds.forEach(id => {
-      deleteTest(id, workspace, collection!);
+      deleteTest(id, globalUser.workspace, collection!);
     });
     setSelected([]);
   }
@@ -103,7 +103,7 @@ const ArchivedTestsView = ({
           },
         ]}
         rowRenderer={props => (
-          <TestsTableRow workspace={workspace} {...props} />
+          <TestsTableRow workspace={globalUser.workspace} {...props} />
         )}
       />
       {showTestModal && (

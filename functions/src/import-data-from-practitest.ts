@@ -5,6 +5,7 @@ import * as cors from 'cors';
 import restrictedMiddleware from './restricted-middleware';
 import parsePractitesCsv from './csv-parsers/practitest';
 import addTestsBulk from './add-tests-bulk';
+import addComponentsBulk from './add-components-bulk';
 import * as fs from 'fs';
 
 const app = express();
@@ -18,13 +19,22 @@ app.post('/', async (request: express.Request, response: express.Response) => {
   const tempFilename = await downloadFile(filename);
   const { tests, components } = await parsePractitesCsv(tempFilename);
 
-  let importSummary = await addTestsBulk(tests, request.query.idToken);
+  const importTestsSummary = await addTestsBulk(tests, request.query.idToken);
+  const importComponentsSummary = await addComponentsBulk(
+    components,
+    request.query.idToken,
+  );
 
   fs.unlinkSync(tempFilename);
 
   response.send({
     status: 'ok',
-    ...importSummary,
+    tests: {
+      ...importTestsSummary,
+    },
+    components: {
+      ...importComponentsSummary,
+    },
   });
 });
 

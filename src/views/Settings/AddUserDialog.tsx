@@ -7,23 +7,35 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { User } from './Users';
 
-const Wrapper = styled.div``;
+const Error = styled.div`
+  color: #f44236;
+`;
 
 const AddUserDialog = ({
   onSubmit,
   onClose,
+  users,
 }: {
   onSubmit: (email: string) => void;
   onClose: () => void;
+  users: User[];
 }) => {
   const [email, setEmail] = useState('');
+  const [showError, setShowError] = useState(false);
+
   function handleSubmit() {
     onSubmit(email);
   }
 
   function handleChange(e: any) {
     setEmail(e.target.value);
+    if (users.find(user => user.email === e.target.value)) {
+      setShowError(true);
+    } else {
+      setShowError(false);
+    }
   }
 
   return (
@@ -43,13 +55,15 @@ const AddUserDialog = ({
           fullWidth
           value={email}
           onChange={handleChange}
+          error={showError}
         />
+        {showError && <Error>Email already exists</Error>}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleSubmit} color="primary">
+        <Button onClick={handleSubmit} color="primary" disabled={showError}>
           Add
         </Button>
       </DialogActions>

@@ -4,7 +4,10 @@ import { TestSet, Test, Step, StepStatus } from '../types';
 import { firestore } from '../firebase';
 import _ from 'lodash';
 import { Tooltip } from '@material-ui/core';
-import { WorkspaceContext, TestsCollectionContext } from '../views/Main';
+import {
+  GlobalUserContext,
+  TestsCollectionContext,
+} from '../views/ContextProviders';
 
 const Wrapper = styled.div`
   display: flex;
@@ -39,7 +42,7 @@ const NoRun = styled.div`
 `;
 
 const TestSetProgressBar = ({ testSet }: { testSet: TestSet }) => {
-  const workspace = useContext(WorkspaceContext);
+  const globalUser = useContext(GlobalUserContext);
   const testsCollection = useContext(TestsCollectionContext);
   const tests = testsCollection!.docs.map(doc => doc.data());
 

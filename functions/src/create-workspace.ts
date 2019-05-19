@@ -1,6 +1,9 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as express from 'express';
+import sendMail from './send-mail';
+import * as welcomeMail from './mails/welcome';
+
 const cors = require('cors');
 const uuidv1 = require('uuid/v1');
 
@@ -149,6 +152,12 @@ app.post('/', async (request: express.Request, response: express.Response) => {
     //     id: '1',
     //     name: user.displayName,
     //   });
+
+    await sendMail({
+      to: email,
+      from: 'eldad@testkit.dev',
+      ...welcomeMail,
+    });
 
     response.status(200).send({
       status: 'ok',
