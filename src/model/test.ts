@@ -6,7 +6,7 @@ export function createTest(id: string): Test {
     id,
     name: '',
     state: 'ready',
-    status: 'no-run',
+    status: 'skipped',
     lastRun: null,
     modified: null,
     component: '',

@@ -149,8 +149,14 @@ const TestRunner = ({
   const testSet: TestSet = testSetDoc!.data() as TestSet;
 
   function getOverallTestStatus(test: TestStatus): StepStatus {
-    if (Object.keys(test).find(stepId => test[stepId].status === 'failed')) {
+    function hasStepWithStatus(status?: StepStatus) {
+      return Object.keys(test).find(stepId => test[stepId].status === status);
+    }
+
+    if (hasStepWithStatus('failed')) {
       return 'failed';
+    } else if (hasStepWithStatus('skipped') || hasStepWithStatus()) {
+      return 'skipped';
     } else {
       return 'passed';
     }

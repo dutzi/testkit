@@ -100,7 +100,7 @@ const TestsTableRow = ({
         <StatusIconWrapper>
           {data.status === 'passed' && <CheckIcon color="primary" />}
           {data.status === 'failed' && <CloseIcon color="error" />}
-          {data.status === 'no-run' && <RemoveIcon color="disabled" />}
+          {data.status === 'skipped' && <RemoveIcon color="disabled" />}
         </StatusIconWrapper>
       </TableCell>
       <TableCell align="left">{renderDateTime(data.lastRun)}</TableCell>

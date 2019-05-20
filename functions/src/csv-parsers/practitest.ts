@@ -8,7 +8,7 @@ function parseRunStatus(status: string) {
   } else if (status === 'FAILED') {
     return 'failed';
   } else if (status === 'NO RUN' || status === 'N/A') {
-    return 'no-run';
+    return 'skipped';
   } else {
     console.log('[practitest-importer] missing status mapping', status);
     return '';
