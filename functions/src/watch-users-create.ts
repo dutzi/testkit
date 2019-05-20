@@ -7,6 +7,7 @@ export default functions.auth.user().onCreate(async user => {
   const globalUserDoc = globalUsers.docs.find(
     doc => doc.data().email === user.email,
   );
+
   if (globalUserDoc) {
     const { workspace } = globalUserDoc.data();
     await firestore
@@ -16,17 +17,34 @@ export default functions.auth.user().onCreate(async user => {
         workspace: globalUserDoc.data().workspace,
       });
 
-    const users = await firestore
+    const workspaceUsers = await firestore
       .collection(`workspaces/${workspace}/users`)
       .get();
 
-    const userDoc = users.docs.find(doc => doc.data().email === user.email);
-    if (userDoc) {
-      await firestore
-        .doc(`workspaces/${workspace}/users/${userDoc.id}`)
-        .update({
-          uid: user.uid,
-        });
+    const workspaceUserDoc = workspaceUsers.docs.find(
+      doc => doc.data().email === user.email,
+    );
+
+    if (workspaceUserDoc) {
+      const workspaceUserData = await firestore
+        .doc(`workspaces/${workspace}/users/${workspaceUserDoc.id}`)
+        .get();
+
+      if (workspaceUserData.data()) {
+        await firestore
+          .doc(`workspaces/${workspace}/users/${user.uid}`)
+          .create({
+            displayName: user.displayName,
+            photoUrl: user.photoURL,
+            role: workspaceUserData.data()!.role,
+          });
+
+        await firestore
+          .doc(`workspaces/${workspace}/users/${workspaceUserDoc.id}`)
+          .delete();
+      }
     }
+
+    await firestore.doc(`users/${globalUserDoc.id}`).delete();
   }
 });

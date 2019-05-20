@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
-import { auth } from '../firebase';
+import { auth, firestore } from '../firebase';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import EditIcon from '@material-ui/icons/Edit';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { MarginH } from '../styles';
 import ProfilePicture from '../components/ProfilePicture';
+import { GlobalUserContext } from './ContextProviders';
 
 const Wrapper = styled.div`
   max-width: 60%;
@@ -22,6 +23,7 @@ const Profile = () => {
   const { user, initialising } = useAuthState(auth);
   const [displayName, setDisplayName] = useState('');
   const [profilePictureUrl, setProfilePictureUrl] = useState('');
+  const globalUser = useContext(GlobalUserContext);
 
   useEffect(() => {
     if (user) {
@@ -53,6 +55,12 @@ const Profile = () => {
       user.updateProfile({
         photoURL: url,
       });
+      firestore
+        .doc(`workspaces/${globalUser.workspace}/users/${user.uid}`)
+        .update({
+          photoUrl: url,
+        });
+
       setProfilePictureUrl(url);
     }
   }
