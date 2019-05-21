@@ -38,6 +38,10 @@ const Row = styled.div`
   margin-bottom: 10px;
 `;
 
+const Metadata = styled.div`
+  max-width: 600px;
+`;
+
 function ScrollDialog({
   onClose,
   testId,
@@ -152,60 +156,63 @@ function ScrollDialog({
         onClose={handleClose}
         scroll="body"
         aria-labelledby="scroll-dialog-title"
-        maxWidth="sm"
+        fullWidth
+        maxWidth="lg"
       >
         <DialogTitle id="scroll-dialog-title">{getTitle()}</DialogTitle>
         <DialogContent dividers={true}>
-          <Row>
-            <TextField
-              id="standard-required"
-              label="Name"
-              margin="normal"
-              value={test.data().name}
-              onChange={handleNameChange}
-              fullWidth
-              autoFocus
-            />
-          </Row>
-          <Row>
-            <SelectsWrapper>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="component">Component</InputLabel>
-                <Select
-                  value={test.data().component}
-                  onChange={handleComponentChange}
-                  inputProps={{
-                    name: 'component',
-                    id: 'component',
-                  }}
-                >
-                  {getComponents().map(component => (
-                    <MenuItem key={component.name} value={component.name}>
-                      {component.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Margin />
-              <FormControl fullWidth>
-                <InputLabel htmlFor="area">Area</InputLabel>
-                <Select
-                  value={test.data().area}
-                  onChange={handleAreaChange}
-                  inputProps={{
-                    name: 'area',
-                    id: 'area',
-                  }}
-                >
-                  {getAreas().map(area => (
-                    <MenuItem key={area.name} value={area.name}>
-                      {area.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </SelectsWrapper>
-          </Row>
+          <Metadata>
+            <Row>
+              <TextField
+                id="standard-required"
+                label="Name"
+                margin="normal"
+                value={test.data().name}
+                onChange={handleNameChange}
+                fullWidth
+                autoFocus
+              />
+            </Row>
+            <Row>
+              <SelectsWrapper>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="component">Component</InputLabel>
+                  <Select
+                    value={test.data().component}
+                    onChange={handleComponentChange}
+                    inputProps={{
+                      name: 'component',
+                      id: 'component',
+                    }}
+                  >
+                    {getComponents().map(component => (
+                      <MenuItem key={component.name} value={component.name}>
+                        {component.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <Margin />
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="area">Area</InputLabel>
+                  <Select
+                    value={test.data().area}
+                    onChange={handleAreaChange}
+                    inputProps={{
+                      name: 'area',
+                      id: 'area',
+                    }}
+                  >
+                    {getAreas().map(area => (
+                      <MenuItem key={area.name} value={area.name}>
+                        {area.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </SelectsWrapper>
+            </Row>
+          </Metadata>
           <Row>
             <StepsProp steps={test.data().steps} onChange={handleStepsChange} />
           </Row>

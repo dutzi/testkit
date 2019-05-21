@@ -6,6 +6,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import AddIcon from '@material-ui/icons/Add';
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import { Step } from '../types';
 
 const ButtonContainer = styled.div`
@@ -15,15 +16,9 @@ const ButtonContainer = styled.div`
 `;
 
 const Wrapper = styled.div`
-  margin: 0px -24px;
-  background: #f7f7f7;
-
-  &:nth-of-type(1) {
-    border-top: 1px solid #00000022;
-  }
-  border-bottom: 1px solid #00000022;
-  display: flex;
+  border: 1px solid var(--background-blue);
   line-height: 1.5;
+  margin-bottom: 24px;
 
   &:hover {
     ${ButtonContainer} {
@@ -32,22 +27,39 @@ const Wrapper = styled.div`
   }
 `;
 
-const Sidebar = styled.div`
+const Header = styled.div`
+  color: white;
+  font-weight: 600;
+  background: var(--background-blue);
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  width: 110px;
-  padding: 10px 0px 4px;
 `;
 
-const Header = styled.div`
-  padding: 0px 24px;
-  color: #787878;
+const Title = styled.div`
+  padding: 6px;
 `;
 
 const Editors = styled.div`
-  flex: 1;
-  width: calc(100% - 110px);
+  display: flex;
+  min-height: 200px;
+
+  div:nth-child(2) {
+    flex: 65%;
+  }
+
+  div:nth-child(3) {
+    flex: 0 0 35%;
+  }
+`;
+
+const Sidebar = styled.div`
+  flex: 0 0 110px;
+`;
+
+const ActionBar = styled.div`
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 function TestStep({
@@ -87,32 +99,37 @@ function TestStep({
 
   return (
     <Wrapper>
-      <Sidebar>
-        <Header>Step {index + 1}</Header>
+      <Header>
+        <Title>Step {index + 1}</Title>
         <ButtonContainer>
           {/* <Button variant="text" color="secondary" onClick={onRemove}>
             Remove Step
           </Button> */}
           <Tooltip title="Add Step After">
             <IconButton onClick={onAdd} aria-label="Add Step After">
-              <AddIcon fontSize="small" />
+              <AddIcon fontSize="small" htmlColor="white" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Duplicate">
             <IconButton onClick={onDuplicate} aria-label="Duplicate">
-              <FileCopyIcon fontSize="small" />
+              <FileCopyIcon fontSize="small" htmlColor="white" />
             </IconButton>
           </Tooltip>
           {allowRemove && (
             <Tooltip title="Remove">
               <IconButton onClick={onRemove} aria-label="Remove">
-                <DeleteIcon fontSize="small" />
+                <DeleteIcon fontSize="small" htmlColor="white" />
               </IconButton>
             </Tooltip>
           )}
         </ButtonContainer>
-      </Sidebar>
+      </Header>
       <Editors>
+        <Sidebar>
+          <ActionBar>
+            <AddPhotoAlternateIcon htmlColor="#A6A6A6" />
+          </ActionBar>
+        </Sidebar>
         <MarkdownEditor
           minHeight="120px"
           onChange={handleDescriptionChange}
