@@ -60,6 +60,7 @@ const Wrapper = styled.div`
     color: #554df5;
   }
 `;
+let uniqueIdentifier = 0;
 
 const MarkdownEditor = ({
   initialValue,
@@ -74,19 +75,14 @@ const MarkdownEditor = ({
   onChange: (value: string) => void;
   showBorder?: boolean;
 }) => {
-  const uniqueIdentifier = Math.floor(Math.random() * 1000000000);
   const [state, setState] = useState(initialValue);
 
   useEffect(() => {
     const steps: HTMLTextAreaElement | null = document.querySelector(
-      `#steps_${uniqueIdentifier}`,
+      `#steps_${uniqueIdentifier++}`,
     );
 
     if (steps) {
-      steps.addEventListener('keyup', (e: any) => {
-        onChange(steps.value);
-      });
-
       steps.addEventListener('keypress', (e: any) => {
         let newState: string | undefined;
         const value = steps.value;
@@ -147,6 +143,10 @@ const MarkdownEditor = ({
     }
   }, []);
 
+  function handleChange(e: any) {
+    onChange(e.target.value);
+  }
+
   return (
     <Wrapper showBorder={showBorder}>
       <Editor
@@ -162,6 +162,7 @@ const MarkdownEditor = ({
           fontSize: '16px',
           minHeight: minHeight,
         }}
+        onChange={handleChange}
       />
     </Wrapper>
   );
