@@ -41,7 +41,6 @@ const StepsProp = ({
     onChange([...steps.slice(0, index), value, ...steps.slice(index + 1)]);
   }
 
-  console.log('[stepsprop]', steps);
   return (
     <Wrapper>
       {steps.map((step, index) => (

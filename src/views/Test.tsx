@@ -1,24 +1,17 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
-// import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-// import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-// import Input from '@material-ui/core/Input';
-// import OutlinedInput from '@material-ui/core/OutlinedInput';
-// import FilledInput from '@material-ui/core/FilledInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import StepsProp from '../components/StepsProp';
-import { firestore } from '../firebase';
-import { getDocById, updateTest as updateTestImpl } from '../data-utils';
-import { Component, Step } from '../types';
+import { getDocById, updateTest } from '../data-utils';
+import _ from 'lodash';
+import { Step, Test } from '../types';
 import {
   GlobalUserContext,
   TestsCollectionContext,
@@ -42,14 +35,16 @@ const Metadata = styled.div`
   max-width: 600px;
 `;
 
+const updateTestImpl = _.debounce(updateTest, 1000);
+
 function ScrollDialog({
   onClose,
   testId,
 }: {
-  onClose: (e: React.MouseEvent) => void;
+  onClose: (e: React.MouseEvent | null) => void;
   testId: string;
 }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     setOpen(true);
@@ -57,7 +52,8 @@ function ScrollDialog({
 
   const globalUser = useContext(GlobalUserContext);
   const collection = useContext(TestsCollectionContext);
-  const workspace = useContext(WorkspaceContext);
+  const workspace = useContext(WorkspaceContext)!;
+  const [testData, setTestData] = useState<Test | null>(null);
 
   let test: firebase.firestore.QueryDocumentSnapshot | undefined;
 
@@ -65,8 +61,14 @@ function ScrollDialog({
     test = getDocById(testId, collection.docs);
   }
 
-  if (!test) {
-    return <div />;
+  useEffect(() => {
+    if (test) {
+      setTestData(test.data() as Test);
+    }
+  }, [collection]);
+
+  if (!testData) {
+    return null;
   }
 
   function handleClose(e: React.MouseEvent) {
@@ -85,8 +87,12 @@ function ScrollDialog({
     }
   }
 
-  function updateTest(data: object) {
+  function updateTest(data: any) {
     updateTestImpl(testId, globalUser.workspace, data, collection!);
+    setTestData({
+      ...testData,
+      ...data,
+    });
   }
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -96,11 +102,12 @@ function ScrollDialog({
   }
 
   function handleComponentChange(e: any) {
-    const areas = getAreas(e.target.value);
+    const component: string = e.target.value;
+    const areas = getAreas(component);
     if (areas.length) {
       updateTest({
-        component: e.target.value,
-        area: getAreas(e.target.value)[0].name,
+        component,
+        area: getAreas(component)[0].name,
       });
     } else {
       updateTest({
@@ -117,9 +124,8 @@ function ScrollDialog({
   }
 
   function getAreas(componentName?: string) {
-    const component = workspace!.components[
-      componentName || test!.data().component
-    ];
+    const component =
+      workspace.components[componentName || test!.data().component];
 
     if (component) {
       return Object.keys(component.areas).map(
@@ -137,7 +143,7 @@ function ScrollDialog({
   }
 
   function getComponents() {
-    const components = workspace!.components;
+    const components = workspace.components;
 
     return Object.keys(components).map(componentName => {
       const component = components[componentName];
@@ -147,6 +153,12 @@ function ScrollDialog({
         areas: getAreas(component.name),
       };
     });
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if ((e.metaKey || e.ctrlKey) && e.keyCode === 13) {
+      onClose(null);
+    }
   }
 
   return (
@@ -167,8 +179,9 @@ function ScrollDialog({
                 id="standard-required"
                 label="Name"
                 margin="normal"
-                value={test.data().name}
+                value={testData.name}
                 onChange={handleNameChange}
+                onKeyDown={handleKeyDown}
                 fullWidth
                 autoFocus
               />
@@ -178,7 +191,7 @@ function ScrollDialog({
                 <FormControl fullWidth>
                   <InputLabel htmlFor="component">Component</InputLabel>
                   <Select
-                    value={test.data().component}
+                    value={testData.component}
                     onChange={handleComponentChange}
                     inputProps={{
                       name: 'component',
@@ -196,7 +209,7 @@ function ScrollDialog({
                 <FormControl fullWidth>
                   <InputLabel htmlFor="area">Area</InputLabel>
                   <Select
-                    value={test.data().area}
+                    value={testData.area}
                     onChange={handleAreaChange}
                     inputProps={{
                       name: 'area',
@@ -214,7 +227,7 @@ function ScrollDialog({
             </Row>
           </Metadata>
           <Row>
-            <StepsProp steps={test.data().steps} onChange={handleStepsChange} />
+            <StepsProp steps={testData.steps} onChange={handleStepsChange} />
           </Row>
         </DialogContent>
         {/* <DialogActions>

@@ -56,7 +56,7 @@ const TestsView = ({
       });
   };
 
-  const handleCloseTest = (e: React.MouseEvent) => {
+  const handleCloseTest = (e: React.MouseEvent | null) => {
     navigateTo('/tests', e, history);
   };
 

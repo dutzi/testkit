@@ -26,7 +26,7 @@ const ArchivedTestsView = ({
   const [selected, setSelected] = useState<string[]>([]);
   const collection = useContext(TestsCollectionContext);
 
-  const handleCloseTest = (e: React.MouseEvent) => {
+  const handleCloseTest = (e: React.MouseEvent | null) => {
     navigateTo('/archived-tests', e, history);
   };
 
