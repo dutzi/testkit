@@ -33,7 +33,18 @@ export default async function(
 
       let currentTest: any;
       const tests: any[] = [];
-      const components: any = {};
+      const components: {
+        [componentName: string]: {
+          name: string;
+          label: string;
+          areas: {
+            [areaName: string]: {
+              name: string;
+              label: string;
+            };
+          };
+        };
+      } = {};
 
       ccJsonObj.forEach((testStep: any) => {
         if (!currentTest || testStep.stepPosition === '1') {
@@ -90,7 +101,20 @@ export default async function(
 
       return {
         tests,
-        components,
+        components: Object.keys(components).map(componentName => {
+          const component = components[componentName];
+          return {
+            name: component.name,
+            label: component.label,
+            areas: Object.keys(component.areas).map((areaName: string) => {
+              const area = component.areas[areaName];
+              return {
+                name: area.name,
+                label: area.label,
+              };
+            }),
+          };
+        }),
       };
     });
 }

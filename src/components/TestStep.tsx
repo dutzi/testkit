@@ -72,6 +72,7 @@ function TestStep({
   onAdd,
   onChange,
   allowRemove,
+  onDismiss,
 }: {
   step: Step;
   index: number;
@@ -80,10 +81,9 @@ function TestStep({
   onAdd: () => void;
   onChange: (step: Step) => void;
   allowRemove: boolean;
+  onDismiss: () => void;
 }) {
   const handleDescriptionChange = (value: string) => {
-    // debugger;
-    console.log(step);
     onChange({
       ...step,
       description: value,
@@ -91,13 +91,18 @@ function TestStep({
   };
 
   const handleResultChange = (value: string) => {
-    // debugger;
-    console.log(step);
     onChange({
       ...step,
       result: value,
     });
   };
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if ((e.metaKey || e.ctrlKey) && e.keyCode === 13) {
+      e.preventDefault();
+      onDismiss();
+    }
+  }
 
   return (
     <Wrapper>
@@ -135,12 +140,14 @@ function TestStep({
         <MarkdownEditor
           minHeight="120px"
           onChange={handleDescriptionChange}
+          onKeyDown={handleKeyDown}
           placeholder="Description"
           initialValue={step.description}
         />
         <MarkdownEditor
           minHeight="70px"
           onChange={handleResultChange}
+          onKeyDown={handleKeyDown}
           placeholder="Expected Result"
           initialValue={step.result}
         />

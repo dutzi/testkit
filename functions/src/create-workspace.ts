@@ -3,6 +3,8 @@ import * as admin from 'firebase-admin';
 import * as express from 'express';
 import sendMail from './send-mail';
 import * as welcomeMail from './mails/welcome';
+import platforms from './platforms';
+import components from './components';
 
 const cors = require('cors');
 const uuidv1 = require('uuid/v1');
@@ -66,39 +68,41 @@ app.post('/', async (request: express.Request, response: express.Response) => {
       .doc(id)
       .create({
         name,
+        platforms,
+        components,
       });
 
-    const collectionDoc = firestore
-      .collection('workspaces')
-      .doc(id)
-      .collection('components')
-      .doc();
+    // const collectionDoc = firestore
+    //   .collection('workspaces')
+    //   .doc(id)
+    //   .collection('components')
+    //   .doc();
 
-    await collectionDoc.create({
-      label: 'My First Component',
-      name: 'my-first-component',
-    });
+    // await collectionDoc.create({
+    //   label: 'My First Component',
+    //   name: 'my-first-component',
+    // });
 
-    await collectionDoc
-      .collection('areas')
-      .doc()
-      .create({
-        label: 'My First Area',
-        name: 'my-first-area',
-      });
+    // await collectionDoc
+    //   .collection('areas')
+    //   .doc()
+    //   .create({
+    //     label: 'My First Area',
+    //     name: 'my-first-area',
+    //   });
 
-    const platformsCollection = firestore
-      .collection('workspaces')
-      .doc(id)
-      .collection('platforms');
+    // const platformsCollection = firestore
+    //   .collection('workspaces')
+    //   .doc(id)
+    //   .collection('platforms');
 
-    await platformsCollection
-      .doc()
-      .create({ id: '1', name: 'iPhone (Safari)' });
+    // await platformsCollection
+    //   .doc()
+    //   .create({ id: '1', name: 'iPhone (Safari)' });
 
-    await platformsCollection
-      .doc()
-      .create({ id: '1', name: 'Android (Chrome)' });
+    // await platformsCollection
+    //   .doc()
+    //   .create({ id: '1', name: 'Android (Chrome)' });
 
     await firestore
       .collection('workspaces')

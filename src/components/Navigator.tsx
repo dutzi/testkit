@@ -37,6 +37,10 @@ const Backdrop = styled.div`
   height: 100%;
 `;
 
+const Image = styled.img`
+  width: 25px;
+`;
+
 const styles = theme => ({
   categoryHeader: {
     paddingTop: 16,
@@ -163,7 +167,7 @@ const Navigator = ({
             )}
           >
             <MarginV margin="5px" />
-            {'🧪'}
+            <Image src="/logo.png" />
             <MarginV /> TestKit
           </ListItem>
           <ListItem className={clsx(classes.item, classes.itemCategory)}>

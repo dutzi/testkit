@@ -68,12 +68,14 @@ const MarkdownEditor = ({
   onChange,
   placeholder,
   showBorder = true,
+  onKeyDown,
 }: {
   initialValue: string;
   minHeight: string;
   placeholder: string;
   onChange: (value: string) => void;
   showBorder?: boolean;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
 }) => {
   const [state, setState] = useState(initialValue);
 
@@ -157,6 +159,7 @@ const MarkdownEditor = ({
         ignoreTabKey
         textareaId={`steps_${uniqueIdentifier}`}
         placeholder={placeholder}
+        onKeyDown={onKeyDown}
         style={{
           fontFamily: '"Roboto", "Fira Mono", monospace',
           fontSize: '16px',

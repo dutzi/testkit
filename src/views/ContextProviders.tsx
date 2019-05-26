@@ -8,17 +8,13 @@ import { GlobalStateProvider } from '../state';
 
 interface Workspace {
   components: {
-    [componentName: string]: {
+    label: string;
+    name: string;
+    areas: {
       label: string;
       name: string;
-      areas: {
-        [areaName: string]: {
-          label: string;
-          name: string;
-        };
-      };
-    };
-  };
+    }[];
+  }[];
   name: string;
 }
 

@@ -70,7 +70,7 @@ const Import = () => {
         <p>
           Successfully imported <strong>{summary.numSuccess}</strong> {label}
         </p>
-        {summary.numFailed && (
+        {summary.numFailed > 0 && (
           <div>
             Error importing <strong>{summary.numFailed}</strong> {label}
             {summary.failedIds.length > 0 && (

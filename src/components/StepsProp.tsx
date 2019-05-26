@@ -9,9 +9,11 @@ const Wrapper = styled.div``;
 const StepsProp = ({
   steps,
   onChange,
+  onDismiss,
 }: {
   steps: Step[];
   onChange: (steps: Step[]) => void;
+  onDismiss: () => void;
 }) => {
   function createStep(step?: Step) {
     return { id: uuidv1(), description: '', result: '', ...step };
@@ -53,6 +55,7 @@ const StepsProp = ({
           onAdd={handleAddStep.bind(null, index)}
           onChange={handleChange.bind(null, index)}
           allowRemove={steps.length > 1}
+          onDismiss={onDismiss}
         />
       ))}
     </Wrapper>

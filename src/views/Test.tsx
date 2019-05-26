@@ -124,13 +124,14 @@ function ScrollDialog({
   }
 
   function getAreas(componentName?: string) {
-    const component =
-      workspace.components[componentName || test!.data().component];
+    componentName = componentName || testData!.component;
+    console.log(workspace);
+    const component = workspace.components.find(
+      component => component.name === componentName,
+    );
 
     if (component) {
-      return Object.keys(component.areas).map(
-        areaName => component.areas[areaName],
-      );
+      return component.areas;
     } else {
       return [];
     }
@@ -159,6 +160,10 @@ function ScrollDialog({
     if ((e.metaKey || e.ctrlKey) && e.keyCode === 13) {
       onClose(null);
     }
+  }
+
+  function handleDismiss() {
+    onClose(null);
   }
 
   return (
@@ -227,7 +232,11 @@ function ScrollDialog({
             </Row>
           </Metadata>
           <Row>
-            <StepsProp steps={testData.steps} onChange={handleStepsChange} />
+            <StepsProp
+              onDismiss={handleDismiss}
+              steps={testData.steps}
+              onChange={handleStepsChange}
+            />
           </Row>
         </DialogContent>
         {/* <DialogActions>

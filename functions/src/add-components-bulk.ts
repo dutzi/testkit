@@ -3,7 +3,7 @@ import getUserData from './get-user-data';
 
 const firestore = admin.firestore();
 
-export default async function(components: any, idToken: string) {
+export default async function(components: any[], idToken: string) {
   const userData = await getUserData(idToken);
   let numSuccess = 0;
   let numFailed = 0;
@@ -19,25 +19,23 @@ export default async function(components: any, idToken: string) {
     }
 
     if (!workspaceDocData.components) {
-      workspaceDocData.components = {};
+      workspaceDocData.components = [];
     }
 
-    const keys = Object.keys(components);
-    for (let i = 0; i < keys.length; i++) {
-      if (workspaceDocData.components[keys[i]]) {
-        numFailed++;
-        failedIds.push(keys[i]);
-      } else {
-        numSuccess++;
-      }
-    }
+    // const keys = Object.keys(components);
+    // for (let i = 0; i < keys.length; i++) {
+    //   if (workspaceDocData.components[keys[i]]) {
+    //     numFailed++;
+    //     failedIds.push(keys[i]);
+    //   } else {
+    //     numSuccess++;
+    //   }
+    // }
+    numSuccess = components.length;
 
     await workspaceDocRef.update({
       ...workspaceDocData,
-      components: {
-        ...components,
-        ...workspaceDocData.components,
-      },
+      components: [...workspaceDocData.components, ...components],
     });
   }
 
