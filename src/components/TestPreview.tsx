@@ -7,11 +7,20 @@ import MarkdownViewer from './MarkdownViewer';
 
 const Wrapper = styled.div`
   margin-bottom: 24px;
+  border: 1px solid var(--background-blue);
+  padding: 24px 24px 12px;
+  border-radius: 4px;
+  overflow: hidden;
 `;
 
-const FlexRow = styled.div`
+const Header = styled.div`
   display: flex;
   align-items: center;
+
+  background: var(--background-blue);
+  color: white;
+  padding: 10px;
+  margin: -24px -24px 24px;
 `;
 
 const Steps = styled.div``;
@@ -69,12 +78,12 @@ const TestPreview = ({
 }) => {
   return (
     <Wrapper>
-      <FlexRow>
+      <Header>
         <TestName>
           {test.name} (#{test.id})
         </TestName>
         {showProgress && <TestProgressBar test={test} status={status} />}
-      </FlexRow>
+      </Header>
       <Steps>
         <base target="_blank" />
         {test.steps.map(step => {

@@ -19,6 +19,8 @@ const Wrapper = styled.div`
   border: 1px solid var(--background-blue);
   line-height: 1.5;
   margin-bottom: 24px;
+  border-radius: 4px;
+  overflow: hidden;
 
   &:hover {
     ${ButtonContainer} {
