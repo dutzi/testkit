@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
@@ -18,6 +19,23 @@ import PersonIcon from '@material-ui/icons/Person';
 import { withRouter } from 'react-router';
 import { navigateTo } from '../utils';
 import { MarginV } from '../styles';
+import media from '../media-queries';
+import { useGlobalState } from '../state';
+import { useIsMobile } from '../hooks';
+
+const Wrapper = styled.div`
+  transition: all 0.2s ease-out;
+  transform: ${(p: { show: boolean }) =>
+    p.show ? 'none' : 'translateX(-100vw)'};
+`;
+
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+`;
 
 const styles = theme => ({
   categoryHeader: {
@@ -72,6 +90,15 @@ const Navigator = ({
   history: any;
   classes?: any;
 }) => {
+  const [
+    {
+      ui: { showSidebar },
+    },
+    dispatch,
+  ] = useGlobalState();
+
+  const isMobile = useIsMobile();
+
   const categories = [
     {
       id: 'Project',
@@ -119,66 +146,77 @@ const Navigator = ({
     navigateTo(path, e, history);
   }
 
+  function handleClose() {
+    dispatch({ type: 'hide-sidebar' });
+  }
+
   return (
-    <Drawer variant="permanent">
-      <List disablePadding style={{ width: '256px' }}>
-        <ListItem
-          className={clsx(classes.firebase, classes.item, classes.itemCategory)}
-        >
-          <MarginV margin="5px" />
-          {'🧪'}
-          <MarginV /> TestKit
-        </ListItem>
-        <ListItem className={clsx(classes.item, classes.itemCategory)}>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText
-            classes={{
-              primary: classes.itemPrimary,
-            }}
+    <Wrapper show={showSidebar || !isMobile}>
+      {isMobile && <Backdrop onClick={handleClose} />}
+      <Drawer variant="permanent">
+        <List disablePadding style={{ width: '256px' }}>
+          <ListItem
+            className={clsx(
+              classes.firebase,
+              classes.item,
+              classes.itemCategory,
+            )}
           >
-            Overview
-          </ListItemText>
-        </ListItem>
-        {categories.map(({ id, children }) => (
-          <React.Fragment key={id}>
-            <ListItem className={classes.categoryHeader}>
-              <ListItemText
-                classes={{
-                  primary: classes.categoryHeaderPrimary,
-                }}
-              >
-                {id}
-              </ListItemText>
-            </ListItem>
-            {children.map(({ id: childId, icon, active, path }) => (
-              <ListItem
-                onClick={handleListItemClick.bind(null, path)}
-                button
-                dense
-                key={childId}
-                className={clsx(
-                  classes.item,
-                  classes.itemActionable,
-                  active && classes.itemActiveItem,
-                )}
-              >
-                <ListItemIcon>{icon}</ListItemIcon>
+            <MarginV margin="5px" />
+            {'🧪'}
+            <MarginV /> TestKit
+          </ListItem>
+          <ListItem className={clsx(classes.item, classes.itemCategory)}>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText
+              classes={{
+                primary: classes.itemPrimary,
+              }}
+            >
+              Overview
+            </ListItemText>
+          </ListItem>
+          {categories.map(({ id, children }) => (
+            <React.Fragment key={id}>
+              <ListItem className={classes.categoryHeader}>
                 <ListItemText
                   classes={{
-                    primary: classes.itemPrimary,
+                    primary: classes.categoryHeaderPrimary,
                   }}
                 >
-                  {childId}
+                  {id}
                 </ListItemText>
               </ListItem>
-            ))}
-            <Divider className={classes.divider} />
-          </React.Fragment>
-        ))}
-      </List>
-    </Drawer>
+              {children.map(({ id: childId, icon, active, path }) => (
+                <ListItem
+                  onClick={handleListItemClick.bind(null, path)}
+                  button
+                  dense
+                  key={childId}
+                  className={clsx(
+                    classes.item,
+                    classes.itemActionable,
+                    active && classes.itemActiveItem,
+                  )}
+                >
+                  <ListItemIcon>{icon}</ListItemIcon>
+                  <ListItemText
+                    classes={{
+                      primary: classes.itemPrimary,
+                    }}
+                  >
+                    {childId}
+                  </ListItemText>
+                </ListItem>
+              ))}
+              <Divider className={classes.divider} />
+            </React.Fragment>
+          ))}
+        </List>
+      </Drawer>
+    </Wrapper>
   );
 };
 

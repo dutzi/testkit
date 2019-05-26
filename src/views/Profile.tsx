@@ -9,10 +9,16 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { MarginH } from '../styles';
 import ProfilePicture from '../components/ProfilePicture';
 import { GlobalUserContext } from './ContextProviders';
+import media from '../media-queries';
 
 const Wrapper = styled.div`
   max-width: 60%;
   margin: 50px auto;
+
+  ${media.mobile`
+    max-width: 85%;
+    margin: 20px auto;
+  `}
 `;
 
 const Padding = styled.div`

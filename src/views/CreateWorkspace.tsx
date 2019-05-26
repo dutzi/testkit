@@ -14,6 +14,7 @@ import { auth, firestore } from '../firebase';
 const Wrapper = styled.div`
   padding: 24px;
   width: 530px;
+  max-width: calc(100% - 24px * 2);
   margin: auto;
 `;
 

@@ -19,6 +19,7 @@ import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
 import { GlobalUserContext, TestsCollectionContext } from './ContextProviders';
 import { navigateTo } from '../utils';
+import MenuButton from '../components/MenuButton';
 
 const Wrapper = styled.div``;
 
@@ -115,6 +116,7 @@ const TestsView = ({
   return (
     <Wrapper>
       <Toolbar>
+        <MenuButton />
         <Button onClick={handleCreateTest} variant="contained" color="primary">
           New Test
         </Button>

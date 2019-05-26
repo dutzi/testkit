@@ -7,10 +7,16 @@ import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { WorkspaceContext } from '../ContextProviders';
 import Import from './Import';
 import Users from './Users';
+import media from '../../media-queries';
 
 const Wrapper = styled.div`
   max-width: 60%;
   margin: 50px auto;
+
+  ${media.mobile`
+    max-width: 85%;
+    margin: 20px auto;
+  `}
 `;
 
 const Settings = () => {

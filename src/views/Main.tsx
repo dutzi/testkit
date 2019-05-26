@@ -14,6 +14,7 @@ import { auth, firestore } from '../firebase';
 import Welcome from './Welcome';
 import CreateWorkspace from './CreateWorkspace';
 import ContextProviders from './ContextProviders';
+import media from '../media-queries';
 
 export interface GlobalUser {
   workspace: string;
@@ -23,6 +24,10 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 256px auto;
   height: 100vh;
+
+  ${media.mobile`
+    grid-template-columns: auto;
+  `}
 `;
 
 const ContentWrapper = styled.div`

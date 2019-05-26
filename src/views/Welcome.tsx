@@ -13,6 +13,7 @@ import SignupModal from '../components/SignupModal';
 const Wrapper = styled.div`
   padding: 24px;
   width: 530px;
+  max-width: calc(100% - 24px * 2);
   margin: auto;
 `;
 

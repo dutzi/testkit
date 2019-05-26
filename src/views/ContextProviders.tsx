@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import firebase from 'firebase/app';
 import styled from 'styled-components';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { firestore } from '../firebase';
 import { GlobalUser } from './Main';
+import { GlobalStateProvider } from '../state';
 
 interface Workspace {
   components: {
@@ -61,15 +62,17 @@ const ContextProviders = ({
   }
 
   return (
-    <TestSetsCollectionContext.Provider value={testSetsCollection}>
-      <TestsCollectionContext.Provider value={testsCollection}>
-        <GlobalUserContext.Provider value={user}>
-          <WorkspaceContext.Provider value={workspace!.data()! as Workspace}>
-            {children}
-          </WorkspaceContext.Provider>
-        </GlobalUserContext.Provider>
-      </TestsCollectionContext.Provider>
-    </TestSetsCollectionContext.Provider>
+    <GlobalStateProvider>
+      <TestSetsCollectionContext.Provider value={testSetsCollection}>
+        <TestsCollectionContext.Provider value={testsCollection}>
+          <GlobalUserContext.Provider value={user}>
+            <WorkspaceContext.Provider value={workspace!.data()! as Workspace}>
+              {children}
+            </WorkspaceContext.Provider>
+          </GlobalUserContext.Provider>
+        </TestsCollectionContext.Provider>
+      </TestSetsCollectionContext.Provider>
+    </GlobalStateProvider>
   );
 };
 
