@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import { Column } from '../../data/table-columns';
@@ -213,11 +215,11 @@ class EnhancedTable extends React.Component<
                       data: n,
                     });
                   })}
-                {/* {emptyRows > 0 && (
+                {emptyRows > 0 && (
                   <TableRow style={{ height: 49 * emptyRows }}>
                     <TableCell colSpan={columns.length + 1} />
                   </TableRow>
-                )} */}
+                )}
               </TableBody>
               {/* Because of z-index issues i'm rendering the head *after* the body */}
               <TableHead

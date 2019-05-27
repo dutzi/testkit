@@ -10,6 +10,7 @@ import {
   TestStatus,
   User,
   Platform,
+  WorkspaceUser,
 } from '../types';
 import TestPreview from '../components/TestPreview';
 import Typography from '@material-ui/core/Typography';
@@ -18,14 +19,16 @@ import { getPlatforms } from '../data/platforms';
 import { Button } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PublishIcon from '@material-ui/icons/Publish';
-import Select from '../components/Select';
+import Select, { mapData } from '../components/Select';
 import { MarginH, MarginV } from '../styles';
 import { createTestSet } from '../model/test-set';
 import {
   GlobalUserContext,
   TestsCollectionContext,
   TestSetsCollectionContext,
+  WorkspaceContext,
 } from './ContextProviders';
+import { useUsers } from '../hooks';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -57,6 +60,10 @@ const ActionsWrapper = styled.div`
   align-items: flex-start;
 `;
 
+function mapUsers(users: WorkspaceUser[]) {
+  return users.map(user => ({ name: user.email, id: user.uid }));
+}
+
 const TestSet = ({
   id,
   onRun,
@@ -71,9 +78,9 @@ const TestSet = ({
   match: any;
 }) => {
   const globalUser = useContext(GlobalUserContext);
+  const workspace = useContext(WorkspaceContext)!;
+  const users = useUsers();
 
-  const [users, setUsers] = useState<User[]>([]);
-  const [platforms, setPlatforms] = useState<Platform[]>([]);
   const [createdTestSet, setCreatedTestSet] = useState<ITestSet>(
     createTestSet(),
   );
@@ -83,9 +90,6 @@ const TestSet = ({
   let isCreating = id === 'create';
 
   useEffect(() => {
-    getUsers().then(setUsers);
-    getPlatforms().then(setPlatforms);
-
     if (isCreating) {
       var searchParams = new URLSearchParams(window.location.search);
       setCreatedTestSet({
@@ -255,7 +259,7 @@ const TestSet = ({
                 name="platform"
                 onChange={handlePlatformChange}
                 allowNone
-                data={platforms}
+                data={mapData(workspace.platforms)}
                 value={getTestSetField('platform')}
               />
               <MarginV />
@@ -264,7 +268,7 @@ const TestSet = ({
                 name="user"
                 onChange={handleUserChange}
                 allowNone
-                data={users}
+                data={mapUsers(users)}
                 value={getTestSetField('user')}
               />
             </SelectsWrapper>

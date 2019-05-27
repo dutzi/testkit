@@ -38,7 +38,9 @@ const TestsTableRow = ({
   // getComponents(workspace).then(setComponents);
 
   function getComponentLabel(componentName: string) {
-    let component = workspace!.components[componentName];
+    let component = workspace!.components.find(
+      component => component.name === componentName,
+    );
 
     if (component) {
       return component.label;
@@ -48,10 +50,12 @@ const TestsTableRow = ({
   }
 
   function getAreaLabel(componentName: string, areaName: string) {
-    let component = workspace!.components[componentName];
+    let component = workspace!.components.find(
+      component => component.name === componentName,
+    );
 
     if (component) {
-      let area = component.areas[areaName];
+      let area = component.areas.find(area => area.name === areaName);
 
       if (area) {
         return area.label;

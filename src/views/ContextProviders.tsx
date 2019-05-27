@@ -6,7 +6,13 @@ import { firestore } from '../firebase';
 import { GlobalUser } from './Main';
 import { GlobalStateProvider } from '../state';
 
+export interface Platform {
+  label: string;
+  name: string;
+}
+
 interface Workspace {
+  name: string;
   components: {
     label: string;
     name: string;
@@ -15,7 +21,7 @@ interface Workspace {
       name: string;
     }[];
   }[];
-  name: string;
+  platforms: Platform[];
 }
 
 export const GlobalUserContext = React.createContext<GlobalUser>({

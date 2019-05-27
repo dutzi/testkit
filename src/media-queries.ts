@@ -8,11 +8,11 @@ const sizes: {
       and (min-device-width : 768px)
       and (max-device-width : 1024px)`,
   mobile: `@media only screen
-      and (min-device-width : 375px)
+      and (min-device-width : 320px)
       and (max-device-width : 812px)
       and (-webkit-device-pixel-ratio : 3),
     only screen
-      and (min-device-width : 375px)
+      and (min-device-width : 320px)
       and (max-device-width : 667px)`,
 };
 

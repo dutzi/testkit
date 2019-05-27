@@ -6,6 +6,10 @@ import FormControl from '@material-ui/core/FormControl';
 import MaterialSelect from '@material-ui/core/Select';
 import { firestore } from '../firebase';
 
+export function mapData(data: any[]) {
+  return data.map(item => ({ name: item.label, id: item.name }));
+}
+
 const Select = ({
   title,
   name,

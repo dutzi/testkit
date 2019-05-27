@@ -15,6 +15,12 @@ export interface User {
   email: string;
 }
 
+export interface WorkspaceUser {
+  uid: string;
+  role: string;
+  email: string;
+}
+
 export interface Platform {
   id: string;
   name: string;
