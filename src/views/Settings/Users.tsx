@@ -9,7 +9,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
 import MenuItem from '@material-ui/core/MenuItem';
 import {
   useCollection,
@@ -18,6 +18,8 @@ import {
 import { GlobalUserContext } from '../ContextProviders';
 import AddUserDialog from './AddUserDialog';
 import { getDocById } from '../../data-utils';
+import { WorkspaceUser } from '../../types';
+import { useWorkspaceUsers } from '../../hooks/workspace-users';
 
 const Padding = styled.div`
   padding: 30px;
@@ -64,6 +66,7 @@ const userRoles = [
 
 const Import = () => {
   const [showDialog, setShowDialog] = useState(false);
+  const [, updateUser] = useWorkspaceUsers();
   const globalUser = useContext(GlobalUserContext);
 
   const globalUsersCollectionRef = firestore.collection('/users');
@@ -92,14 +95,9 @@ const Import = () => {
   }
 
   function handleUserRoleChange(user: User, e: any) {
-    if (users && usersCollection) {
-      const doc = usersCollection.docs.find(doc => doc.data().uid === user.uid);
-      if (doc) {
-        usersCollectionRef.doc(doc.id).update({
-          role: e.target.value,
-        });
-      }
-    }
+    updateUser(user.uid, {
+      role: e.target.value,
+    });
   }
 
   function handleCloseDialog() {
@@ -145,16 +143,16 @@ const Import = () => {
     console.log(auth.currentUser!.uid);
     if (isCurrentUserAdmin() && !isCurrentUser(user)) {
       return (
-        <Select
+        <NativeSelect
           value={user.role}
           onChange={handleUserRoleChange.bind(null, user)}
         >
           {userRoles.map(role => (
-            <MenuItem key={role.name} value={role.name}>
+            <option key={role.name} value={role.name}>
               {role.label}
-            </MenuItem>
+            </option>
           ))}
-        </Select>
+        </NativeSelect>
       );
     } else {
       return <Role>{getRoleByName(user.role)!.label}</Role>;

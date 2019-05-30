@@ -4,18 +4,9 @@ import TextField from '@material-ui/core/TextField';
 import { firestore } from '../firebase';
 import { withRouter } from 'react-router';
 import { getCollectionData, getDocById, getNextId } from '../data-utils';
-import {
-  TestSet as ITestSet,
-  Test,
-  TestStatus,
-  User,
-  Platform,
-  WorkspaceUser,
-} from '../types';
+import { TestSet as ITestSet, Test, TestStatus, WorkspaceUser } from '../types';
 import TestPreview from '../components/TestPreview';
 import Typography from '@material-ui/core/Typography';
-import { getUsers } from '../data/users';
-import { getPlatforms } from '../data/platforms';
 import { Button } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PublishIcon from '@material-ui/icons/Publish';
@@ -61,7 +52,7 @@ const ActionsWrapper = styled.div`
 `;
 
 function mapUsers(users: WorkspaceUser[]) {
-  return users.map(user => ({ name: user.email, id: user.uid }));
+  return users.map(user => ({ name: user.displayName, id: user.uid }));
 }
 
 const TestSet = ({
@@ -116,7 +107,7 @@ const TestSet = ({
     return null;
   }
 
-  function updateTestSet(data: object) {
+  function updateTestSet(data: Partial<ITestSet>) {
     if (isCreating) {
       setCreatedTestSet({
         ...createdTestSet,
@@ -167,9 +158,9 @@ const TestSet = ({
     });
   }
 
-  function handleUserChange(e: any) {
+  function handleAssigneeChange(e: any) {
     updateTestSet({
-      user: e.target.value,
+      assignee: e.target.value,
     });
   }
 
@@ -189,7 +180,7 @@ const TestSet = ({
     }
   }
 
-  function getTestSetField(fieldName: string) {
+  function getTestSetField(fieldName: keyof ITestSet) {
     if (isCreating) {
       return createdTestSet[fieldName];
     } else {
@@ -266,10 +257,10 @@ const TestSet = ({
               <Select
                 title="Assignee"
                 name="user"
-                onChange={handleUserChange}
+                onChange={handleAssigneeChange}
                 allowNone
                 data={mapUsers(users)}
-                value={getTestSetField('user')}
+                value={getTestSetField('assignee')}
               />
             </SelectsWrapper>
           </InputsWrapper>

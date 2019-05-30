@@ -3,8 +3,9 @@ import * as admin from 'firebase-admin';
 import * as express from 'express';
 import sendMail from './send-mail';
 import * as welcomeMail from './mails/welcome';
-import platforms from './platforms';
-import components from './components';
+import platforms from './initial-data/platforms';
+import components from './initial-data/components';
+import { getDisplayName, getPhotoUrl } from './selectors';
 
 const cors = require('cors');
 const uuidv1 = require('uuid/v1');
@@ -35,7 +36,7 @@ app.use(restrictedMiddleware);
 // app.get('/:id', (req, res) => res.send(Widgets.getById(req.params.id)));
 app.post('/', async (request: express.Request, response: express.Response) => {
   const name = request.param('name').trim();
-  const email = request.param('email');
+  // const email = request.param('email');
 
   const id = name.toLocaleLowerCase();
   let uid;
@@ -51,6 +52,8 @@ app.post('/', async (request: express.Request, response: express.Response) => {
     });
     return;
   }
+
+  const user = await admin.auth().getUser(uid);
 
   if (
     (await firestore
@@ -71,38 +74,6 @@ app.post('/', async (request: express.Request, response: express.Response) => {
         platforms,
         components,
       });
-
-    // const collectionDoc = firestore
-    //   .collection('workspaces')
-    //   .doc(id)
-    //   .collection('components')
-    //   .doc();
-
-    // await collectionDoc.create({
-    //   label: 'My First Component',
-    //   name: 'my-first-component',
-    // });
-
-    // await collectionDoc
-    //   .collection('areas')
-    //   .doc()
-    //   .create({
-    //     label: 'My First Area',
-    //     name: 'my-first-area',
-    //   });
-
-    // const platformsCollection = firestore
-    //   .collection('workspaces')
-    //   .doc(id)
-    //   .collection('platforms');
-
-    // await platformsCollection
-    //   .doc()
-    //   .create({ id: '1', name: 'iPhone (Safari)' });
-
-    // await platformsCollection
-    //   .doc()
-    //   .create({ id: '1', name: 'Android (Chrome)' });
 
     await firestore
       .collection('workspaces')
@@ -131,11 +102,13 @@ app.post('/', async (request: express.Request, response: express.Response) => {
       .collection('workspaces')
       .doc(id)
       .collection('users')
-      .doc()
+      .doc(uid)
       .create({
         role: 'admin',
-        email,
+        email: user.email,
         uid,
+        displayName: getDisplayName(user),
+        photoUrl: getPhotoUrl(user),
       });
 
     await firestore
@@ -158,7 +131,7 @@ app.post('/', async (request: express.Request, response: express.Response) => {
     //   });
 
     await sendMail({
-      to: email,
+      to: user.email!,
       from: 'eldad@testkit.dev',
       ...welcomeMail,
     });

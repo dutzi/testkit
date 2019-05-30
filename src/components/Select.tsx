@@ -1,10 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import MaterialSelect from '@material-ui/core/Select';
-import { firestore } from '../firebase';
+import NativeSelect from '@material-ui/core/NativeSelect';
 
 export function mapData(data: any[]) {
   return data.map(item => ({ name: item.label, id: item.name }));
@@ -28,7 +25,7 @@ const Select = ({
   return (
     <FormControl fullWidth>
       <InputLabel htmlFor={name}>{title}</InputLabel>
-      <MaterialSelect
+      <NativeSelect
         value={value}
         onChange={onChange}
         inputProps={{
@@ -37,16 +34,16 @@ const Select = ({
         }}
       >
         {allowNone && (
-          <MenuItem key="-1" value="-1">
+          <option key="-1" value="-1">
             None
-          </MenuItem>
+          </option>
         )}
         {data.map(item => (
-          <MenuItem key={item.id} value={item.id}>
+          <option key={item.id} value={item.id}>
             {item.name}
-          </MenuItem>
+          </option>
         ))}
-      </MaterialSelect>
+      </NativeSelect>
     </FormControl>
   );
 };

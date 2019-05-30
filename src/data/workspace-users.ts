@@ -1,7 +1,7 @@
 import { firestore } from '../firebase';
 import { WorkspaceUser } from '../types';
 
-export function getWorkspaceUsers(workspace) {
+export function getWorkspaceUsers(workspace: string) {
   return firestore
     .collection(`workspaces/${workspace}/users`)
     .get()

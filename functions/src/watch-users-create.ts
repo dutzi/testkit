@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import { getDisplayName, getPhotoUrl } from './selectors';
 const firestore = admin.firestore();
 
 export default functions.auth.user().onCreate(async user => {
@@ -34,9 +35,11 @@ export default functions.auth.user().onCreate(async user => {
         await firestore
           .doc(`workspaces/${workspace}/users/${user.uid}`)
           .create({
-            displayName: user.displayName,
-            photoUrl: user.photoURL,
+            displayName: getDisplayName(user),
+            photoUrl: getPhotoUrl(user),
             role: workspaceUserData.data()!.role,
+            email: user.email,
+            uid: user.uid,
           });
 
         await firestore

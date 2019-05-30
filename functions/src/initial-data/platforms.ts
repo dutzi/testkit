@@ -4,7 +4,7 @@ export default [
     label: 'iPhone (Safari)',
   },
   {
-    name: 'iphoneSafari',
+    name: 'iphoneChrome',
     label: 'iPhone (Chrome)',
   },
   {

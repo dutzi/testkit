@@ -6,10 +6,14 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import EditIcon from '@material-ui/icons/Edit';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { MarginH } from '../styles';
+import { MarginH, Toolbar } from '../styles';
 import ProfilePicture from '../components/ProfilePicture';
 import { GlobalUserContext } from './ContextProviders';
 import media from '../media-queries';
+import { useWorkspaceUsers } from '../hooks/workspace-users';
+import { useCurrentUser } from '../hooks/current-user';
+import { WorkspaceUser } from '../types';
+import MenuButton from '../components/MenuButton';
 
 const Wrapper = styled.div`
   max-width: 60%;
@@ -25,73 +29,69 @@ const Padding = styled.div`
   padding: 24px;
 `;
 
-const Profile = () => {
-  const { user, initialising } = useAuthState(auth);
-  const [displayName, setDisplayName] = useState('');
-  const [profilePictureUrl, setProfilePictureUrl] = useState('');
-  const globalUser = useContext(GlobalUserContext);
-
-  useEffect(() => {
-    if (user) {
-      if (user.displayName) {
-        setDisplayName(user.displayName);
-      }
-      if (user.photoURL) {
-        setProfilePictureUrl(user.photoURL);
-      }
-    }
-  }, [initialising]);
+const Profile = ({ currentUser }: { currentUser: WorkspaceUser }) => {
+  const [displayName, setDisplayName] = useState(currentUser.displayName);
+  const [profilePictureUrl, setProfilePictureUrl] = useState(
+    currentUser.photoUrl,
+  );
+  const [, updateUser] = useWorkspaceUsers();
 
   function handleLogout() {
     auth.signOut();
   }
 
   function handleDisplayNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-    if (user) {
-      const displayName = e.currentTarget.value;
-      user.updateProfile({
-        displayName,
-      });
-      setDisplayName(displayName);
-    }
+    const displayName = e.currentTarget.value;
+
+    updateUser(currentUser.uid, {
+      displayName,
+    });
+    setDisplayName(displayName);
   }
 
   function handleProfilePictureChange(url: string) {
-    if (user) {
-      user.updateProfile({
-        photoURL: url,
-      });
-      firestore
-        .doc(`workspaces/${globalUser.workspace}/users/${user.uid}`)
-        .update({
-          photoUrl: url,
-        });
+    updateUser(currentUser.uid, {
+      photoUrl: url,
+    });
 
-      setProfilePictureUrl(url);
-    }
+    setProfilePictureUrl(url);
   }
 
   return (
-    <Wrapper>
-      <Paper>
-        <Padding>
-          <ProfilePicture
-            src={profilePictureUrl}
-            onChange={handleProfilePictureChange}
-          />
-          <TextField
-            label="Display Name"
-            value={displayName}
-            onChange={handleDisplayNameChange}
-          />
-        </Padding>
-      </Paper>
-      <MarginH />
-      <Button variant="outlined" color="default" onClick={handleLogout}>
-        Log out
-      </Button>
-    </Wrapper>
+    <React.Fragment>
+      <Toolbar>
+        <MenuButton />
+      </Toolbar>
+      <Wrapper>
+        <Paper>
+          <Padding>
+            <ProfilePicture
+              src={profilePictureUrl}
+              onChange={handleProfilePictureChange}
+            />
+            <TextField
+              label="Display Name"
+              value={displayName}
+              onChange={handleDisplayNameChange}
+            />
+          </Padding>
+        </Paper>
+        <MarginH />
+        <Button variant="outlined" color="default" onClick={handleLogout}>
+          Log out
+        </Button>
+      </Wrapper>
+    </React.Fragment>
   );
 };
 
-export default Profile;
+const CurrentUserGuard = props => {
+  const currentUser = useCurrentUser();
+  if (!currentUser) {
+    return null;
+  }
+
+  return <Profile {...props} currentUser={currentUser} />;
+};
+
+export default CurrentUserGuard;

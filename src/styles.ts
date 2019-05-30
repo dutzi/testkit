@@ -48,3 +48,9 @@ export const TableLink = styled.a`
     }
   }
 `;
+
+export const Toolbar = styled.div`
+  display: flex;
+  background-color: var(--background-blue);
+  padding: 10px;
+`;

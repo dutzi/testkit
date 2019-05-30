@@ -8,7 +8,7 @@ export function createTestSet(): TestSet {
     lastRun: null,
     status: {},
     tests: [],
-    user: '',
+    assignee: '',
     platform: '',
   };
 }

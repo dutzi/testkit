@@ -25,6 +25,7 @@ const Error = styled.div`
 type Mode = 'signup' | 'signin';
 
 const SignupModal = ({ onClose }: { onClose: () => void }) => {
+  // const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -63,16 +64,24 @@ const SignupModal = ({ onClose }: { onClose: () => void }) => {
     }
   }
 
+  // function handleDisplayNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+  //   setDisplayName(e.currentTarget.value);
+  //   resetErrorMessage();
+  // }
+
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.currentTarget.value);
     resetErrorMessage();
   }
+
   function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPassword(e.currentTarget.value);
     resetErrorMessage();
   }
 
   const title = mode === 'signup' ? 'Signup' : 'Login';
+  const isDisabled =
+    /*!displayName.trim() ||*/ !password.trim() || !email.trim();
 
   return (
     <Wrapper>
@@ -102,9 +111,19 @@ const SignupModal = ({ onClose }: { onClose: () => void }) => {
                 </Link>
               </DialogContentText>
             )}
+            {/* <TextField
+              value={displayName}
+              autoFocus
+              margin="dense"
+              id="displayName"
+              label="Display Name"
+              type="text"
+              fullWidth
+              onChange={handleDisplayNameChange}
+              onSubmit={handleSubmit}
+            /> */}
             <TextField
               value={email}
-              autoFocus
               margin="dense"
               id="email"
               label="Email Address"
@@ -130,7 +149,11 @@ const SignupModal = ({ onClose }: { onClose: () => void }) => {
             <Button onClick={onClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleSubmit} color="primary">
+            <Button
+              disabled={isDisabled}
+              onClick={handleSubmit}
+              color="primary"
+            >
               {title}
             </Button>
           </DialogActions>

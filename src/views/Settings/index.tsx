@@ -8,6 +8,8 @@ import { WorkspaceContext } from '../ContextProviders';
 import Import from './Import';
 import Users from './Users';
 import media from '../../media-queries';
+import { Toolbar } from '../../styles';
+import MenuButton from '../../components/MenuButton';
 
 const Wrapper = styled.div`
   max-width: 60%;
@@ -23,14 +25,19 @@ const Settings = () => {
   const workspace = useContext(WorkspaceContext);
 
   return (
-    <Wrapper>
-      <Typography variant="h4">{workspace!.name}</Typography>
-      <MarginH />
-      <Users />
-      <MarginH />
-      <Import />
-      <MarginH />
-    </Wrapper>
+    <React.Fragment>
+      <Toolbar>
+        <MenuButton />
+      </Toolbar>
+      <Wrapper>
+        <Typography variant="h4">{workspace!.name}</Typography>
+        <MarginH />
+        <Users />
+        <MarginH />
+        <Import />
+        <MarginH />
+      </Wrapper>
+    </React.Fragment>
   );
 };
 

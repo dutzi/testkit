@@ -18,6 +18,7 @@ import {
   TestSetsCollectionContext,
 } from './ContextProviders';
 import { navigateTo } from '../utils';
+import MenuButton from '../components/MenuButton';
 
 const Wrapper = styled.div`
   display: grid;
@@ -198,6 +199,7 @@ const TestsView = ({
   return (
     <Wrapper>
       <Toolbar>
+        <MenuButton />
         <Button variant="contained" color="primary">
           New Test Set
         </Button>

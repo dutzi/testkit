@@ -5,9 +5,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
 import StepsProp from '../components/StepsProp';
 import { getDocById, updateTest } from '../data-utils';
 import _ from 'lodash';
@@ -195,7 +194,7 @@ function ScrollDialog({
               <SelectsWrapper>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="component">Component</InputLabel>
-                  <Select
+                  <NativeSelect
                     value={testData.component}
                     onChange={handleComponentChange}
                     inputProps={{
@@ -204,16 +203,16 @@ function ScrollDialog({
                     }}
                   >
                     {getComponents().map(component => (
-                      <MenuItem key={component.name} value={component.name}>
+                      <option key={component.name} value={component.name}>
                         {component.label}
-                      </MenuItem>
+                      </option>
                     ))}
-                  </Select>
+                  </NativeSelect>
                 </FormControl>
                 <Margin />
                 <FormControl fullWidth>
                   <InputLabel htmlFor="area">Area</InputLabel>
-                  <Select
+                  <NativeSelect
                     value={testData.area}
                     onChange={handleAreaChange}
                     inputProps={{
@@ -222,11 +221,11 @@ function ScrollDialog({
                     }}
                   >
                     {getAreas().map(area => (
-                      <MenuItem key={area.name} value={area.name}>
+                      <option key={area.name} value={area.name}>
                         {area.label}
-                      </MenuItem>
+                      </option>
                     ))}
-                  </Select>
+                  </NativeSelect>
                 </FormControl>
               </SelectsWrapper>
             </Row>

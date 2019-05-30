@@ -11,6 +11,8 @@ import { testsTableColumns } from '../data/table-columns';
 import TestsTableRow from '../components/TestsTableRow';
 import { GlobalUserContext, TestsCollectionContext } from './ContextProviders';
 import { navigateTo } from '../utils';
+import { Toolbar } from '../styles';
+import MenuButton from '../components/MenuButton';
 
 const Wrapper = styled.div``;
 
@@ -71,19 +73,9 @@ const ArchivedTestsView = ({
 
   return (
     <Wrapper>
-      {/* <Toolbar>
-        <Button onClick={handleCreateTest} variant="contained" color="primary">
-          New Test
-        </Button>
-        <Margin />
-        <Button
-          onClick={handleCreateTestSet}
-          variant="contained"
-          color="default"
-        >
-          Create Test Set
-        </Button>
-      </Toolbar> */}
+      <Toolbar>
+        <MenuButton />
+      </Toolbar>
       <Table
         selected={selected}
         setSelected={setSelected}

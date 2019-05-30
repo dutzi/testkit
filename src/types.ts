@@ -19,6 +19,8 @@ export interface WorkspaceUser {
   uid: string;
   role: string;
   email: string;
+  displayName: string;
+  photoUrl: string;
 }
 
 export interface Platform {
@@ -61,6 +63,6 @@ export interface TestSet {
     [testId: string]: TestStatus;
   };
   tests: string[];
-  user: string;
+  assignee: string;
   platform: string;
 }

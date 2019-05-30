@@ -16,6 +16,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PersonIcon from '@material-ui/icons/Person';
+import AdSense from 'react-adsense';
 import { withRouter } from 'react-router';
 import { navigateTo } from '../utils';
 import { MarginV } from '../styles';
@@ -27,6 +28,8 @@ const Wrapper = styled.div`
   transition: all 0.2s ease-out;
   transform: ${(p: { show: boolean }) =>
     p.show ? 'none' : 'translateX(-100vw)'};
+  display: flex;
+  flex-direction: column;
 `;
 
 const Backdrop = styled.div`
@@ -39,6 +42,12 @@ const Backdrop = styled.div`
 
 const Image = styled.img`
   width: 25px;
+`;
+
+const DesktopOnly = styled.div`
+  ${media.mobile`
+    display: none;
+  `}
 `;
 
 const styles = theme => ({
@@ -82,6 +91,9 @@ const styles = theme => ({
   },
   divider: {
     marginTop: theme.spacing(2),
+  },
+  root: {
+    flex: 1,
   },
 });
 
@@ -157,7 +169,7 @@ const Navigator = ({
   return (
     <Wrapper show={showSidebar || !isMobile}>
       {isMobile && <Backdrop onClick={handleClose} />}
-      <Drawer variant="permanent">
+      <Drawer variant="permanent" className={clsx(classes.root)}>
         <List disablePadding style={{ width: '256px' }}>
           <ListItem
             className={clsx(
@@ -220,6 +232,14 @@ const Navigator = ({
           ))}
         </List>
       </Drawer>
+      <DesktopOnly>
+        <AdSense.Google
+          client="ca-pub-1444313493745778"
+          slot="7806394673"
+          style={{ width: 250, height: 250, float: 'left' }}
+          format=""
+        />
+      </DesktopOnly>
     </Wrapper>
   );
 };
