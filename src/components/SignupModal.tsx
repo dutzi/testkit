@@ -25,7 +25,6 @@ const Error = styled.div`
 type Mode = 'signup' | 'signin';
 
 const SignupModal = ({ onClose }: { onClose: () => void }) => {
-  // const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -63,11 +62,6 @@ const SignupModal = ({ onClose }: { onClose: () => void }) => {
       }
     }
   }
-
-  // function handleDisplayNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-  //   setDisplayName(e.currentTarget.value);
-  //   resetErrorMessage();
-  // }
 
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.currentTarget.value);
@@ -111,17 +105,6 @@ const SignupModal = ({ onClose }: { onClose: () => void }) => {
                 </Link>
               </DialogContentText>
             )}
-            {/* <TextField
-              value={displayName}
-              autoFocus
-              margin="dense"
-              id="displayName"
-              label="Display Name"
-              type="text"
-              fullWidth
-              onChange={handleDisplayNameChange}
-              onSubmit={handleSubmit}
-            /> */}
             <TextField
               value={email}
               margin="dense"

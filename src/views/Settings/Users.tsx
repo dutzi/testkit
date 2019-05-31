@@ -140,7 +140,6 @@ const Import = () => {
   }
 
   function renderRole(user: User) {
-    console.log(auth.currentUser!.uid);
     if (isCurrentUserAdmin() && !isCurrentUser(user)) {
       return (
         <NativeSelect

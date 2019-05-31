@@ -149,7 +149,7 @@ const TestsView = ({
     }
   }
 
-  function handleNextTest(e: React.MouseEvent) {
+  function handleNextTest(e: React.MouseEvent | null) {
     const testSet = getCurrentTestSet(testSetsCollection);
     if (testSet) {
       const testIndex = getTestIndex();

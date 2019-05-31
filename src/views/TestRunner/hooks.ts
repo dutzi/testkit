@@ -62,9 +62,7 @@ export function useTestRunner(testSetId: string, testId: string) {
     step: IStep,
     status: Partial<StepStatusWithMessage>,
   ) {
-    if (testSetDoc && testSetsCollection && testsCollection) {
-      const testSet = testSetDoc.data() as TestSet;
-
+    if (testSet && testSetDoc && testSetsCollection && testsCollection) {
       const nextState = produce(testSet, draftState => {
         draftState.status[testId] = draftState.status[testId] || {};
         draftState.status[testId][step.id] = {
@@ -79,6 +77,7 @@ export function useTestRunner(testSetId: string, testId: string) {
         nextState,
         testSetsCollection,
       );
+      setTestSet(nextState);
 
       const overallTestStatus = getOverallTestStatus(nextState.status[testId]);
 

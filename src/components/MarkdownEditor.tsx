@@ -69,6 +69,7 @@ const MarkdownEditor = ({
   placeholder,
   showBorder = true,
   onKeyDown,
+  onSubmit,
 }: {
   initialValue: string;
   minHeight: string;
@@ -76,6 +77,7 @@ const MarkdownEditor = ({
   onChange: (value: string) => void;
   showBorder?: boolean;
   onKeyDown?: (e: React.KeyboardEvent) => void;
+  onSubmit?: () => void;
 }) => {
   const [state, setState] = useState(initialValue);
 

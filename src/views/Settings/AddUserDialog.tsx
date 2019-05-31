@@ -13,6 +13,10 @@ const Error = styled.div`
   color: #f44236;
 `;
 
+const Submit = styled.input`
+  opacity: 0;
+`;
+
 const AddUserDialog = ({
   onSubmit,
   onClose,
@@ -40,33 +44,37 @@ const AddUserDialog = ({
 
   return (
     <Dialog open onClose={onClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Add User</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Enter the user's email, once you hit Submit that person will get an
-          invite link to their email.
-        </DialogContentText>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          label="Email Address"
-          type="email"
-          fullWidth
-          value={email}
-          onChange={handleChange}
-          error={showError}
-        />
-        {showError && <Error>Email already exists</Error>}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} color="primary" disabled={showError}>
-          Add
-        </Button>
-      </DialogActions>
+      <form action="add-user" method="post" onSubmit={handleSubmit}>
+        <DialogTitle id="form-dialog-title">Add User</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Enter the user's email, once you hit Submit that person will get an
+            invite link to their email.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Email Address"
+            type="email"
+            fullWidth
+            value={email}
+            onChange={handleChange}
+            error={showError}
+            onSubmit={handleSubmit}
+          />
+          {showError && <Error>Email already exists</Error>}
+        </DialogContent>
+        <DialogActions>
+          <Submit tabIndex={-1} type="submit" onClick={handleSubmit} />
+          <Button onClick={onClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} color="primary" disabled={showError}>
+            Add
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

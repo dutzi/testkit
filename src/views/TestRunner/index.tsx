@@ -120,8 +120,8 @@ const TestRunner = ({
 }: {
   testSetId: string;
   testId: string;
-  onNext: (e: React.MouseEvent) => void;
-  onPrev: (e: React.MouseEvent) => void;
+  onNext: (e: React.MouseEvent | null) => void;
+  onPrev: (e: React.MouseEvent | null) => void;
   testIndex: number;
   numTests: number;
 }) => {
@@ -149,6 +149,10 @@ const TestRunner = ({
     updateStepStatus(step, {
       message: value,
     });
+  }
+
+  function handleSubmit() {
+    onNext(null);
   }
 
   function renderActions() {
@@ -216,6 +220,7 @@ const TestRunner = ({
                       `status[${testId}][${step.id}].message`,
                       '',
                     )}
+                    onSubmit={handleSubmit}
                   />
                 </TestStatusMessage>
               </React.Fragment>
