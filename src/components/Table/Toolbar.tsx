@@ -55,6 +55,10 @@ const EnhancedTableToolbar = ({
   // onDuplicate: () => void;
   // onArchive: () => void;
 }) => {
+  function handleToggleFilter() {
+    onAction('toggle-filter');
+  }
+
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -96,7 +100,7 @@ const EnhancedTableToolbar = ({
             </Tooltip>
           ))}
         <Tooltip title="Filter list">
-          <IconButton aria-label="Filter list">
+          <IconButton onClick={handleToggleFilter} aria-label="Filter list">
             <FilterListIcon />
           </IconButton>
         </Tooltip>

@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -18,7 +19,19 @@ type EnhancedTableHeadProps = {
   rowCount: number;
   classes: any;
   columns: Column[];
+  showFilters: boolean;
+  onFilterChange: (value: string, column: Column) => void;
 };
+
+const FilterInput = styled.input`
+  width: calc(100% - 40px);
+  padding: 7px;
+  box-shadow: 0px 2px 7px #00000014 inset;
+  margin: 10px;
+  border: 1px solid #b7b7b7;
+  font-family: inherit;
+  font-size: 13px;
+`;
 
 const tableHeadStyles = theme => ({
   root: {
@@ -37,6 +50,13 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
     this.props.onRequestSort(event, property);
   };
 
+  handleFilterChange = (
+    column: Column,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    this.props.onFilterChange(e.target.value, column);
+  };
+
   render() {
     const {
       onSelectAllClick,
@@ -46,6 +66,7 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
       rowCount,
       classes,
       columns,
+      showFilters,
     } = this.props;
 
     return (
@@ -88,6 +109,31 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
             this,
           )}
         </TableRow>
+        {showFilters && (
+          <TableRow>
+            <TableCell padding="checkbox" />
+            {columns.map(
+              column => (
+                <TableCell
+                  className={classNames({
+                    [classes.wide]: column.large,
+                    [classes.narrow]: column.small,
+                  })}
+                  key={column.id}
+                  align={column.numeric ? 'right' : 'left'}
+                  padding="none"
+                  sortDirection={orderBy === column.id ? order : false}
+                >
+                  <FilterInput
+                    type="text"
+                    onChange={this.handleFilterChange.bind(null, column)}
+                  />
+                </TableCell>
+              ),
+              this,
+            )}
+          </TableRow>
+        )}
       </TableHead>
     );
   }

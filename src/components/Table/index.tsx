@@ -88,6 +88,10 @@ type EnhancedTableState = {
   orderBy: string;
   page: number;
   rowsPerPage: number;
+  showFilters: boolean;
+  filters: {
+    [columnId: string]: string;
+  };
 };
 
 class EnhancedTable extends React.Component<
@@ -102,6 +106,8 @@ class EnhancedTable extends React.Component<
       orderBy: 'id',
       page: 0,
       rowsPerPage: 20,
+      showFilters: false,
+      filters: {},
     };
   }
 
@@ -160,7 +166,11 @@ class EnhancedTable extends React.Component<
   };
 
   handleAction = (action: string) => {
-    this.props.onAction(action, this.props.selected);
+    if (action === 'toggle-filter') {
+      this.setState({ showFilters: !this.state.showFilters, filters: {} });
+    } else {
+      this.props.onAction(action, this.props.selected);
+    }
   };
 
   handleScroll = e => {
@@ -171,6 +181,26 @@ class EnhancedTable extends React.Component<
       head.style.transform = `translateY(${e.target.scrollTop}px)`;
       // console.log(e.target.scrollTop);
     }
+  };
+
+  handleFilterChange = (value: string, column: Column) => {
+    this.setState({
+      page: 0,
+      filters: {
+        ...this.state.filters,
+        [column.id]: value,
+      },
+    });
+  };
+
+  filterRow = row => {
+    const { filters } = this.state;
+    const hasMismatch = Object.keys(filters).find((columnId: string) => {
+      return !row[columnId]
+        .toLowerCase()
+        .match(new RegExp(filters[columnId].toLowerCase().replace(/ /g, '.*')));
+    });
+    return !hasMismatch;
   };
 
   isSelected = id => this.props.selected.indexOf(id) !== -1;
@@ -184,9 +214,22 @@ class EnhancedTable extends React.Component<
       rowRenderer,
       topPadding,
     } = this.props;
-    const { order, orderBy, rowsPerPage, page } = this.state;
+
+    const {
+      order,
+      orderBy,
+      rowsPerPage,
+      page,
+      showFilters,
+      filters,
+    } = this.state;
+
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+
+    const filteredData = stableSort(data, getSorting(order, orderBy)).filter(
+      this.filterRow,
+    );
 
     return (
       <Wrapper>
@@ -203,7 +246,7 @@ class EnhancedTable extends React.Component<
           >
             <Table className={classes.table} aria-labelledby="tableTitle">
               <TableBody>
-                {stableSort(data, getSorting(order, orderBy))
+                {filteredData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(n => {
                     const isSelected = this.isSelected(n.id);
@@ -229,14 +272,16 @@ class EnhancedTable extends React.Component<
                 orderBy={orderBy}
                 onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
-                rowCount={data.length}
+                rowCount={filteredData.length}
+                showFilters={showFilters}
+                onFilterChange={this.handleFilterChange}
               />
             </Table>
           </div>
           <TablePagination
             rowsPerPageOptions={[20, 50, 100]}
             component="div"
-            count={data.length}
+            count={filteredData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             backIconButtonProps={{
