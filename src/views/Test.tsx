@@ -8,7 +8,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import StepsProp from '../components/StepsProp';
-import { getDocById, updateTest } from '../data-utils';
+import { updateTest } from '../clients/test';
+import { getDocById } from '../clients/utils';
 import _ from 'lodash';
 import { Step, Test } from '../types';
 import {
@@ -34,7 +35,7 @@ const Metadata = styled.div`
   max-width: 600px;
 `;
 
-const updateTestImpl = _.debounce(updateTest, 1000);
+const updateTestBED = _.debounce(updateTest, 1000);
 
 function ScrollDialog({
   onClose,
@@ -87,7 +88,7 @@ function ScrollDialog({
   }
 
   function updateTest(data: any) {
-    updateTestImpl(testId, globalUser.workspace, data, collection!);
+    updateTestBED(testId, globalUser.workspace, data, collection!);
     setTestData({
       ...testData,
       ...data,

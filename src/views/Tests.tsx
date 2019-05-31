@@ -7,12 +7,10 @@ import Table from '../components/Table';
 import TestView from './Test';
 import Button from '@material-ui/core/Button';
 import { firestore } from '../firebase';
-import {
-  getDocById,
-  updateTest,
-  getCollectionData,
-  getNextId,
-} from '../data-utils';
+import { updateTest } from '../clients/test';
+import { getNextId } from '../clients/utils';
+import { getCollectionData } from '../clients/utils';
+import { getDocById } from '../clients/utils';
 import { Test } from '../types';
 import { createTest } from '../model/test';
 import { testsTableColumns } from '../data/table-columns';

@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { firestore } from '../firebase';
-import { getDocById, updateTest } from '../data-utils';
+import { updateTest } from '../clients/test';
+import { getDocById } from '../clients/utils';
 import produce from 'immer';
 import { Test, Step as IStep, TestSet, TestStatus, StepStatus } from '../types';
 import { markdownOverrides, MarginV, MarginH } from '../styles';

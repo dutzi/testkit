@@ -27,7 +27,7 @@ const MarkdownViewer = ({
   }
 
   source = source
-    .replace(/(\#(\d+))\b/g, '<a href="/test/$2">$1</a>')
+    .replace(/(#(\d+))\b/g, '<a href="/test/$2">$1</a>')
     .replace(/\n/g, '\n\n');
 
   return (

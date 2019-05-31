@@ -17,7 +17,7 @@ import {
 } from 'react-firebase-hooks/firestore';
 import { GlobalUserContext } from '../ContextProviders';
 import AddUserDialog from './AddUserDialog';
-import { getDocById } from '../../data-utils';
+import { getDocById } from '../../clients/utils';
 import { WorkspaceUser } from '../../types';
 import { useWorkspaceUsers } from '../../hooks/workspace-users';
 

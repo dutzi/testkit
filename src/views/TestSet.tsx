@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import { firestore } from '../firebase';
 import { withRouter } from 'react-router';
-import { getCollectionData, getDocById, getNextId } from '../data-utils';
+import { updateTestSet } from '../clients/test-set';
+import { getDocById, getCollectionData, getNextId } from '../clients/utils';
 import { TestSet as ITestSet, Test, TestStatus, WorkspaceUser } from '../types';
 import TestPreview from '../components/TestPreview';
 import Typography from '@material-ui/core/Typography';
@@ -20,6 +21,7 @@ import {
   WorkspaceContext,
 } from './ContextProviders';
 import { useUsers } from '../hooks';
+import _ from 'lodash';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -55,30 +57,25 @@ function mapUsers(users: WorkspaceUser[]) {
   return users.map(user => ({ name: user.displayName, id: user.uid }));
 }
 
-const TestSet = ({
-  id,
-  onRun,
-  history,
-  location,
-  match,
-}: {
-  id: string;
-  onRun: (e: React.MouseEvent) => void;
-  history: any;
-  location: any;
-  match: any;
-}) => {
-  const globalUser = useContext(GlobalUserContext);
-  const workspace = useContext(WorkspaceContext)!;
-  const users = useUsers();
+const updateTestSetDebounced = _.debounce(updateTestSet, 1000);
 
+function useTestSet(
+  id: string,
+): [
+  ITestSet | undefined,
+  (data: Partial<ITestSet>) => void,
+  () => Promise<number>,
+  boolean,
+  { test: Test; status: TestStatus }[]
+] {
+  const globalUser = useContext(GlobalUserContext);
   const [createdTestSet, setCreatedTestSet] = useState<ITestSet>(
     createTestSet(),
   );
   const testsCollection = useContext(TestsCollectionContext);
   const testSetsCollection = useContext(TestSetsCollectionContext);
 
-  let isCreating = id === 'create';
+  const isCreating = id === 'create';
 
   useEffect(() => {
     if (isCreating) {
@@ -90,23 +87,6 @@ const TestSet = ({
     }
   }, []);
 
-  if (!testSetsCollection || !testsCollection) {
-    return null;
-  }
-
-  const testSets: ITestSet[] = getCollectionData(testSetsCollection);
-  const tests: Test[] = getCollectionData(testsCollection);
-
-  let testSet: ITestSet | undefined;
-
-  if (!isCreating) {
-    testSet = testSets.find(testSet => testSet.id === id);
-  }
-
-  if ((!testSet && !createdTestSet) || !tests) {
-    return null;
-  }
-
   function updateTestSet(data: Partial<ITestSet>) {
     if (isCreating) {
       setCreatedTestSet({
@@ -114,27 +94,32 @@ const TestSet = ({
         ...(data as ITestSet),
       });
     } else {
-      const testSet = getDocById(id, testSetsCollection!.docs);
-      if (testSet) {
-        var testSetRef = firestore
-          .collection(`workspaces/${globalUser.workspace}/test-sets`)
-          .doc(testSet.id);
-        if (testSetRef) {
-          testSetRef.update({ modified: new Date(), ...data });
-        }
-      }
+      updateTestSetDebounced(
+        id,
+        globalUser.workspace,
+        data,
+        testSetsCollection,
+      );
     }
   }
 
-  function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-    updateTestSet({
-      name: e.currentTarget.value,
+  function onSave() {
+    return new Promise<number>(resolve => {
+      if (testSetsCollection) {
+        const nextId = getNextId(testSetsCollection);
+
+        firestore
+          .collection(`workspaces/${globalUser.workspace}/test-sets`)
+          .add({
+            ...createdTestSet,
+            id: String(nextId),
+          })
+          .then(() => resolve(nextId));
+      }
     });
   }
 
-  function getTests() {
-    testSet = isCreating ? createdTestSet : testSet;
-
+  function getTests(testSet: ITestSet | undefined) {
     if (testSet) {
       return testSet.tests
         .filter(testId => {
@@ -152,6 +137,58 @@ const TestSet = ({
     }
   }
 
+  if (isCreating) {
+    return [
+      createdTestSet,
+      updateTestSet,
+      onSave,
+      isCreating,
+      getTests(createdTestSet),
+    ];
+  } else {
+    const testSets: ITestSet[] = getCollectionData(testSetsCollection);
+
+    const testSet = testSets.find(testSet => testSet.id === id);
+
+    return [testSet, updateTestSet, onSave, isCreating, getTests(testSet)];
+  }
+}
+
+const TestSet = ({
+  id,
+  onRun,
+  history,
+  location,
+  match,
+}: {
+  id: string;
+  onRun: (e: React.MouseEvent) => void;
+  history: any;
+  location: any;
+  match: any;
+}) => {
+  // const [testSetData, setTestSetData] = useState<Test | null>(null);
+  const [
+    testSet,
+    updateTestSet,
+    onSave,
+    isCreating,
+    testsInTestSet,
+  ] = useTestSet(id);
+
+  const workspace = useContext(WorkspaceContext)!;
+  const users = useUsers();
+
+  if (!testSet) {
+    return null;
+  }
+
+  function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    updateTestSet({
+      name: e.currentTarget.value,
+    });
+  }
+
   function handlePlatformChange(e: any) {
     updateTestSet({
       platform: e.target.value,
@@ -164,31 +201,17 @@ const TestSet = ({
     });
   }
 
-  function onSave() {
-    if (testSetsCollection) {
-      const nextId = getNextId(testSetsCollection!);
-
-      firestore
-        .collection(`workspaces/${globalUser.workspace}/test-sets`)
-        .add({
-          ...createdTestSet,
-          id: String(nextId),
-        })
-        .then(() => {
-          history.push(`/test-sets/${nextId}`);
-        });
-    }
+  function handleSave() {
+    onSave().then(nextId => {
+      history.push(`/test-sets/${nextId}`);
+    });
   }
 
   function getTestSetField(fieldName: keyof ITestSet) {
-    if (isCreating) {
-      return createdTestSet[fieldName];
+    if (testSet) {
+      return testSet[fieldName];
     } else {
-      if (testSet) {
-        return testSet[fieldName];
-      } else {
-        return '';
-      }
+      return '';
     }
   }
 
@@ -201,7 +224,7 @@ const TestSet = ({
     if (isCreating) {
       return (
         <React.Fragment>
-          <Button variant="contained" color="primary" onClick={onSave}>
+          <Button variant="contained" color="primary" onClick={handleSave}>
             <MarginV margin="-6px" />
             <PublishIcon />
             <MarginV margin="6px" />
@@ -226,8 +249,6 @@ const TestSet = ({
       );
     }
   }
-
-  const testsInTestSet = getTests();
 
   return (
     <Wrapper>
