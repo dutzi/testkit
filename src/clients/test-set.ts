@@ -19,9 +19,9 @@ export function updateTestSet(
   id: string,
   workspace: string,
   data: object,
-  collection: firebase.firestore.QuerySnapshot,
+  testSetCollection: firebase.firestore.QuerySnapshot,
 ) {
-  const testSet = getDocById(id, collection.docs);
+  const testSet = getDocById(id, testSetCollection.docs);
   if (testSet) {
     var testSetRef = firestore
       .collection(`workspaces/${workspace}/test-sets`)

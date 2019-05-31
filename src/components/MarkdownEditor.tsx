@@ -80,6 +80,10 @@ const MarkdownEditor = ({
   const [state, setState] = useState(initialValue);
 
   useEffect(() => {
+    setState(initialValue);
+  }, [initialValue]);
+
+  useEffect(() => {
     const steps: HTMLTextAreaElement | null = document.querySelector(
       `#steps_${uniqueIdentifier++}`,
     );

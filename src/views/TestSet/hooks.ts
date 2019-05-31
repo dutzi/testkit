@@ -11,7 +11,7 @@ import {
 } from '../ContextProviders';
 import { updateTestSet } from '../../clients/test-set';
 
-const updateTestSetBED = _.debounce(updateTestSet, 1000);
+const debouncedUpdateTestSet = _.debounce(updateTestSet, 1000);
 
 export function useTestSet(
   id: string,
@@ -56,7 +56,12 @@ export function useTestSet(
       });
     } else {
       setTestSet({ ...testSet, ...(data as ITestSet) });
-      updateTestSetBED(id, globalUser.workspace, data, testSetsCollection);
+      debouncedUpdateTestSet(
+        id,
+        globalUser.workspace,
+        data,
+        testSetsCollection,
+      );
     }
   }
 

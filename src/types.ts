@@ -47,10 +47,12 @@ export interface Test {
 }
 
 export interface TestStatus {
-  [testStepId: string]: {
-    message: string;
-    status: StepStatus;
-  };
+  [testStepId: string]: StepStatusWithMessage;
+}
+
+export interface StepStatusWithMessage {
+  message: string;
+  status: StepStatus;
 }
 
 export type StepStatus = 'passed' | 'failed' | 'skipped' | undefined;

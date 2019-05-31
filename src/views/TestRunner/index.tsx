@@ -1,11 +1,17 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { firestore } from '../firebase';
-import { updateTest } from '../clients/test';
-import { getDocById } from '../clients/utils';
+import { firestore } from '../../firebase';
+import { updateTest } from '../../clients/test';
+import { getDocById } from '../../clients/utils';
 import produce from 'immer';
-import { Test, Step as IStep, TestSet, TestStatus, StepStatus } from '../types';
-import { markdownOverrides, MarginV, MarginH } from '../styles';
+import {
+  Test,
+  Step as IStep,
+  TestSet,
+  TestStatus,
+  StepStatus,
+} from '../../types';
+import { markdownOverrides, MarginV, MarginH } from '../../styles';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -13,14 +19,14 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import _ from 'lodash';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import MarkdownEditor from '../components/MarkdownEditor';
+import MarkdownEditor from '../../components/MarkdownEditor';
 import {
   GlobalUserContext,
   TestsCollectionContext,
   TestSetsCollectionContext,
-} from './ContextProviders';
-import Paper from '@material-ui/core/Paper';
-import MarkdownViewer from '../components/MarkdownViewer';
+} from '../ContextProviders';
+import MarkdownViewer from '../../components/MarkdownViewer';
+import { useTestRunner } from './hooks';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -119,18 +125,9 @@ const TestRunner = ({
   testIndex: number;
   numTests: number;
 }) => {
-  const globalUser = useContext(GlobalUserContext);
-  const testsCollection = useContext(TestsCollectionContext);
-  const testSetsCollection = useContext(TestSetsCollectionContext);
+  const { updateStepStatus, test, testSet } = useTestRunner(testSetId, testId);
 
-  if (!testSetsCollection || !testsCollection) {
-    return null;
-  }
-
-  const testSetDoc = getDocById(testSetId, testSetsCollection!.docs);
-  const testDoc = getDocById(testId, testsCollection!.docs);
-
-  if (!testDoc) {
+  if (!test) {
     return (
       <Wrapper>
         <MaxWidth>
@@ -140,66 +137,6 @@ const TestRunner = ({
         </MaxWidth>
       </Wrapper>
     );
-  }
-
-  if (!testSetDoc) {
-    return null;
-  }
-
-  const test: Test = testDoc.data() as Test;
-  const testSet: TestSet = testSetDoc!.data() as TestSet;
-
-  function getOverallTestStatus(test: TestStatus): StepStatus {
-    function hasStepWithStatus(status?: StepStatus) {
-      return Object.keys(test).find(stepId => test[stepId].status === status);
-    }
-
-    if (hasStepWithStatus('failed')) {
-      return 'failed';
-    } else if (hasStepWithStatus('skipped') || hasStepWithStatus()) {
-      return 'skipped';
-    } else {
-      return 'passed';
-    }
-  }
-
-  function updateStepStatus(
-    step: IStep,
-    value: { status?: StepStatus; message?: string },
-  ) {
-    if (testSetDoc) {
-      var testSetRef = firestore
-        .collection(`workspaces/${globalUser.workspace}/test-sets`)
-        .doc(testSetDoc.id);
-      if (testSetRef) {
-        const testSet = testSetDoc.data();
-
-        const nextState = produce(testSet, draftState => {
-          draftState.status[testId] = draftState.status[testId] || {};
-          draftState.status[testId][step.id] = {
-            ...draftState.status[testId][step.id],
-            ...value,
-          };
-        });
-
-        testSetRef.update(nextState);
-
-        const overallTestStatus = getOverallTestStatus(
-          nextState.status[testId],
-        );
-
-        updateTest(
-          testId,
-          globalUser.workspace,
-          {
-            lastRun: new Date(),
-            status: overallTestStatus,
-          },
-          testsCollection!,
-          false,
-        );
-      }
-    }
   }
 
   function handleStatusChange(step: IStep, e: any) {
