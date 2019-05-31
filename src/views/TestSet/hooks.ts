@@ -46,7 +46,7 @@ export function useTestSet(
     const testSets: ITestSet[] = getCollectionData(testSetsCollection);
 
     setTestSet(testSets.find(testSet => testSet.id === id));
-  }, [testSetsCollection]);
+  }, [testSetsCollection, id]);
 
   function updateTestSet(data: Partial<ITestSet>) {
     if (isCreating) {
