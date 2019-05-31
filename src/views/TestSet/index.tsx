@@ -1,27 +1,24 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
-import { firestore } from '../firebase';
 import { withRouter } from 'react-router';
-import { updateTestSet } from '../clients/test-set';
-import { getDocById, getCollectionData, getNextId } from '../clients/utils';
-import { TestSet as ITestSet, Test, TestStatus, WorkspaceUser } from '../types';
-import TestPreview from '../components/TestPreview';
+import {
+  TestSet as ITestSet,
+  Test,
+  TestStatus,
+  WorkspaceUser,
+} from '../../types';
+import TestPreview from '../../components/TestPreview';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PublishIcon from '@material-ui/icons/Publish';
-import Select, { mapData } from '../components/Select';
-import { MarginH, MarginV } from '../styles';
-import { createTestSet } from '../model/test-set';
-import {
-  GlobalUserContext,
-  TestsCollectionContext,
-  TestSetsCollectionContext,
-  WorkspaceContext,
-} from './ContextProviders';
-import { useUsers } from '../hooks';
+import Select, { mapData } from '../../components/Select';
+import { MarginH, MarginV } from '../../styles';
+import { WorkspaceContext } from '../ContextProviders';
+import { useUsers } from '../../hooks';
 import _ from 'lodash';
+import { useTestSet } from './hooks';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -57,117 +54,19 @@ function mapUsers(users: WorkspaceUser[]) {
   return users.map(user => ({ name: user.displayName, id: user.uid }));
 }
 
-const updateTestSetDebounced = _.debounce(updateTestSet, 1000);
-
-function useTestSet(
-  id: string,
-): [
-  ITestSet | undefined,
-  (data: Partial<ITestSet>) => void,
-  () => Promise<number>,
-  boolean,
-  { test: Test; status: TestStatus }[]
-] {
-  const globalUser = useContext(GlobalUserContext);
-  const [createdTestSet, setCreatedTestSet] = useState<ITestSet>(
-    createTestSet(),
-  );
-  const testsCollection = useContext(TestsCollectionContext);
-  const testSetsCollection = useContext(TestSetsCollectionContext);
-
-  const isCreating = id === 'create';
-
-  useEffect(() => {
-    if (isCreating) {
-      var searchParams = new URLSearchParams(window.location.search);
-      setCreatedTestSet({
-        ...createdTestSet,
-        tests: (searchParams.get('tests') || '').split(','),
-      });
-    }
-  }, []);
-
-  function updateTestSet(data: Partial<ITestSet>) {
-    if (isCreating) {
-      setCreatedTestSet({
-        ...createdTestSet,
-        ...(data as ITestSet),
-      });
-    } else {
-      updateTestSetDebounced(
-        id,
-        globalUser.workspace,
-        data,
-        testSetsCollection,
-      );
-    }
-  }
-
-  function onSave() {
-    return new Promise<number>(resolve => {
-      if (testSetsCollection) {
-        const nextId = getNextId(testSetsCollection);
-
-        firestore
-          .collection(`workspaces/${globalUser.workspace}/test-sets`)
-          .add({
-            ...createdTestSet,
-            id: String(nextId),
-          })
-          .then(() => resolve(nextId));
-      }
-    });
-  }
-
-  function getTests(testSet: ITestSet | undefined) {
-    if (testSet) {
-      return testSet.tests
-        .filter(testId => {
-          return !!getDocById(testId, testsCollection!.docs);
-        })
-        .map(testId => {
-          const test = getDocById(testId, testsCollection!.docs);
-          return {
-            test: test!.data() as Test,
-            status: testSet!.status[testId],
-          };
-        });
-    } else {
-      return [];
-    }
-  }
-
-  if (isCreating) {
-    return [
-      createdTestSet,
-      updateTestSet,
-      onSave,
-      isCreating,
-      getTests(createdTestSet),
-    ];
-  } else {
-    const testSets: ITestSet[] = getCollectionData(testSetsCollection);
-
-    const testSet = testSets.find(testSet => testSet.id === id);
-
-    return [testSet, updateTestSet, onSave, isCreating, getTests(testSet)];
-  }
-}
-
 const TestSet = ({
   id,
   onRun,
-  history,
-  location,
   match,
+  location,
+  history,
 }: {
   id: string;
   onRun: (e: React.MouseEvent) => void;
-  history: any;
-  location: any;
   match: any;
+  location: any;
+  history: any;
 }) => {
-  // const [testSetData, setTestSetData] = useState<Test | null>(null);
   const [
     testSet,
     updateTestSet,
