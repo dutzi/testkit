@@ -198,7 +198,7 @@ const Components = () => {
           color="primary"
           onClick={showAddComponentDialog}
         >
-          Create Component
+          Add Component
         </Button>
         <MarginH />
         <Button

@@ -36,10 +36,12 @@ const Wrapper = styled.div`
     outline: none;
     background: #ffffff99 !important;
     padding: 10px !important;
+    word-break: break-word !important;
   }
 
   pre {
     padding: 10px !important;
+    word-break: break-word !important;
   }
 
   pre {

@@ -12,29 +12,26 @@ const Wrapper = styled.div`
   ${markdownOverrides}
 `;
 
-const MarkdownViewer = ({
-  source,
-  label,
-}: {
-  source: string;
-  label: string;
-}) => {
-  let isEmpty;
+const MarkdownViewer = React.memo(
+  ({ source, label }: { source: string; label: string }) => {
+    console.log('here!');
+    let isEmpty;
 
-  if (!source) {
-    isEmpty = true;
-    source = `${label}: (empty)`;
-  }
+    if (!source) {
+      isEmpty = true;
+      source = `${label}: (empty)`;
+    }
 
-  source = source
-    .replace(/(#(\d+))\b/g, '<a href="/test/$2">$1</a>')
-    .replace(/\n/g, '\n\n');
+    source = source
+      .replace(/(#(\d+))\b/g, '<a href="/test/$2">$1</a>')
+      .replace(/\n/g, '\n\n');
 
-  return (
-    <Wrapper isEmpty={isEmpty}>
-      <ReactMarkdown source={source} />
-    </Wrapper>
-  );
-};
+    return (
+      <Wrapper isEmpty={isEmpty}>
+        <ReactMarkdown source={source} />
+      </Wrapper>
+    );
+  },
+);
 
 export default MarkdownViewer;

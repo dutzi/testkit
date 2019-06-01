@@ -124,7 +124,9 @@ class EnhancedTable extends React.Component<
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      this.props.setSelected(this.props.data.map((n: any) => n.id));
+      const filteredData = this.props.data.filter(this.filterRow);
+
+      this.props.setSelected(filteredData.map((n: any) => n.id));
       return;
     }
     this.props.setSelected([]);
