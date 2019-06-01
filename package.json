@@ -57,5 +57,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "firebase-tools": "^6.10.0"
+  }
 }
