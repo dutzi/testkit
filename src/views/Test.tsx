@@ -212,7 +212,7 @@ function ScrollDialog({
                 </FormControl>
                 <Margin />
                 <FormControl fullWidth>
-                  <InputLabel htmlFor="area">Area</InputLabel>
+                  <InputLabel htmlFor="area">Sub Component</InputLabel>
                   <NativeSelect
                     value={testData.area}
                     onChange={handleAreaChange}

@@ -41,7 +41,7 @@ export const testsTableColumns: Column[] = [
     id: 'area',
     numeric: false,
     disablePadding: false,
-    label: 'Area',
+    label: 'Sub&nbsp;Component',
   },
 ];
 

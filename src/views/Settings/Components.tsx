@@ -137,10 +137,10 @@ const Components = () => {
     setDialogState({
       onClose: handleCloseDialog,
       onSubmit: handleSubmitAreaDialog,
-      title: 'Add Area',
-      description: "Enter the area's name.",
+      title: 'Add Sub Component',
+      description: "Enter the sub component's name.",
       buttonLabel: 'Add',
-      inputLabel: 'Area Name',
+      inputLabel: 'Sub Component Name',
     });
   }
 
@@ -158,10 +158,10 @@ const Components = () => {
   return (
     <Paper>
       <Padding>
-        <Typography variant="h5">Components &amp; Areas</Typography>
+        <Typography variant="h5">Components &amp; Sub Component</Typography>
         <MarginH />
         <div>
-          <p>Add or remove components and areas.</p>
+          <p>Add or remove components and sub component.</p>
         </div>
         <MarginH />
         {components &&
@@ -170,7 +170,7 @@ const Components = () => {
               <Label>
                 {component.label}
                 <Toolbar>
-                  <Tooltip title="Add Area">
+                  <Tooltip title="Add Sub Component">
                     <IconButton onClick={handleAddArea.bind(null, component)}>
                       <AddIcon />
                     </IconButton>
@@ -189,7 +189,7 @@ const Components = () => {
                   <Area>
                     {area.label}
                     <Toolbar>
-                      <Tooltip title="Remove Area">
+                      <Tooltip title="Remove Sub Component">
                         <IconButton
                           onClick={handleRemoveArea.bind(null, component, area)}
                         >
