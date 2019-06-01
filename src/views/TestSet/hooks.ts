@@ -40,7 +40,7 @@ export function useTestSet(
         tests: (searchParams.get('tests') || '').split(','),
       });
     }
-  }, []);
+  }, [createdTestSet, isCreating]);
 
   useEffect(() => {
     const testSets: ITestSet[] = getCollectionData(testSetsCollection);

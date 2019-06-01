@@ -65,7 +65,7 @@ function ScrollDialog({
     if (test) {
       setTestData(test.data() as Test);
     }
-  }, [collection]);
+  }, [collection, test]);
 
   if (!testData) {
     return null;

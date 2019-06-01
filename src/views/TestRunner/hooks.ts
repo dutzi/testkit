@@ -49,13 +49,13 @@ export function useTestRunner(testSetId: string, testId: string) {
     const testSets: TestSet[] = getCollectionData(testSetsCollection);
 
     setTestSet(testSets.find(testSet => testSet.id === testSetId));
-  }, [testSetsCollection]);
+  }, [testSetsCollection, testSetId]);
 
   useEffect(() => {
     const tests: Test[] = getCollectionData(testsCollection);
 
     setTest(tests.find(test => test.id === testId));
-  }, [testsCollection]);
+  }, [testsCollection, testId]);
 
   function updateStepStatus(
     step: IStep,

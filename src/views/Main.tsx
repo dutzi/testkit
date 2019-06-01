@@ -40,14 +40,12 @@ const MainView = () => {
   });
   const [initializingWorkspace, setInitializingWorkspace] = useState(true);
 
-  let cancelSnapshotLisener;
-
   useEffect(() => {
     if (!user) {
       return;
     }
 
-    cancelSnapshotLisener = firestore
+    const cancelSnapshotLisener = firestore
       .doc(`users/${user.uid}`)
       .onSnapshot(snapshot => {
         const data = snapshot.data();

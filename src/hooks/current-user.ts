@@ -17,7 +17,7 @@ export function useCurrentUser() {
         setUser(me);
       }
     }
-  }, [users, initialising]);
+  }, [users, initialising, user, authUser]);
 
   return user as WorkspaceUser;
 }
