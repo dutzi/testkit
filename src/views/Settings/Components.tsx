@@ -1,19 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { MarginH } from '../../styles';
-import { auth, firestore } from '../../firebase';
-import DeleteIcon from '@material-ui/icons/Delete';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import {
-  useCollection,
-  useCollectionData,
-} from 'react-firebase-hooks/firestore';
 import { GlobalUserContext, WorkspaceContext } from '../ContextProviders';
-import AddUserDialog from './AddUserDialog';
-import { useWorkspaceUsers } from '../../hooks/workspace-users';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -166,7 +157,7 @@ const Components = () => {
         <MarginH />
         {components &&
           components.map(component => (
-            <Component>
+            <Component key={component.name}>
               <Label>
                 {component.label}
                 <Toolbar>
@@ -186,7 +177,7 @@ const Components = () => {
               </Label>
               <Areas>
                 {component.areas.map(area => (
-                  <Area>
+                  <Area key={area.name}>
                     {area.label}
                     <Toolbar>
                       <Tooltip title="Remove Sub Component">

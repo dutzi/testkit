@@ -125,7 +125,6 @@ function ScrollDialog({
 
   function getAreas(componentName?: string) {
     componentName = componentName || testData!.component;
-    console.log(workspace);
     const component = workspace.components.find(
       component => component.name === componentName,
     );

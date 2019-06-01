@@ -1,9 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import { MarginH } from '../../styles';
-import { firestore } from '../../firebase';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { WorkspaceContext } from '../ContextProviders';
 import Import from './Import';
 import Users from './Users';

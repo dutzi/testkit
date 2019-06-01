@@ -9,7 +9,7 @@ export function useUsers() {
 
   useEffect(() => {
     getWorkspaceUsers(globalUser.workspace).then(setUsers);
-  }, []);
+  }, [globalUser.workspace]);
 
   return users;
 }

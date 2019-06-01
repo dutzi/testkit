@@ -1,13 +1,9 @@
 import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { TestSet, Test, Step, StepStatus } from '../types';
-import { firestore } from '../firebase';
 import _ from 'lodash';
 import { Tooltip } from '@material-ui/core';
-import {
-  GlobalUserContext,
-  TestsCollectionContext,
-} from '../views/ContextProviders';
+import { TestsCollectionContext } from '../views/ContextProviders';
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,7 +38,6 @@ const NoRun = styled.div`
 `;
 
 const TestSetProgressBar = ({ testSet }: { testSet: TestSet }) => {
-  const globalUser = useContext(GlobalUserContext);
   const testsCollection = useContext(TestsCollectionContext);
   const tests = testsCollection!.docs.map(doc => doc.data());
 

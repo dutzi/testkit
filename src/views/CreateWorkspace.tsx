@@ -9,7 +9,7 @@ import { MarginH } from '../styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { createWorkspace } from '../clients/create-workspace';
-import { auth, firestore } from '../firebase';
+import { auth } from '../firebase';
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -117,7 +117,14 @@ const CreateWorkspace = () => {
               fullWidth
               autoFocus
             />
-            {nameIsTaken && <Error>That name is already taken 😞</Error>}
+            {nameIsTaken && (
+              <Error>
+                That name is already taken{' '}
+                <span role="img" aria-label="sad face">
+                  😞
+                </span>
+              </Error>
+            )}
             <MarginH />
             <FlexEnd>
               <Button

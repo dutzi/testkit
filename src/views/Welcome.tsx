@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase';
-import _ from 'lodash';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -43,7 +42,12 @@ const Welcome = () => {
       <MarginH />
       <Paper>
         <Padder>
-          <Typography variant="h6">Welcome to the beta 😃</Typography>
+          <Typography variant="h6">
+            Welcome to the beta{' '}
+            <span role="img" aria-label="smiley">
+              😃
+            </span>
+          </Typography>
           <MarginH />
           <Typography variant="body1">
             We will be rolling out features on a biweekly basis.

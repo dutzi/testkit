@@ -41,7 +41,6 @@ export function useTestRunner(testSetId: string, testId: string) {
   const testSetsCollection = useContext(TestSetsCollectionContext);
 
   const testSetDoc = getDocById(testSetId, testSetsCollection!.docs);
-  const testDoc = getDocById(testId, testsCollection!.docs);
 
   const [test, setTest] = useState<Test | undefined>();
   const [testSet, setTestSet] = useState<TestSet | undefined>();

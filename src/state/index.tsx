@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { User } from '../types';
+import React from 'react';
 
 interface GlobalState {
   ui: {

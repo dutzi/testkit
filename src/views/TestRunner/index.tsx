@@ -1,16 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { firestore } from '../../firebase';
-import { updateTest } from '../../clients/test';
-import { getDocById } from '../../clients/utils';
-import produce from 'immer';
-import {
-  Test,
-  Step as IStep,
-  TestSet,
-  TestStatus,
-  StepStatus,
-} from '../../types';
+import { Step as IStep } from '../../types';
 import { markdownOverrides, MarginV, MarginH } from '../../styles';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
@@ -20,11 +10,6 @@ import FormControl from '@material-ui/core/FormControl';
 import _ from 'lodash';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MarkdownEditor from '../../components/MarkdownEditor';
-import {
-  GlobalUserContext,
-  TestsCollectionContext,
-  TestSetsCollectionContext,
-} from '../ContextProviders';
 import MarkdownViewer from '../../components/MarkdownViewer';
 import { useTestRunner } from './hooks';
 
@@ -54,11 +39,6 @@ const NumTests = styled.div`
 `;
 
 const Steps = styled.div``;
-
-const TestName = styled.div`
-  flex: 1;
-  font-weight: 600;
-`;
 
 const Step = styled.div`
   margin: 12px 0px;
@@ -131,7 +111,12 @@ const TestRunner = ({
     return (
       <Wrapper>
         <MaxWidth>
-          <div>This test does not exist 🤔</div>
+          <div>
+            This test does not exist{' '}
+            <span role="img" aria-label="thinking face">
+              🤔
+            </span>
+          </div>
           <MarginH />
           {renderActions()}
         </MaxWidth>

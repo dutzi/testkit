@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
-import firebase from 'firebase/app';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Route } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useDocument, useCollection } from 'react-firebase-hooks/firestore';
 import TestsView from './Tests';
 import ArchivedTestsView from './ArchivedTests';
 import TestSetsView from './TestSets';

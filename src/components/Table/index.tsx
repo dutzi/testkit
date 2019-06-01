@@ -215,14 +215,7 @@ class EnhancedTable extends React.Component<
       topPadding,
     } = this.props;
 
-    const {
-      order,
-      orderBy,
-      rowsPerPage,
-      page,
-      showFilters,
-      filters,
-    } = this.state;
+    const { order, orderBy, rowsPerPage, page, showFilters } = this.state;
 
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);

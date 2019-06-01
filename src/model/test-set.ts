@@ -1,4 +1,3 @@
-import uuidv1 from 'uuid/v1';
 import { TestSet } from '../types';
 
 export function createTestSet(): TestSet {

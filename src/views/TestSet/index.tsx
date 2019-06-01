@@ -17,7 +17,6 @@ import Select, { mapData } from '../../components/Select';
 import { MarginH, MarginV } from '../../styles';
 import { WorkspaceContext } from '../ContextProviders';
 import { useUsers } from '../../hooks';
-import _ from 'lodash';
 import { useTestSet } from './hooks';
 
 const Wrapper = styled.div`

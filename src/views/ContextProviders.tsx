@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import firebase from 'firebase/app';
-import styled from 'styled-components';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { firestore } from '../firebase';
 import { GlobalUser } from './Main';

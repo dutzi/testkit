@@ -1,14 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
-import { auth, firestore } from '../firebase';
+import { auth } from '../firebase';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-import EditIcon from '@material-ui/icons/Edit';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { MarginH, Toolbar } from '../styles';
 import ProfilePicture from '../components/ProfilePicture';
-import { GlobalUserContext } from './ContextProviders';
 import media from '../media-queries';
 import { useWorkspaceUsers } from '../hooks/workspace-users';
 import { useCurrentUser } from '../hooks/current-user';

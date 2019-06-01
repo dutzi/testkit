@@ -1,9 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-import moment from 'moment';
 import { TestSet } from '../types';
 import TestSetProgressBar from './TestSetProgressBar';
 import { formatDate } from '../utils';
