@@ -58,6 +58,7 @@
     ]
   },
   "devDependencies": {
-    "firebase-tools": "^6.10.0"
+    "firebase-tools": "^6.10.0",
+    "tslint": "^5.17.0"
   }
 }
