@@ -98,6 +98,8 @@ class EnhancedTable extends React.Component<
   EnhancedTableProps,
   EnhancedTableState
 > {
+  scrollRef = React.createRef<HTMLDivElement>();
+
   constructor(props) {
     super(props);
 
@@ -155,6 +157,9 @@ class EnhancedTable extends React.Component<
 
   handleChangePage = (event, page) => {
     this.setState({ page });
+    if (this.scrollRef.current) {
+      this.scrollRef.current.scrollTo({ top: 0 });
+    }
   };
 
   handleChangeRowsPerPage = event => {
@@ -198,9 +203,9 @@ class EnhancedTable extends React.Component<
   filterRow = row => {
     const { filters } = this.state;
     const hasMismatch = Object.keys(filters).find((columnId: string) => {
-      return !(row[columnId] || '')
-        .toLowerCase()
-        .match(new RegExp(filters[columnId].toLowerCase().replace(/ /g, '.*')));
+      return !(row[columnId] || '').match(
+        new RegExp(filters[columnId].toLowerCase().replace(/ /gi, '.*')),
+      );
     });
     return !hasMismatch;
   };
@@ -235,6 +240,7 @@ class EnhancedTable extends React.Component<
             numSelected={selected.length}
           />
           <div
+            ref={this.scrollRef}
             style={{ maxHeight: `calc(100vh - ${topPadding})` }}
             className={classes.tableWrapper}
             onScroll={this.handleScroll}
