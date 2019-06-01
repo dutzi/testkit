@@ -22,7 +22,7 @@ export const testsTableColumns: Column[] = [
     label: 'Name',
     large: true,
   },
-  { id: 'state', numeric: false, disablePadding: false, label: 'State' },
+  // { id: 'state', numeric: false, disablePadding: false, label: 'State' },
   { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
   {
     id: 'lastRun',

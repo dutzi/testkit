@@ -97,7 +97,7 @@ const TestsTableRow = ({
           {data.name || '(untitled)'}
         </TableLink>
       </TableCell>
-      <TableCell align="left">{data.state}</TableCell>
+      {/* <TableCell align="left">{data.state}</TableCell> */}
       <TableCell align="left">
         <StatusIconWrapper>
           {data.status === 'passed' && <CheckIcon color="primary" />}
