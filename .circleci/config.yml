@@ -35,10 +35,6 @@ jobs:
 
       # run tests!
       - run:
-          name: Install tslint
-          command: npm install -g tslint
-
-      - run:
           name: Deploy Master to Firebase
           command: npm run build && ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
 
