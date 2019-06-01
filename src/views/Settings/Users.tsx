@@ -1,32 +1,22 @@
-import React, { useState, useContext, useImperativeHandle } from 'react';
+import React, { useState, useContext } from 'react';
 import styled, { css } from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import { MarginH, MarginV } from '../../styles';
-import { storage, auth, firestore } from '../../firebase';
-import EditIcon from '@material-ui/icons/Edit';
+import { MarginH } from '../../styles';
+import { auth, firestore } from '../../firebase';
 import DeleteIcon from '@material-ui/icons/Delete';
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import MenuItem from '@material-ui/core/MenuItem';
 import {
   useCollection,
   useCollectionData,
 } from 'react-firebase-hooks/firestore';
 import { GlobalUserContext } from '../ContextProviders';
 import AddUserDialog from './AddUserDialog';
-import { getDocById } from '../../clients/utils';
-import { WorkspaceUser } from '../../types';
 import { useWorkspaceUsers } from '../../hooks/workspace-users';
 
 const Padding = styled.div`
   padding: 30px;
-`;
-
-const Flex = styled.div`
-  display: flex;
 `;
 
 const Users = styled.div`

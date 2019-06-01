@@ -68,3 +68,16 @@ export interface TestSet {
   assignee: string;
   platform: string;
 }
+
+export interface Workspace {
+  name: string;
+  components: {
+    label: string;
+    name: string;
+    areas: {
+      label: string;
+      name: string;
+    }[];
+  }[];
+  platforms: Platform[];
+}

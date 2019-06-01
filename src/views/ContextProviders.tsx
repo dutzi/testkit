@@ -5,23 +5,11 @@ import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { firestore } from '../firebase';
 import { GlobalUser } from './Main';
 import { GlobalStateProvider } from '../state';
+import { Workspace } from '../types';
 
 export interface Platform {
   label: string;
   name: string;
-}
-
-interface Workspace {
-  name: string;
-  components: {
-    label: string;
-    name: string;
-    areas: {
-      label: string;
-      name: string;
-    }[];
-  }[];
-  platforms: Platform[];
 }
 
 export const GlobalUserContext = React.createContext<GlobalUser>({

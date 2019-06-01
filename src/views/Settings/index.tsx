@@ -10,6 +10,7 @@ import Users from './Users';
 import media from '../../media-queries';
 import { Toolbar } from '../../styles';
 import MenuButton from '../../components/MenuButton';
+import Components from './Components';
 
 const Wrapper = styled.div`
   max-width: 60%;
@@ -31,6 +32,8 @@ const Settings = () => {
       </Toolbar>
       <Wrapper>
         <Typography variant="h4">{workspace!.name}</Typography>
+        <MarginH />
+        <Components />
         <MarginH />
         <Users />
         <MarginH />

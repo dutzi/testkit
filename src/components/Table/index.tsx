@@ -196,7 +196,7 @@ class EnhancedTable extends React.Component<
   filterRow = row => {
     const { filters } = this.state;
     const hasMismatch = Object.keys(filters).find((columnId: string) => {
-      return !row[columnId]
+      return !(row[columnId] || '')
         .toLowerCase()
         .match(new RegExp(filters[columnId].toLowerCase().replace(/ /g, '.*')));
     });
