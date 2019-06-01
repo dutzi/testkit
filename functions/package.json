@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "lint": "./node_modules/.bin/wtf --project tsconfig.json",
+    "lint": "tslint --project tsconfig.json",
     "build": "tsc",
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
