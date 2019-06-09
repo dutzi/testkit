@@ -25,12 +25,6 @@ export interface WorkspaceUser {
   photoUrl: string;
 }
 
-export interface InvitedWorkspaceUser {
-  id: string;
-  role: Role;
-  email: string;
-}
-
 export interface Platform {
   id: string;
   name: string;

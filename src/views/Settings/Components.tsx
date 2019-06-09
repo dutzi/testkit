@@ -13,7 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import _ from 'lodash';
 import InputDialog from './InputDialog';
 import camelcase from 'camelcase';
-import { useStore, useActions } from '../../store';
+import { updateWorkspace } from '../../clients/workspace';
 
 const Padding = styled.div`
   padding: 30px;
@@ -52,11 +52,8 @@ const Area = styled.div`
 `;
 
 const Components = () => {
-  const workspace = useStore(state => state.workspace.data);
-  const updateWorkspace = useActions(
-    actions => actions.workspace.updateWorkspace,
-  );
-
+  const workspace = useContext(WorkspaceContext);
+  const globalUser = useContext(GlobalUserContext);
   const [components, setComponents] = useState<IComponent[] | undefined>();
   const [hasChanged, setHasChanged] = useState(false);
   const [dialogState, setDialogState] = useState<{
@@ -140,7 +137,7 @@ const Components = () => {
 
   function handleSaveChanges() {
     if (components && workspace) {
-      updateWorkspace({
+      updateWorkspace(globalUser.workspace, {
         ...workspace,
         components,
       });
