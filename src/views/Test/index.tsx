@@ -7,16 +7,16 @@ import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import StepsProp from '../components/StepsProp';
-import { updateTest } from '../clients/test';
-import { getDocById } from '../clients/utils';
+import StepsProp from '../../components/StepsProp';
+import { getDocById } from '../../clients/utils';
 import _ from 'lodash';
-import { Step, Test } from '../types';
+import { Step, Test } from '../../types';
 import {
   GlobalUserContext,
   TestsCollectionContext,
   WorkspaceContext,
-} from './ContextProviders';
+} from '../ContextProviders';
+import { useTest } from './hooks';
 
 const SelectsWrapper = styled.div`
   display: flex;
@@ -35,8 +35,6 @@ const Metadata = styled.div`
   max-width: 600px;
 `;
 
-const updateTestBED = _.debounce(updateTest, 1000);
-
 function ScrollDialog({
   onClose,
   testId,
@@ -50,24 +48,10 @@ function ScrollDialog({
     setOpen(true);
   }, []);
 
-  const globalUser = useContext(GlobalUserContext);
-  const collection = useContext(TestsCollectionContext);
+  const [test, updateTest] = useTest(testId);
   const workspace = useContext(WorkspaceContext)!;
-  const [testData, setTestData] = useState<Test | null>(null);
 
-  let test: firebase.firestore.QueryDocumentSnapshot | undefined;
-
-  if (collection) {
-    test = getDocById(testId, collection.docs);
-  }
-
-  useEffect(() => {
-    if (test) {
-      setTestData(test.data() as Test);
-    }
-  }, [collection]);
-
-  if (!testData) {
+  if (!test) {
     return null;
   }
 
@@ -87,14 +71,6 @@ function ScrollDialog({
     }
   }
 
-  function updateTest(data: any) {
-    updateTestBED(testId, globalUser.workspace, data, collection!);
-    setTestData({
-      ...testData,
-      ...data,
-    });
-  }
-
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     updateTest({
       name: e.currentTarget.value,
@@ -111,8 +87,8 @@ function ScrollDialog({
       });
     } else {
       updateTest({
-        component: null,
-        area: null,
+        component: undefined,
+        area: undefined,
       });
     }
   }
@@ -124,7 +100,7 @@ function ScrollDialog({
   }
 
   function getAreas(componentName?: string) {
-    componentName = componentName || testData!.component;
+    componentName = componentName || test!.component;
     const component = workspace.components.find(
       component => component.name === componentName,
     );
@@ -183,7 +159,7 @@ function ScrollDialog({
                 id="standard-required"
                 label="Name"
                 margin="normal"
-                value={testData.name}
+                value={test.name}
                 onChange={handleNameChange}
                 onKeyDown={handleKeyDown}
                 fullWidth
@@ -195,7 +171,7 @@ function ScrollDialog({
                 <FormControl fullWidth>
                   <InputLabel htmlFor="component">Component</InputLabel>
                   <NativeSelect
-                    value={testData.component}
+                    value={test.component}
                     onChange={handleComponentChange}
                     inputProps={{
                       name: 'component',
@@ -213,7 +189,7 @@ function ScrollDialog({
                 <FormControl fullWidth>
                   <InputLabel htmlFor="area">Sub Component</InputLabel>
                   <NativeSelect
-                    value={testData.area}
+                    value={test.area}
                     onChange={handleAreaChange}
                     inputProps={{
                       name: 'area',
@@ -233,7 +209,7 @@ function ScrollDialog({
           <Row>
             <StepsProp
               onDismiss={handleDismiss}
-              steps={testData.steps}
+              steps={test.steps}
               onChange={handleStepsChange}
             />
           </Row>
