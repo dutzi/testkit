@@ -16,7 +16,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PersonIcon from '@material-ui/icons/Person';
-import AdSense from 'react-adsense';
+// import AdSense from 'react-adsense';
 import { withRouter } from 'react-router';
 import { navigateTo } from '../utils';
 import { MarginV } from '../styles';
@@ -233,12 +233,12 @@ const Navigator = ({
         </List>
       </Drawer>
       <DesktopOnly>
-        <AdSense.Google
+        {/* <AdSense.Google
           client="ca-pub-1444313493745778"
           slot="7806394673"
           style={{ width: 250, height: 250, float: 'left' }}
           format=""
-        />
+        /> */}
       </DesktopOnly>
     </Wrapper>
   );

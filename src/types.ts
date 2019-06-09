@@ -1,3 +1,5 @@
+export type Role = 'admin' | 'user';
+
 export interface Area {
   name: string;
   label: string;
@@ -17,7 +19,7 @@ export interface User {
 
 export interface WorkspaceUser {
   uid: string;
-  role: string;
+  role: Role;
   email: string;
   displayName: string;
   photoUrl: string;

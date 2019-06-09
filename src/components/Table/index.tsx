@@ -249,14 +249,14 @@ class EnhancedTable extends React.Component<
               <TableBody>
                 {filteredData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(n => {
-                    const isSelected = this.isSelected(n.id);
+                  .map(row => {
+                    const isSelected = this.isSelected(row.id);
                     return rowRenderer({
-                      key: n.id,
+                      key: row.id,
                       onLinkClick: this.handleLinkClick,
                       onClick: this.handleClick,
                       selected: isSelected,
-                      data: n,
+                      data: row,
                     });
                   })}
                 {emptyRows > 0 && (

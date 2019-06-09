@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Route } from 'react-router-dom';
+import { useStore } from '../store';
+import { Route, Redirect } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import TestsView from './Tests';
 import ArchivedTestsView from './ArchivedTests';
@@ -34,35 +35,41 @@ const ContentWrapper = styled.div`
 `;
 
 const MainView = () => {
-  const { initialising: initializingUser, user } = useAuthState(auth);
-  const [globalUser, setGlobalUser] = useState<GlobalUser>({
-    workspace: 'default',
-  });
-  const [initializingWorkspace, setInitializingWorkspace] = useState(true);
+  const currentUser = useStore(state => state.currentUser.data);
+  const workspace = useStore(state => state.workspace.name);
+  const initializingCurrentUser = useStore(
+    state => state.currentUser.initializing,
+  );
+  const initializingWorkspace = useStore(state => state.workspace.initializing);
+  // const { initialising: initializingUser, user } = useAuthState(auth);
+  // const [globalUser, setGlobalUser] = useState<GlobalUser>({
+  //   workspace: 'default',
+  // });
+  // const [initializingWorkspace, setInitializingWorkspace] = useState(true);
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!user) {
+  //     return;
+  //   }
 
-    const cancelSnapshotLisener = firestore
-      .doc(`users/${user.uid}`)
-      .onSnapshot(snapshot => {
-        const data = snapshot.data();
+  //   const cancelSnapshotLisener = firestore
+  //     .doc(`users/${user.uid}`)
+  //     .onSnapshot(snapshot => {
+  //       const data = snapshot.data();
 
-        setInitializingWorkspace(false);
-        if (data) {
-          setGlobalUser({ workspace: data.workspace });
-          cancelSnapshotLisener();
-        }
-      });
-  }, [user]);
+  //       setInitializingWorkspace(false);
+  //       if (data) {
+  //         setGlobalUser({ workspace: data.workspace });
+  //         cancelSnapshotLisener();
+  //       }
+  //     });
+  // }, [user]);
 
-  if (initializingUser) {
+  if (initializingCurrentUser) {
     return null;
   }
 
-  if (!user) {
+  if (!currentUser) {
     return <Welcome />;
   }
 
@@ -70,15 +77,17 @@ const MainView = () => {
     return null;
   }
 
-  if (globalUser.workspace === 'default') {
+  if (workspace === 'default') {
     return <CreateWorkspace />;
   }
 
   return (
-    <ContextProviders user={globalUser}>
+    <ContextProviders user={{ workspace }}>
       <Wrapper>
         <Navigator />
         <ContentWrapper>
+          <Route exact path="/" render={() => <Redirect to="/tests" />} />
+
           <Route path="/tests/:testId?" component={TestsView} />
           <Route
             path="/archived-tests/:testId?"

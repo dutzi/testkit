@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import firebase from 'firebase';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import { MarginH } from '../styles';
-import { auth } from '../firebase';
-import Logo from '../components/Logo';
-import SignupModal from '../components/SignupModal';
+import { MarginH } from '../../styles';
+import { auth } from '../../firebase';
+import Logo from '../../components/Logo';
+import SignupModal from '../../components/SignupModal';
+import Features from './Features';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    overflow: auto !important;
+  }
+`;
 
 const Wrapper = styled.div`
   padding: 24px;
@@ -38,6 +45,7 @@ const Welcome = () => {
 
   return (
     <Wrapper>
+      <GlobalStyle />
       <Logo />
       <MarginH />
       <Paper>
@@ -71,6 +79,14 @@ const Welcome = () => {
           </Button>
         </Padder>
       </Paper>
+
+      <MarginH />
+      <Typography variant="h5">Features</Typography>
+      <MarginH margin="12px" />
+      <Features />
+
+      <MarginH />
+
       {showRegistrationModal && (
         <SignupModal onClose={handleCloseSignupModal} />
       )}

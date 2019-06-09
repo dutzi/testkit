@@ -11,6 +11,7 @@ import { useWorkspaceUsers } from '../hooks/workspace-users';
 import { useCurrentUser } from '../hooks/current-user';
 import { WorkspaceUser } from '../types';
 import MenuButton from '../components/MenuButton';
+import { useStore } from '../store';
 
 const Wrapper = styled.div`
   max-width: 60%;
@@ -83,7 +84,7 @@ const Profile = ({ currentUser }: { currentUser: WorkspaceUser }) => {
 };
 
 const CurrentUserGuard = props => {
-  const currentUser = useCurrentUser();
+  const currentUser = useStore(state => state.currentUser.data);
   if (!currentUser) {
     return null;
   }
