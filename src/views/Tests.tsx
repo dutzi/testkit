@@ -7,8 +7,8 @@ import Table from '../components/Table';
 import TestView from './Test';
 import Button from '@material-ui/core/Button';
 import { firestore } from '../firebase';
-// import { updateTest } from '../clients/test';
-import { getNextIdArray } from '../clients/utils';
+import { updateTest } from '../clients/test';
+import { getNextId } from '../clients/utils';
 import { getCollectionData } from '../clients/utils';
 import { getDocById } from '../clients/utils';
 import { Test } from '../types';
@@ -18,7 +18,6 @@ import TestsTableRow from '../components/TestsTableRow';
 import { GlobalUserContext, TestsCollectionContext } from './ContextProviders';
 import { navigateTo } from '../utils';
 import MenuButton from '../components/MenuButton';
-import { useStore, useActions } from '../store';
 
 const Wrapper = styled.div``;
 
@@ -41,20 +40,19 @@ const TestsView = ({
   location: any;
   match: any;
 }) => {
-  const tests = useStore(state => state.tests.data);
-  const addTest = useActions(state => state.tests.addTest);
-  const updateTest = useActions(state => state.tests.updateTest);
-  const duplicateTest = useActions(state => state.tests.duplicateTest);
+  const globalUser = useContext(GlobalUserContext);
   const [selected, setSelected] = useState<string[]>([]);
-
-  if (!tests) {
-    return null;
-  }
+  const collection = useContext(TestsCollectionContext);
 
   const handleCreateTest = (e: React.MouseEvent) => {
-    addTest().then(testId => {
-      navigateTo(`/tests/${testId}`, e, history);
-    });
+    const nextId = getNextId(collection!);
+
+    firestore
+      .collection(`workspaces/${globalUser.workspace}/tests`)
+      .add(createTest(String(nextId)))
+      .then(() => {
+        navigateTo(`/tests/${nextId}`, e, history);
+      });
   };
 
   const handleCloseTest = (e: React.MouseEvent | null) => {
@@ -67,20 +65,30 @@ const TestsView = ({
 
   const handleDuplicate = (testIds: string[]) => {
     testIds.forEach((id, index) => {
-      const test = tests.find(test => test.id === id);
+      const test = getDocById(id, collection!.docs);
+      const nextId = String(getNextId(collection!) + index);
 
       if (test) {
-        duplicateTest(test);
+        firestore.collection(`workspaces/${globalUser.workspace}/tests`).add({
+          ...test.data(),
+          id: nextId,
+          modified: new Date(),
+          lastRun: null,
+        });
       }
     });
   };
 
   const handleArchive = (testIds: string[]) => {
     testIds.forEach(id => {
-      updateTest({
+      updateTest(
         id,
-        test: { state: 'archived' },
-      });
+        globalUser.workspace,
+        {
+          state: 'archived',
+        },
+        collection!,
+      );
     });
     setSelected([]);
   };
@@ -136,8 +144,10 @@ const TestsView = ({
             icon: ArchiveIcon,
           },
         ]}
-        data={getUnarchivedTests(tests)}
-        rowRenderer={props => <TestsTableRow {...props} />}
+        data={getUnarchivedTests(getCollectionData(collection))}
+        rowRenderer={props => (
+          <TestsTableRow workspace={globalUser.workspace} {...props} />
+        )}
         topPadding="210px"
       />
       {showTestModal && (
