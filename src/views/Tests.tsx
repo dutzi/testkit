@@ -45,11 +45,12 @@ const TestsView = ({
   const collection = useContext(TestsCollectionContext);
 
   const handleCreateTest = (e: React.MouseEvent) => {
-    const nextId = getNextId(collection!);
+    const nextId = String(getNextId(collection!));
 
     firestore
       .collection(`workspaces/${globalUser.workspace}/tests`)
-      .add(createTest(String(nextId)))
+      .doc(nextId)
+      .set(createTest(nextId))
       .then(() => {
         navigateTo(`/tests/${nextId}`, e, history);
       });
@@ -69,12 +70,15 @@ const TestsView = ({
       const nextId = String(getNextId(collection!) + index);
 
       if (test) {
-        firestore.collection(`workspaces/${globalUser.workspace}/tests`).add({
-          ...test.data(),
-          id: nextId,
-          modified: new Date(),
-          lastRun: null,
-        });
+        firestore
+          .collection(`workspaces/${globalUser.workspace}/tests`)
+          .doc(nextId)
+          .set({
+            ...test.data(),
+            id: nextId,
+            modified: new Date(),
+            lastRun: null,
+          });
       }
     });
   };
