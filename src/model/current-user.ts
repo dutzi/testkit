@@ -29,7 +29,7 @@ const currentUser: CurrentUserModel = {
   }),
   listeners: listen(on => {
     on(
-      workspaceModel.setName,
+      workspaceModel.setId,
       thunk((actions, payload) => {
         actions.init(payload);
       }),

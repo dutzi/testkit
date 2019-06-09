@@ -11,15 +11,16 @@ import {
   useCollection,
   useCollectionData,
 } from 'react-firebase-hooks/firestore';
-import { GlobalUserContext } from '../ContextProviders';
 import AddUserDialog from './AddUserDialog';
 import { useWorkspaceUsers } from '../../hooks/workspace-users';
+import { useActions, useStore } from '../../store';
+import { User, getUserId } from '../../model/users';
 
 const Padding = styled.div`
   padding: 30px;
 `;
 
-const Users = styled.div`
+const UsersWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr auto auto;
   grid-gap: 10px;
@@ -42,33 +43,28 @@ const Role = styled.div``;
 
 const Actions = styled.div``;
 
-export interface User {
-  uid: string;
-  email: string;
-  role: 'admin' | 'user';
-  isEditing?: boolean;
-}
+// export interface User {
+//   uid: string;
+//   id: string;
+//   email: string;
+//   role: 'admin' | 'user';
+//   isEditing?: boolean;
+// }
 
 const userRoles = [
   { name: 'admin', label: 'Admin' },
   { name: 'user', label: 'User' },
 ];
 
-const Import = () => {
+const Users = () => {
+  const updateUser = useActions(actions => actions.users.updateUser);
+  const addUser = useActions(actions => actions.users.addUser);
+  const deleteUser = useActions(actions => actions.users.deleteUser);
+  const users = useStore(state => state.users.data);
+
   const [showDialog, setShowDialog] = useState(false);
-  const [, updateUser] = useWorkspaceUsers();
-  const globalUser = useContext(GlobalUserContext);
 
-  const globalUsersCollectionRef = firestore.collection('/users');
-
-  const usersCollectionRef = firestore.collection(
-    `workspaces/${globalUser.workspace}/users`,
-  );
-
-  const { value: usersCollection } = useCollection(usersCollectionRef);
-  const { value: users } = useCollectionData<User>(usersCollectionRef);
-
-  if (!usersCollection || !users) {
+  if (!users) {
     return null;
   }
 
@@ -81,12 +77,15 @@ const Import = () => {
   }
 
   function getUserById(uid: string) {
-    return users!.find(user => user.uid === uid);
+    return users!.find(user => getUserId(user) === uid);
   }
 
   function handleUserRoleChange(user: User, e: any) {
-    updateUser(user.uid, {
-      role: e.target.value,
+    updateUser({
+      id: getUserId(user)!,
+      user: {
+        role: e.target.value,
+      },
     });
   }
 
@@ -96,28 +95,11 @@ const Import = () => {
 
   function handleSubmitDialog(email: string) {
     handleCloseDialog();
-    usersCollectionRef.add({
-      id: email,
-      email,
-      role: 'user',
-    });
-
-    globalUsersCollectionRef.add({
-      email,
-      workspace: globalUser.workspace,
-      isTemporaryUser: true,
-    });
+    addUser(email);
   }
 
   function handleDeleteUser(user: User) {
-    if (users && usersCollection) {
-      const doc = usersCollection.docs.find(doc => doc.data().uid === user.uid);
-      if (doc) {
-        firestore
-          .doc(`workspaces/${globalUser.workspace}/users/${doc.id}`)
-          .delete();
-      }
-    }
+    deleteUser(getUserId(user)!);
   }
 
   function isCurrentUserAdmin() {
@@ -126,7 +108,7 @@ const Import = () => {
   }
 
   function isCurrentUser(user: User) {
-    return user.uid === auth.currentUser!.uid;
+    return getUserId(user) === auth.currentUser!.uid;
   }
 
   function renderRole(user: User) {
@@ -150,7 +132,7 @@ const Import = () => {
 
   function renderUser(user: User) {
     return (
-      <React.Fragment key={user.uid}>
+      <React.Fragment key={getUserId(user)}>
         <Email>{user.email}</Email>
         {renderRole(user)}
         <Actions>
@@ -180,12 +162,12 @@ const Import = () => {
           </Typography>
         </div>
         <MarginH />
-        <Users>
+        <UsersWrapper>
           <TableHead>Email</TableHead>
           <TableHead>Role</TableHead>
           <TableHead alignCenter />
           {users.map(user => renderUser(user))}
-        </Users>
+        </UsersWrapper>
         <MarginH />
         <Button variant="contained" color="primary" onClick={handleAddUser}>
           Add User
@@ -202,4 +184,4 @@ const Import = () => {
   );
 };
 
-export default Import;
+export default Users;

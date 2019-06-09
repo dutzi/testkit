@@ -36,7 +36,7 @@ const ContentWrapper = styled.div`
 
 const MainView = () => {
   const currentUser = useStore(state => state.currentUser.data);
-  const workspace = useStore(state => state.workspace.name);
+  const workspaceId = useStore(state => state.workspace.id);
   const initializingCurrentUser = useStore(
     state => state.currentUser.initializing,
   );
@@ -77,12 +77,12 @@ const MainView = () => {
     return null;
   }
 
-  if (workspace === 'default') {
+  if (workspaceId === 'default') {
     return <CreateWorkspace />;
   }
 
   return (
-    <ContextProviders user={{ workspace }}>
+    <ContextProviders user={{ workspace: workspaceId }}>
       <Wrapper>
         <Navigator />
         <ContentWrapper>
