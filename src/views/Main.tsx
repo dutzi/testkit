@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useStore } from '../store';
 import { Route, Redirect } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import TestsView from './Tests';
 import ArchivedTestsView from './ArchivedTests';
 import TestSetsView from './TestSets';
 import ProfileView from './Profile';
 import SettingsView from './Settings';
 import Navigator from '../components/Navigator';
-import { auth, firestore } from '../firebase';
 import Welcome from './Welcome';
 import CreateWorkspace from './CreateWorkspace';
 import ContextProviders from './ContextProviders';
@@ -41,29 +39,6 @@ const MainView = () => {
     state => state.currentUser.initializing,
   );
   const initializingWorkspace = useStore(state => state.workspace.initializing);
-  // const { initialising: initializingUser, user } = useAuthState(auth);
-  // const [globalUser, setGlobalUser] = useState<GlobalUser>({
-  //   workspace: 'default',
-  // });
-  // const [initializingWorkspace, setInitializingWorkspace] = useState(true);
-
-  // useEffect(() => {
-  //   if (!user) {
-  //     return;
-  //   }
-
-  //   const cancelSnapshotLisener = firestore
-  //     .doc(`users/${user.uid}`)
-  //     .onSnapshot(snapshot => {
-  //       const data = snapshot.data();
-
-  //       setInitializingWorkspace(false);
-  //       if (data) {
-  //         setGlobalUser({ workspace: data.workspace });
-  //         cancelSnapshotLisener();
-  //       }
-  //     });
-  // }, [user]);
 
   if (initializingCurrentUser) {
     return null;
