@@ -23,3 +23,18 @@ export function getNextId(collection: firebase.firestore.QuerySnapshot) {
 
   return maxId + 1;
 }
+
+export function getNextIdArray(collection?: any[]) {
+  if (!collection) {
+    return 0;
+  }
+
+  let maxId = 0;
+  collection.forEach(test => {
+    if (parseInt(test.id) > maxId) {
+      maxId = parseInt(test.id);
+    }
+  });
+
+  return maxId + 1;
+}

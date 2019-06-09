@@ -9,6 +9,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { formatDate } from '../utils';
 import { TableLink } from '../styles';
 import { WorkspaceContext } from '../views/ContextProviders';
+import { useStore } from '../store';
 
 const StatusIconWrapper = styled.div`
   line-height: 0px;
@@ -31,9 +32,7 @@ const TestsTableRow = ({
     id: string,
   ) => void;
 }) => {
-  const workspace = useContext(WorkspaceContext);
-  // const [components, setComponents] = useState<Component[]>([]);
-  // getComponents(workspace).then(setComponents);
+  const workspace = useStore(state => state.workspace.data);
 
   function getComponentLabel(componentName: string) {
     let component = workspace!.components.find(
