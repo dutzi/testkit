@@ -28,7 +28,7 @@
     "react-firebase-hooks": "^1.2.1",
     "react-markdown": "^4.0.8",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "3.0.0",
+    "react-scripts": "3.4.4",
     "react-select": "^2.4.3",
     "react-simple-code-editor": "^0.9.10",
     "react-simplemde-editor": "^4.0.1",
